@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0566f069b4f711a428f300fbaa37256a, type: 3}
+  m_Name: FlockGfxProfile_BuiltinRenderer lp 3
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 9166758140784899028, guid: 8dcd3662926ff3d43aba16611f67df24, type: 3}
+  mesh: {fileID: 2586148439552901436, guid: 5faba8716bbe0e142bbf52e04625206e, type: 3}
+  material: {fileID: 2100000, guid: cf080a4b5fa57f342a2070c0c7179089, type: 2}
+  shadowCasting: 1
+  receiveShadows: 1
