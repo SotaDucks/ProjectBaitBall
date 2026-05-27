@@ -3,7 +3,12 @@ guid: c0f9cd306cd69914ca04aa9d63128cb8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Lime._9o46-VRayMtl-18038352-016
+    second: {fileID: 2100000, guid: 6f941d925fb74b2429792e3803c9bc1d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using FishFlock.Utils;
 using Unity.Burst;
 using Unity.Collections;
 using Unity.Jobs;
@@ -21,6 +22,7 @@ namespace TestBoids.Boids
         [SerializeField] private Mesh instanceMesh;
         [SerializeField] private Material[] instanceMaterials = Array.Empty<Material>();
         [SerializeField] private Vector3 instanceScale = Vector3.one;
+        [SerializeField, MinMax(0.5f, 1.5f)] private Vector2 scaleMultiplierRange = new(0.95f, 1.05f);
         [SerializeField] private Vector3 localForwardAxis = Vector3.forward;
         [SerializeField] private Vector3 localDorsalAxis = Vector3.up;
         [SerializeField] private bool applyBank = true;
@@ -43,15 +45,22 @@ namespace TestBoids.Boids
         [SerializeField] private float toroidalAxisSpeed = 0.42f;
 
         [Header("Boids")]
-        [SerializeField] private float minSpeed = 2.8f;
-        [SerializeField] private float maxSpeed = 7f;
-        [SerializeField] private float maxTurnRate = 18f;
+        [SerializeField, HideInInspector] private float minSpeed = 2.8f;
+        [SerializeField, HideInInspector] private float maxSpeed = 7f;
+        [SerializeField, HideInInspector] private float maxTurnRate = 18f;
         [SerializeField] private float perceptionRadius = 4.2f;
         [SerializeField] private float separationRadius = 1.25f;
-        [SerializeField] private float maxSteerForce = 4.2f;
+        [SerializeField, HideInInspector] private float maxSteerForce = 4.2f;
         [SerializeField] private float alignWeight = 0.5f;
         [SerializeField] private float cohesionWeight = 0.9f;
-        [SerializeField] private float separateWeight = 3f;
+        [SerializeField, HideInInspector] private float separateWeight = 3f;
+
+        [Header("Individual Randomization")]
+        [SerializeField, MinMax(0f, 12f)] private Vector2 speedRange = new(2.8f, 7f);
+        [SerializeField, MinMax(0f, 40f)] private Vector2 maxTurnRateRange = new(16.5f, 19.5f);
+        [SerializeField, MinMax(0f, 10f)] private Vector2 maxSteerForceRange = new(3.8f, 4.6f);
+        [SerializeField, MinMax(0f, 6f)] private Vector2 separateWeightRange = new(2.7f, 3.3f);
+        [SerializeField, HideInInspector] private bool individualRandomRangesInitialized;
 
         [Header("Obstacle Avoidance")]
         [SerializeField] private float boundsRadius = 0.27f;
@@ -110,6 +119,11 @@ namespace TestBoids.Boids
             alignWeight = 0.5f;
             cohesionWeight = 0.9f;
             separateWeight = 3f;
+            scaleMultiplierRange = new Vector2(0.95f, 1.05f);
+            speedRange = new Vector2(2.8f, 7f);
+            maxTurnRateRange = new Vector2(16.5f, 19.5f);
+            maxSteerForceRange = new Vector2(3.8f, 4.6f);
+            separateWeightRange = new Vector2(2.7f, 3.3f);
             boundsRadius = 0.27f;
             avoidCollisionWeight = 4f;
             collisionAvoidDistance = 7f;
@@ -119,10 +133,13 @@ namespace TestBoids.Boids
             maxBankAngleDegrees = 12f;
             bankTurnScale = 0.18f;
             bankResponse = 8f;
+            individualRandomRangesInitialized = true;
         }
 
         private void Awake()
         {
+            InitializeIndividualRandomRangesFromLegacyValues();
+            NormalizeIndividualRandomRanges();
             propertyBlock = new MaterialPropertyBlock();
             RefreshAxisCorrection();
             ResolveRenderResources();
@@ -130,7 +147,32 @@ namespace TestBoids.Boids
 
         private void OnValidate()
         {
+            InitializeIndividualRandomRangesFromLegacyValues();
+            NormalizeIndividualRandomRanges();
             RefreshAxisCorrection();
+        }
+
+        private void InitializeIndividualRandomRangesFromLegacyValues()
+        {
+            if (individualRandomRangesInitialized)
+            {
+                return;
+            }
+
+            speedRange = OrderedRange(minSpeed, maxSpeed);
+            maxTurnRateRange = Around(maxTurnRate, 0.08f);
+            maxSteerForceRange = Around(maxSteerForce, 0.10f);
+            separateWeightRange = Around(separateWeight, 0.10f);
+            individualRandomRangesInitialized = true;
+        }
+
+        private void NormalizeIndividualRandomRanges()
+        {
+            scaleMultiplierRange = OrderedRange(scaleMultiplierRange);
+            speedRange = OrderedRange(speedRange);
+            maxTurnRateRange = OrderedRange(maxTurnRateRange);
+            maxSteerForceRange = OrderedRange(maxSteerForceRange);
+            separateWeightRange = OrderedRange(separateWeightRange);
         }
 
         private void Start()
@@ -190,13 +232,19 @@ namespace TestBoids.Boids
             {
                 float3 position = CreateInitialPosition(ref random, center);
                 float3 direction = CreateInitialDirection(position, center, ref random);
-                float speed = Mathf.Lerp(minSpeed, maxSpeed, random.Next01());
+                float speed = Mathf.Max(0.001f, SampleRange(speedRange, ref random));
                 fish[i] = new FishState
                 {
                     Position = position,
                     Velocity = direction * speed,
                     CollisionAvoidanceDirection = float3.zero,
                     Bank = 0f,
+                    ScaleMultiplier = Mathf.Max(0.001f, SampleRange(scaleMultiplierRange, ref random)),
+                    MinSpeed = Mathf.Max(0.001f, speed * 0.88f),
+                    MaxSpeed = Mathf.Max(0.001f, speed * 1.12f),
+                    MaxTurnRate = Mathf.Max(0f, SampleRange(maxTurnRateRange, ref random)),
+                    MaxSteerForce = Mathf.Max(0f, SampleRange(maxSteerForceRange, ref random)),
+                    SeparateWeight = Mathf.Max(0f, SampleRange(separateWeightRange, ref random)),
                     HasCollisionAvoidanceDirection = 0
                 };
                 nextFish[i] = fish[i];
@@ -232,15 +280,10 @@ namespace TestBoids.Boids
                 ToroidalFlowWeight = toroidalFlowWeight,
                 ToroidalRollWeight = toroidalRollWeight,
                 ToroidalAxisSpeed = toroidalAxisSpeed,
-                MinSpeed = minSpeed,
-                MaxSpeed = maxSpeed,
-                MaxTurnRate = maxTurnRate,
                 PerceptionRadius = perceptionRadius,
                 SeparationRadius = separationRadius,
-                MaxSteerForce = maxSteerForce,
                 AlignWeight = alignWeight,
                 CohesionWeight = cohesionWeight,
-                SeparateWeight = separateWeight,
                 BoundsRadius = boundsRadius,
                 AvoidCollisionWeight = avoidCollisionWeight,
                 CollisionAvoidDistance = collisionAvoidDistance,
@@ -463,17 +506,18 @@ namespace TestBoids.Boids
                 Matrix4x4 rootMatrix = Matrix4x4.TRS(
                     new Vector3(state.Position.x, state.Position.y, state.Position.z),
                     rotation,
-                    GetInstanceScale());
+                    GetInstanceScale(state.ScaleMultiplier));
                 instanceMatrices[i] = rootMatrix * prefabRenderLocalMatrix;
             }
         }
 
-        private Vector3 GetInstanceScale()
+        private Vector3 GetInstanceScale(float scaleMultiplier)
         {
+            float multiplier = Mathf.Max(0.0001f, Mathf.Abs(scaleMultiplier));
             return new Vector3(
-                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.x)),
-                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.y)),
-                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.z)));
+                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.x)) * multiplier,
+                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.y)) * multiplier,
+                Mathf.Max(0.0001f, Mathf.Abs(instanceScale.z)) * multiplier);
         }
 
         private void FillBatchData(int start, int count)
@@ -487,7 +531,7 @@ namespace TestBoids.Boids
                 batchMatrices[i] = instanceMatrices[sourceIndex];
                 batchAnimParams[i] = new Vector4(
                     animationPhaseOffsets[sourceIndex],
-                    Mathf.Max(0f, speed / Mathf.Max(0.0001f, maxSpeed)),
+                    Mathf.Max(0f, speed / Mathf.Max(0.0001f, state.MaxSpeed)),
                     1f,
                     1f);
                 batchTints[i] = tint;
@@ -669,6 +713,27 @@ namespace TestBoids.Boids
             return new quaternion(value.x, value.y, value.z, value.w);
         }
 
+        private static float SampleRange(Vector2 range, ref BoidRandom random)
+        {
+            return Mathf.Lerp(range.x, range.y, random.Next01());
+        }
+
+        private static Vector2 Around(float value, float ratio)
+        {
+            float spread = Mathf.Abs(value) * Mathf.Max(0f, ratio);
+            return OrderedRange(Mathf.Max(0f, value - spread), value + spread);
+        }
+
+        private static Vector2 OrderedRange(float x, float y)
+        {
+            return x <= y ? new Vector2(x, y) : new Vector2(y, x);
+        }
+
+        private static Vector2 OrderedRange(Vector2 range)
+        {
+            return OrderedRange(range.x, range.y);
+        }
+
         private static float3 SafeNormalize(float3 vector)
         {
             return math.lengthsq(vector) > 0.000001f ? math.normalize(vector) : float3.zero;
@@ -680,6 +745,12 @@ namespace TestBoids.Boids
             public float3 Velocity;
             public float3 CollisionAvoidanceDirection;
             public float Bank;
+            public float ScaleMultiplier;
+            public float MinSpeed;
+            public float MaxSpeed;
+            public float MaxTurnRate;
+            public float MaxSteerForce;
+            public float SeparateWeight;
             public int HasCollisionAvoidanceDirection;
         }
 
@@ -712,15 +783,10 @@ namespace TestBoids.Boids
             public float ToroidalFlowWeight;
             public float ToroidalRollWeight;
             public float ToroidalAxisSpeed;
-            public float MinSpeed;
-            public float MaxSpeed;
-            public float MaxTurnRate;
             public float PerceptionRadius;
             public float SeparationRadius;
-            public float MaxSteerForce;
             public float AlignWeight;
             public float CohesionWeight;
-            public float SeparateWeight;
             public float BoundsRadius;
             public float AvoidCollisionWeight;
             public float CollisionAvoidDistance;
@@ -772,20 +838,20 @@ namespace TestBoids.Boids
                 if (neighborCount > 0)
                 {
                     centerSum /= neighborCount;
-                    acceleration += SteerTowards(headingSum, current.Velocity) * AlignWeight;
-                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity) * CohesionWeight;
-                    acceleration += SteerTowards(avoidanceSum, current.Velocity) * SeparateWeight;
+                    acceleration += SteerTowards(headingSum, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * AlignWeight;
+                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * CohesionWeight;
+                    acceleration += SteerTowards(avoidanceSum, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * current.SeparateWeight;
                 }
 
-                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity) * CenteringWeight;
-                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase) * ToroidalFlowWeight;
-                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity);
+                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * CenteringWeight;
+                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase, current.MaxSpeed, current.MaxSteerForce) * ToroidalFlowWeight;
+                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce);
 
                 float3 forward = SafeNormalize(current.Velocity);
                 if (IsHeadingForCollision(current.Position, forward))
                 {
                     float3 clearDirection = ObstacleRays(current.Position, forward, ref current);
-                    acceleration += SteerTowards(clearDirection, current.Velocity) * AvoidCollisionWeight;
+                    acceleration += SteerTowards(clearDirection, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * AvoidCollisionWeight;
                 }
                 else
                 {
@@ -793,9 +859,9 @@ namespace TestBoids.Boids
                 }
 
                 float3 desiredVelocity = current.Velocity + acceleration * Dt;
-                float speed = math.clamp(math.length(desiredVelocity), MinSpeed, MaxSpeed);
+                float speed = math.clamp(math.length(desiredVelocity), current.MinSpeed, current.MaxSpeed);
                 desiredVelocity = SafeNormalize(desiredVelocity) * speed;
-                float3 velocity = LimitTurn(current.Velocity, desiredVelocity, Dt);
+                float3 velocity = LimitTurn(current.Velocity, desiredVelocity, Dt, current.MaxTurnRate);
                 float3 nextPosition = current.Position + velocity * Dt;
 
                 UpdateMotionState(ref current, velocity, Dt);
@@ -807,24 +873,24 @@ namespace TestBoids.Boids
                 NextPositions[index] = nextPosition;
             }
 
-            private float3 SteerTowards(float3 vector, float3 velocity)
+            private float3 SteerTowards(float3 vector, float3 velocity, float maxSpeed, float maxSteerForce)
             {
                 if (math.lengthsq(vector) < 0.000001f)
                 {
                     return float3.zero;
                 }
 
-                float3 desired = math.normalize(vector) * MaxSpeed;
-                return ClampMagnitude(desired - velocity, MaxSteerForce);
+                float3 desired = math.normalize(vector) * math.max(0.001f, maxSpeed);
+                return ClampMagnitude(desired - velocity, math.max(0f, maxSteerForce));
             }
 
-            private float3 LimitTurn(float3 currentVelocity, float3 desiredVelocity, float dt)
+            private float3 LimitTurn(float3 currentVelocity, float3 desiredVelocity, float dt, float maxTurnRate)
             {
                 float3 currentDirection = SafeNormalize(currentVelocity);
                 float3 desiredDirection = SafeNormalize(desiredVelocity);
                 float dot = math.clamp(math.dot(currentDirection, desiredDirection), -1f, 1f);
                 float angle = math.acos(dot);
-                float maxAngle = MaxTurnRate * dt;
+                float maxAngle = math.max(0f, maxTurnRate) * dt;
 
                 if (angle <= maxAngle || angle < 0.000001f)
                 {
@@ -970,7 +1036,7 @@ namespace TestBoids.Boids
                 return near <= far;
             }
 
-            private float3 SphereObstacleSeparationForce(float3 position, float3 velocity)
+            private float3 SphereObstacleSeparationForce(float3 position, float3 velocity, float maxSpeed, float maxSteerForce)
             {
                 float margin = math.max(0f, SphereSeparationMargin);
                 float weight = math.max(0f, SphereSeparationWeight);
@@ -1026,10 +1092,10 @@ namespace TestBoids.Boids
                     return float3.zero;
                 }
 
-                return SteerTowards(away, velocity) * (weight * maxPressure);
+                return SteerTowards(away, velocity, maxSpeed, maxSteerForce) * (weight * maxPressure);
             }
 
-            private float3 SphericalEnvelopeForce(float3 position, float3 velocity)
+            private float3 SphericalEnvelopeForce(float3 position, float3 velocity, float maxSpeed, float maxSteerForce)
             {
                 float targetRadius = math.max(0.001f, BaitBallRadius);
                 float coreRadius = targetRadius * math.max(0f, BaitBallCoreRatio);
@@ -1064,10 +1130,10 @@ namespace TestBoids.Boids
                     force += radialDirection * -inwardBias;
                 }
 
-                return SteerTowards(force, velocity) * pressure;
+                return SteerTowards(force, velocity, maxSpeed, maxSteerForce) * pressure;
             }
 
-            private float3 ToroidalFlowForce(float3 position, float3 velocity, float3 axis, float phase)
+            private float3 ToroidalFlowForce(float3 position, float3 velocity, float3 axis, float phase, float maxSpeed, float maxSteerForce)
             {
                 float3 radial = position - Center;
                 if (math.lengthsq(radial) < 0.000001f)
@@ -1092,7 +1158,7 @@ namespace TestBoids.Boids
                 float roll = math.sin(phase + axialOffset * 0.72f);
                 float3 desiredDirection = toroidal + poloidal * (roll * ToroidalRollWeight);
 
-                return SteerTowards(desiredDirection, velocity);
+                return SteerTowards(desiredDirection, velocity, maxSpeed, maxSteerForce);
             }
 
             private float3 ReadFlowAxis(float time)
