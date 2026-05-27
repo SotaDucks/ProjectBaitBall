@@ -43,6 +43,12 @@ namespace TestBoids.Boids
         [SerializeField] private float toroidalFlowWeight = 1.9f;
         [SerializeField] private float toroidalRollWeight = 0.38f;
         [SerializeField] private float toroidalAxisSpeed = 0.42f;
+        [SerializeField, Min(0.1f)] private float baitBallWidthScale = 1.45f;
+        [SerializeField, Min(0.1f)] private float baitBallHeightScale = 0.72f;
+        [SerializeField, Range(0f, 1f)] private float baitBallBottomDrop = 0.36f;
+        [SerializeField, Range(0f, 0.9f)] private float baitBallBottomTaper = 0.42f;
+        [SerializeField, Range(0f, 0.45f)] private float baitBallShapeAmount = 0.22f;
+        [SerializeField, Min(0f)] private float baitBallShapeSpeed = 0.07f;
 
         [Header("Boids")]
         [SerializeField, HideInInspector] private float minSpeed = 2.8f;
@@ -110,6 +116,12 @@ namespace TestBoids.Boids
             toroidalFlowWeight = 1.9f;
             toroidalRollWeight = 0.38f;
             toroidalAxisSpeed = 0.42f;
+            baitBallWidthScale = 1.45f;
+            baitBallHeightScale = 0.72f;
+            baitBallBottomDrop = 0.36f;
+            baitBallBottomTaper = 0.42f;
+            baitBallShapeAmount = 0.22f;
+            baitBallShapeSpeed = 0.07f;
             minSpeed = 2.8f;
             maxSpeed = 7f;
             maxTurnRate = 18f;
@@ -280,6 +292,12 @@ namespace TestBoids.Boids
                 ToroidalFlowWeight = toroidalFlowWeight,
                 ToroidalRollWeight = toroidalRollWeight,
                 ToroidalAxisSpeed = toroidalAxisSpeed,
+                BaitBallWidthScale = baitBallWidthScale,
+                BaitBallHeightScale = baitBallHeightScale,
+                BaitBallBottomDrop = baitBallBottomDrop,
+                BaitBallBottomTaper = baitBallBottomTaper,
+                BaitBallShapeAmount = baitBallShapeAmount,
+                BaitBallShapeSpeed = baitBallShapeSpeed,
                 PerceptionRadius = perceptionRadius,
                 SeparationRadius = separationRadius,
                 AlignWeight = alignWeight,
@@ -627,8 +645,18 @@ namespace TestBoids.Boids
 
         private float3 CreateInitialPosition(ref BoidRandom random, float3 center)
         {
-            float radius = Mathf.Max(0.001f, baitBallRadius);
             float3 direction = CreateRandomUnitVector(ref random);
+            float radius = ComputeBaitBallTargetRadius(
+                direction,
+                ToQuaternion(transform.rotation),
+                baitBallRadius,
+                baitBallWidthScale,
+                baitBallHeightScale,
+                baitBallBottomDrop,
+                baitBallBottomTaper,
+                baitBallShapeAmount,
+                0f,
+                baitBallShapeSpeed);
             float shellBias = 0.32f + 0.68f * Mathf.Pow(random.Next01(), 1f / 3f);
             return center + direction * (radius * shellBias);
         }
@@ -739,6 +767,48 @@ namespace TestBoids.Boids
             return math.lengthsq(vector) > 0.000001f ? math.normalize(vector) : float3.zero;
         }
 
+        private static float ComputeBaitBallTargetRadius(
+            float3 radialDirection,
+            quaternion rotation,
+            float baseRadius,
+            float widthScale,
+            float heightScale,
+            float bottomDrop,
+            float bottomTaper,
+            float shapeAmount,
+            float elapsedTime,
+            float shapeSpeed)
+        {
+            float radius = math.max(0.001f, baseRadius);
+            float3 localDirection = SafeNormalize(math.mul(math.inverse(rotation), radialDirection));
+            if (math.lengthsq(localDirection) < 0.000001f)
+            {
+                return radius;
+            }
+
+            float vertical = math.clamp(localDirection.y, -1f, 1f);
+            float top = math.saturate(vertical);
+            float bottom = math.saturate(-vertical);
+            float bottomShape = bottom * bottom;
+            float horizontalSq = math.max(0f, localDirection.x * localDirection.x + localDirection.z * localDirection.z);
+            float horizontalScale = math.max(0.1f, widthScale) * (1f - math.clamp(bottomTaper, 0f, 0.9f) * bottomShape);
+            float verticalScale = math.max(0.1f, heightScale)
+                * (1f + math.saturate(bottomDrop) * bottom - top * top * 0.34f);
+            verticalScale = math.max(0.1f, verticalScale);
+
+            float shapeDistance = math.sqrt(
+                horizontalSq / (horizontalScale * horizontalScale)
+                + vertical * vertical / (verticalScale * verticalScale));
+            float blobRadius = radius / math.max(0.001f, shapeDistance);
+
+            float amount = math.clamp(shapeAmount, 0f, 0.75f);
+            float time = elapsedTime * math.max(0f, shapeSpeed);
+            float lump = noise.snoise(localDirection * 1.65f + new float3(time * 0.37f, time * 0.59f, time * 0.43f));
+            float profile = 1f + lump * amount * 0.65f;
+
+            return blobRadius * math.max(0.45f, profile);
+        }
+
         private struct FishState
         {
             public float3 Position;
@@ -783,6 +853,12 @@ namespace TestBoids.Boids
             public float ToroidalFlowWeight;
             public float ToroidalRollWeight;
             public float ToroidalAxisSpeed;
+            public float BaitBallWidthScale;
+            public float BaitBallHeightScale;
+            public float BaitBallBottomDrop;
+            public float BaitBallBottomTaper;
+            public float BaitBallShapeAmount;
+            public float BaitBallShapeSpeed;
             public float PerceptionRadius;
             public float SeparationRadius;
             public float AlignWeight;
@@ -1097,8 +1173,6 @@ namespace TestBoids.Boids
 
             private float3 SphericalEnvelopeForce(float3 position, float3 velocity, float maxSpeed, float maxSteerForce)
             {
-                float targetRadius = math.max(0.001f, BaitBallRadius);
-                float coreRadius = targetRadius * math.max(0f, BaitBallCoreRatio);
                 float3 radial = position - Center;
                 float distance = math.length(radial);
 
@@ -1108,6 +1182,18 @@ namespace TestBoids.Boids
                 }
 
                 float3 radialDirection = radial / distance;
+                float targetRadius = ComputeBaitBallTargetRadius(
+                    radialDirection,
+                    TransformRotation,
+                    BaitBallRadius,
+                    BaitBallWidthScale,
+                    BaitBallHeightScale,
+                    BaitBallBottomDrop,
+                    BaitBallBottomTaper,
+                    BaitBallShapeAmount,
+                    ElapsedTime,
+                    BaitBallShapeSpeed);
+                float coreRadius = targetRadius * math.max(0f, BaitBallCoreRatio);
                 float3 force = float3.zero;
                 float pressure = 1f;
 
