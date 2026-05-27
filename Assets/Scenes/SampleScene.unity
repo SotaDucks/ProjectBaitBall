@@ -857,15 +857,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.1999736
+      value: 1.5135338
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.3969564
+      value: -3.5899124
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.217493
+      value: -7.42715
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -924,15 +924,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.1999736
+      value: 1.5135338
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.3969564
+      value: -3.5899124
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.217493
+      value: -7.42715
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1079,7 +1079,7 @@ MonoBehaviour:
   instanceMesh: {fileID: 0}
   instanceMaterials: []
   instanceScale: {x: 1, y: 1, z: 1}
-  scaleMultiplierRange: {x: 0.95, y: 1.133028}
+  scaleMultiplierRange: {x: 0.7644079, y: 0.9444079}
   localForwardAxis: {x: 0, y: 0, z: 1}
   localDorsalAxis: {x: 0, y: 1, z: 0}
   applyBank: 1
@@ -1087,10 +1087,10 @@ MonoBehaviour:
   shadowCasting: 1
   receiveShadows: 1
   layer: 0
-  fishCount: 5000
+  fishCount: 10000
   spawnOnStart: 1
   seed: 42
-  baitBallRadius: 1.5
+  baitBallRadius: 2
   baitBallCoreRatio: 50
   centeringWeight: 1.4
   toroidalFlowWeight: 1.9
@@ -1111,11 +1111,12 @@ MonoBehaviour:
   maxTurnRate: 18
   perceptionRadius: 4.2
   separationRadius: 1.25
+  neighborScanLimit: 256
   maxSteerForce: 4.2
-  alignWeight: 0.5
+  alignWeight: 2
   cohesionWeight: 0.9
   separateWeight: 3
-  speedRange: {x: 0.76, y: 1.88531}
+  speedRange: {x: 0.99860716, y: 2.128607}
   maxTurnRateRange: {x: 16.56, y: 19.44}
   maxSteerForceRange: {x: 3.7799997, y: 4.62}
   separateWeightRange: {x: 2.7, y: 3.3}
@@ -1155,15 +1156,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.1999736
+      value: 1.5135338
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.3969564
+      value: -3.5899124
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -4.217493
+      value: -7.42715
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w

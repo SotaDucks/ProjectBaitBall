@@ -60,6 +60,8 @@ namespace TestBoids.Boids
         [SerializeField, HideInInspector] private float maxTurnRate = 18f;
         [SerializeField] private float perceptionRadius = 4.2f;
         [SerializeField] private float separationRadius = 1.25f;
+        [SerializeField, Min(0), Tooltip("Maximum other fish sampled by each fish per simulation step. Set to 0 to scan every fish.")]
+        public int neighborScanLimit = 256;
         [SerializeField, HideInInspector] private float maxSteerForce = 4.2f;
         [SerializeField] private float alignWeight = 0.5f;
         [SerializeField] private float cohesionWeight = 0.9f;
@@ -146,6 +148,7 @@ namespace TestBoids.Boids
             maxTurnRate = 18f;
             perceptionRadius = 4.2f;
             separationRadius = 1.25f;
+            neighborScanLimit = 256;
             maxSteerForce = 4.2f;
             alignWeight = 0.5f;
             cohesionWeight = 0.9f;
@@ -189,6 +192,7 @@ namespace TestBoids.Boids
                 baitBallMorphInitialized = false;
             }
 
+            neighborScanLimit = Mathf.Max(0, neighborScanLimit);
             RefreshAxisCorrection();
         }
 
@@ -330,6 +334,7 @@ namespace TestBoids.Boids
                 BaitBallShapeSpeed = baitBallShapeSpeed,
                 PerceptionRadius = perceptionRadius,
                 SeparationRadius = separationRadius,
+                NeighborScanLimit = Mathf.Max(0, neighborScanLimit),
                 AlignWeight = alignWeight,
                 CohesionWeight = cohesionWeight,
                 BoundsRadius = boundsRadius,
@@ -996,6 +1001,7 @@ namespace TestBoids.Boids
             public float BaitBallShapeSpeed;
             public float PerceptionRadius;
             public float SeparationRadius;
+            public int NeighborScanLimit;
             public float AlignWeight;
             public float CohesionWeight;
             public float BoundsRadius;
@@ -1033,28 +1039,47 @@ namespace TestBoids.Boids
                 float3 avoidanceSum = float3.zero;
                 int neighborCount = 0;
 
-                for (int i = 0; i < Fish.Length; i++)
+                if (NeighborScanLimit <= 0 || NeighborScanLimit >= Fish.Length - 1)
                 {
-                    if (i == index)
+                    for (int i = 0; i < Fish.Length; i++)
                     {
-                        continue;
-                    }
-
-                    FishState other = Fish[i];
-                    float3 offset = other.Position - current.Position;
-                    float distanceSq = math.lengthsq(offset);
-
-                    if (distanceSq < perceptionRadiusSq)
-                    {
-                        neighborCount++;
-                        headingSum += SafeNormalize(other.Velocity);
-                        centerSum += other.Position;
-
-                        if (distanceSq < separationRadiusSq)
+                        if (i == index)
                         {
-                            float distance = math.sqrt(math.max(distanceSq, 0.0001f));
-                            avoidanceSum += offset * (-1f / distance);
+                            continue;
                         }
+
+                        AccumulateNeighbor(
+                            i,
+                            current,
+                            perceptionRadiusSq,
+                            separationRadiusSq,
+                            ref headingSum,
+                            ref centerSum,
+                            ref avoidanceSum,
+                            ref neighborCount);
+                    }
+                }
+                else
+                {
+                    int sampleFrame = (int)math.floor(ElapsedTime * 8f);
+                    int sampleCount = math.min(NeighborScanLimit, Fish.Length - 1);
+                    for (int i = 0; i < sampleCount; i++)
+                    {
+                        int otherIndex = SampleNeighborIndex(index, i, Fish.Length, sampleFrame);
+                        if (otherIndex == index)
+                        {
+                            otherIndex = (otherIndex + 1) % Fish.Length;
+                        }
+
+                        AccumulateNeighbor(
+                            otherIndex,
+                            current,
+                            perceptionRadiusSq,
+                            separationRadiusSq,
+                            ref headingSum,
+                            ref centerSum,
+                            ref avoidanceSum,
+                            ref neighborCount);
                     }
                 }
 
@@ -1093,6 +1118,47 @@ namespace TestBoids.Boids
                 NextFish[index] = current;
                 NextVelocities[index] = velocity;
                 NextPositions[index] = nextPosition;
+            }
+
+            private void AccumulateNeighbor(
+                int otherIndex,
+                FishState current,
+                float perceptionRadiusSq,
+                float separationRadiusSq,
+                ref float3 headingSum,
+                ref float3 centerSum,
+                ref float3 avoidanceSum,
+                ref int neighborCount)
+            {
+                FishState other = Fish[otherIndex];
+                float3 offset = other.Position - current.Position;
+                float distanceSq = math.lengthsq(offset);
+
+                if (distanceSq >= perceptionRadiusSq)
+                {
+                    return;
+                }
+
+                neighborCount++;
+                headingSum += SafeNormalize(other.Velocity);
+                centerSum += other.Position;
+
+                if (distanceSq < separationRadiusSq)
+                {
+                    float distance = math.sqrt(math.max(distanceSq, 0.0001f));
+                    avoidanceSum += offset * (-1f / distance);
+                }
+            }
+
+            private static int SampleNeighborIndex(int fishIndex, int sampleIndex, int fishCount, int sampleFrame)
+            {
+                uint value = (uint)fishIndex * 747796405u
+                    + (uint)sampleIndex * 2891336453u
+                    + (uint)sampleFrame * 277803737u;
+                value ^= value >> 16;
+                value *= 2246822519u;
+                value ^= value >> 13;
+                return (int)(value % (uint)fishCount);
             }
 
             private float3 SteerTowards(float3 vector, float3 velocity, float maxSpeed, float maxSteerForce)
