@@ -1,19 +1,9 @@
 fileFormatVersion: 2
-guid: f07b97d6ac14b294c80a2f52746454f0
+guid: c0f9cd306cd69914ca04aa9d63128cb8
 ModelImporter:
   serializedVersion: 24200
   internalIDToNameTable: []
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: BaitiaoFinMaterial
-    second: {fileID: 2100000, guid: 28d680dd43da14f438eb8acc34422c37, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: BaitiaoMaterial
-    second: {fileID: 2100000, guid: 2c880781bf22b1f458fd245a246f00bf, type: 2}
+  externalObjects: {}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -60,7 +50,7 @@ ModelImporter:
     useFileUnits: 1
     keepQuads: 0
     weldVertices: 1
-    bakeAxisConversion: 0
+    bakeAxisConversion: 1
     preserveHierarchy: 0
     skinWeightsMode: 0
     maxBonesPerVertex: 4

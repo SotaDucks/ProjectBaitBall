@@ -225,6 +225,77 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6595978}
   m_Mesh: {fileID: -8670151273213183110, guid: d0abf58b1088fc044aaa6d97c5d51d65, type: 3}
+--- !u!1 &277282428
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 277282430}
+  - component: {fileID: 277282429}
+  m_Layer: 0
+  m_Name: FishFlockController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &277282429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277282428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9e42d73def774d1468de9d38bc728a72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FishFlock.FishFlockController
+  swimmingAreaWidth: 19.3
+  swimmingAreaHeight: 15.8
+  swimmingAreaDepth: 32.2
+  FishMovementAxis: 0
+  debugDraw: 1
+  renderingMode: 1
+  computationMode: 0
+  fishesCount: 2000
+  speed: {x: 1.05, y: 2.950438}
+  rotation: {x: 1.88, y: 6.14}
+  neighbourDistance: 4
+  spawnRadius: 2
+  scale: {x: 0.8, y: 1.2}
+  cohesionScale: {x: 0, y: 0, z: 0}
+  followTarget: 0
+  target: {fileID: 0}
+  targetPointsAmount: {x: 2, y: 5}
+  recalculatePoints: 1
+  groupAreaSpeed: 0.8
+  gfxProfile: {fileID: 11400000, guid: a607f01c666cc2f4b8990381b96c8746, type: 2}
+  computeShader: {fileID: 7200000, guid: 0868acc0e83612c4e9ecd5b73fd6f746, type: 3}
+  lookAheadSteps: 3
+  force: 20
+  colliderSizeOffset: 0
+  colliders: []
+  updateAtRuntime: 1
+  groupAnchor: {x: 0, y: 0, z: 0}
+--- !u!4 &277282430
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 277282428}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.24256, y: -9.11594, z: 1.96625}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,15 +857,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.4539892
+      value: 4.043594
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5377387
+      value: -5.910601
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.673823
+      value: 1.4515676
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -853,15 +924,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.4539892
+      value: 4.043594
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5377387
+      value: -5.910601
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.673823
+      value: 1.4515676
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -925,7 +996,6 @@ GameObject:
   - component: {fileID: 1718917403}
   - component: {fileID: 1718917402}
   - component: {fileID: 1718917404}
-  - component: {fileID: 1718917405}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -971,7 +1041,7 @@ MonoBehaviour:
   collisionAvoidDistance: 4
   sphereSeparationMargin: 2
   sphereSeparationWeight: 20
-  obstacleRayCount: 300
+  obstacleRayCount: 32
   autoCollectObstacles: 1
   obstacles:
   - {fileID: 0}
@@ -1000,24 +1070,27 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1718917401}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0efbd039a92a4c90a7d97cda6cc45c24, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.InstancedFishSchoolManager
-  fishPrefab: {fileID: 2279384747904904771, guid: 380f3f7c48a67204f97a7f5ed195d2bf, type: 3}
+  fishPrefab: {fileID: 5124270250192655418, guid: 723582aa2901366449a1a06b19587824, type: 3}
   instanceMesh: {fileID: 0}
   instanceMaterials: []
   instanceScale: {x: 1, y: 1, z: 1}
-  drawBoundsSize: {x: 1000, y: 1000, z: 1000}
+  localForwardAxis: {x: 0, y: 0, z: 1}
+  localDorsalAxis: {x: 0, y: 1, z: 0}
+  applyBank: 1
+  instanceTint: {r: 1, g: 1, b: 1, a: 1}
   shadowCasting: 1
   receiveShadows: 1
   layer: 0
-  fishCount: 2000
+  fishCount: 5000
   spawnOnStart: 1
   seed: 42
   baitBallRadius: 1.5
-  baitBallCoreRatio: 0.34
+  baitBallCoreRatio: 50
   centeringWeight: 1.4
   toroidalFlowWeight: 1.9
   toroidalRollWeight: 0.38
@@ -1036,51 +1109,12 @@ MonoBehaviour:
   collisionAvoidDistance: 7
   sphereSeparationMargin: 2
   sphereSeparationWeight: 20
-  obstacleRayCount: 300
+  obstacleRayCount: 32
   autoCollectObstacles: 1
   obstacles: []
   maxBankAngleDegrees: 12
   bankTurnScale: 0.18
   bankResponse: 8
---- !u!114 &1718917405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1718917401}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e42d73def774d1468de9d38bc728a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishFlock.FishFlockController
-  swimmingAreaWidth: 25
-  swimmingAreaHeight: 20
-  swimmingAreaDepth: 25
-  FishMovementAxis: 0
-  debugDraw: 1
-  renderingMode: 1
-  computationMode: 0
-  fishesCount: 30
-  speed: {x: 2.58, y: 6.58}
-  rotation: {x: 1.88, y: 6.14}
-  neighbourDistance: 4
-  spawnRadius: 2
-  scale: {x: 0.2, y: 0.4}
-  cohesionScale: {x: 0, y: 0, z: 0}
-  followTarget: 0
-  target: {fileID: 0}
-  targetPointsAmount: {x: 2, y: 5}
-  recalculatePoints: 1
-  groupAreaSpeed: 0.8
-  gfxProfile: {fileID: 11400000, guid: 05bab9afd1a9fdb43b05db78da8ebcea, type: 2}
-  computeShader: {fileID: 7200000, guid: 0868acc0e83612c4e9ecd5b73fd6f746, type: 3}
-  lookAheadSteps: 3
-  force: 20
-  colliderSizeOffset: 0
-  colliders: []
-  updateAtRuntime: 1
-  groupAnchor: {x: 0, y: 0, z: 0}
 --- !u!198 &1916881945 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4626506250383706674, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
@@ -1101,15 +1135,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.4539892
+      value: 4.043594
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.5377387
+      value: -5.910601
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.673823
+      value: 1.4515676
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1159,3 +1193,4 @@ SceneRoots:
   - {fileID: 938804944}
   - {fileID: 6595979}
   - {fileID: 954030724}
+  - {fileID: 277282430}

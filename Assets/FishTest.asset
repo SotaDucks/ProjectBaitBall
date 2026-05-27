@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0566f069b4f711a428f300fbaa37256a, type: 3}
   m_Name: FishTest
   m_EditorClassIdentifier: 
-  prefab: {fileID: 8224828686654389064, guid: 6422e2c2e54990a49b22ef342adede0a, type: 3}
-  mesh: {fileID: 2586148439552901436, guid: 6503a09bc64d522499c4653e5a1fa966, type: 3}
-  material: {fileID: 2100000, guid: d592a62b3e1802e47b98b42e9752bfca, type: 2}
+  prefab: {fileID: 919132149155446097, guid: b9ae5e98354e51448ab7999b2c6c1045, type: 3}
+  mesh: {fileID: 2586148439552901436, guid: b9ae5e98354e51448ab7999b2c6c1045, type: 3}
+  material: {fileID: 3242340845958315093, guid: 9a971856ac5340346a166e239f2b259e, type: 3}
   shadowCasting: 1
   receiveShadows: 0
