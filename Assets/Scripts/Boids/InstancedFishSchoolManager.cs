@@ -304,6 +304,20 @@ namespace TestBoids.Boids
             ResetSchool(count, seed);
         }
 
+        public void GetBehaviorWeights(out float currentToroidalFlowWeight, out float currentAlignWeight, out float currentCohesionWeight)
+        {
+            currentToroidalFlowWeight = toroidalFlowWeight;
+            currentAlignWeight = alignWeight;
+            currentCohesionWeight = cohesionWeight;
+        }
+
+        public void SetBehaviorWeights(float newToroidalFlowWeight, float newAlignWeight, float newCohesionWeight)
+        {
+            toroidalFlowWeight = Mathf.Max(0f, newToroidalFlowWeight);
+            alignWeight = Mathf.Max(0f, newAlignWeight);
+            cohesionWeight = Mathf.Max(0f, newCohesionWeight);
+        }
+
         private void UpdateSimulation(float dt)
         {
             int count = fish.Length;

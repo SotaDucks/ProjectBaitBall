@@ -225,77 +225,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6595978}
   m_Mesh: {fileID: -8670151273213183110, guid: d0abf58b1088fc044aaa6d97c5d51d65, type: 3}
---- !u!1 &277282428
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 277282430}
-  - component: {fileID: 277282429}
-  m_Layer: 0
-  m_Name: FishFlockController
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &277282429
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277282428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e42d73def774d1468de9d38bc728a72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::FishFlock.FishFlockController
-  swimmingAreaWidth: 19.3
-  swimmingAreaHeight: 15.8
-  swimmingAreaDepth: 32.2
-  FishMovementAxis: 0
-  debugDraw: 1
-  renderingMode: 1
-  computationMode: 0
-  fishesCount: 2000
-  speed: {x: 1.05, y: 2.950438}
-  rotation: {x: 1.88, y: 6.14}
-  neighbourDistance: 4
-  spawnRadius: 2
-  scale: {x: 0.8, y: 1.2}
-  cohesionScale: {x: 0, y: 0, z: 0}
-  followTarget: 0
-  target: {fileID: 0}
-  targetPointsAmount: {x: 2, y: 5}
-  recalculatePoints: 1
-  groupAreaSpeed: 0.8
-  gfxProfile: {fileID: 11400000, guid: a607f01c666cc2f4b8990381b96c8746, type: 2}
-  computeShader: {fileID: 7200000, guid: 0868acc0e83612c4e9ecd5b73fd6f746, type: 3}
-  lookAheadSteps: 3
-  force: 20
-  colliderSizeOffset: 0
-  colliders: []
-  updateAtRuntime: 1
-  groupAnchor: {x: 0, y: 0, z: 0}
---- !u!4 &277282430
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 277282428}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.24256, y: -9.11594, z: 1.96625}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -731,7 +660,7 @@ Transform:
   m_GameObject: {fileID: 938804939}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -7, z: 0}
+  m_LocalPosition: {x: 7.49, y: -7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -857,15 +786,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5135338
+      value: 2.086546
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5899124
+      value: -4.5514307
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.42715
+      value: -7.3341312
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -924,15 +853,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5135338
+      value: 2.086546
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5899124
+      value: -4.5514307
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.42715
+      value: -7.3341312
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -996,6 +925,7 @@ GameObject:
   - component: {fileID: 1718917403}
   - component: {fileID: 1718917402}
   - component: {fileID: 1718917404}
+  - component: {fileID: 1718917405}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -1136,6 +1066,54 @@ MonoBehaviour:
   maxBankAngleDegrees: 12
   bankTurnScale: 0.18
   bankResponse: 8
+--- !u!114 &1718917405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718917401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e0f8ccf37e54eb4862e1c60e2b6ec9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.BaitBallBehaviorModulator
+  target: {fileID: 1718917404}
+  modulateOnPlay: 1
+  restoreOriginalWeightsOnDisable: 1
+  seed: 9127
+  toroidalFlowLimits: {x: 0, y: 4}
+  alignLimits: {x: 0, y: 4}
+  cohesionLimits: {x: 0, y: 4}
+  states:
+  - name: Calm
+    toroidalFlowRange: {x: 1.8, y: 1.94}
+    alignRange: {x: 2.0010464, y: 2.1210463}
+    cohesionRange: {x: 0.92, y: 0.97842926}
+    durationRange: {x: 3, y: 12}
+    transitionRange: {x: 2, y: 5}
+    selectionWeight: 1
+  - name: Swirl
+    toroidalFlowRange: {x: 3.9370713, y: 4}
+    alignRange: {x: 0.5, y: 1.1}
+    cohesionRange: {x: 0.8, y: 1.4}
+    durationRange: {x: 4.53, y: 5.6283975}
+    transitionRange: {x: 2, y: 5}
+    selectionWeight: 1
+  - name: Pulse
+    toroidalFlowRange: {x: 2.179634, y: 2.8796341}
+    alignRange: {x: 2.9112124, y: 3.7112124}
+    cohesionRange: {x: 1.5416472, y: 2.0416472}
+    durationRange: {x: 3.22, y: 6.4424305}
+    transitionRange: {x: 2, y: 5}
+    selectionWeight: 1
+  - name: Loose
+    toroidalFlowRange: {x: 2.318078, y: 2.818078}
+    alignRange: {x: 0.4, y: 0.9}
+    cohesionRange: {x: 2.0597253, y: 2.4597254}
+    durationRange: {x: 4.2, y: 4.644854}
+    transitionRange: {x: 2, y: 5}
+    selectionWeight: 1
 --- !u!198 &1916881945 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4626506250383706674, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
@@ -1156,15 +1134,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.5135338
+      value: 2.086546
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.5899124
+      value: -4.5514307
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.42715
+      value: -7.3341312
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1214,4 +1192,3 @@ SceneRoots:
   - {fileID: 938804944}
   - {fileID: 6595979}
   - {fileID: 954030724}
-  - {fileID: 277282430}
