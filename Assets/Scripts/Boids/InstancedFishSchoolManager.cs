@@ -82,6 +82,12 @@ namespace TestBoids.Boids
         [SerializeField] private bool autoCollectObstacles = true;
         [SerializeField] private BoidObstacle[] obstacles = Array.Empty<BoidObstacle>();
 
+        [Header("Panic Settings")]
+        [SerializeField, Min(1f)] private float panicSpeedMultiplier = 1.8f;
+        [SerializeField, Min(0f)] private float panicMinSpeedRatio = 1.15f;
+        [SerializeField, Min(0f)] private float panicRiseRate = 8f;
+        [SerializeField, Min(0f)] private float panicDecayRate = 2.4f;
+
         [Header("Pose")]
         [SerializeField] private float maxBankAngleDegrees = 12f;
         [SerializeField] private float bankTurnScale = 0.18f;
@@ -155,6 +161,10 @@ namespace TestBoids.Boids
             sphereSeparationMargin = 4f;
             sphereSeparationWeight = 20f;
             obstacleRayCount = 300;
+            panicSpeedMultiplier = 1.8f;
+            panicMinSpeedRatio = 1.15f;
+            panicRiseRate = 8f;
+            panicDecayRate = 2.4f;
             maxBankAngleDegrees = 12f;
             bankTurnScale = 0.18f;
             bankResponse = 8f;
@@ -327,6 +337,10 @@ namespace TestBoids.Boids
                 CollisionAvoidDistance = collisionAvoidDistance,
                 SphereSeparationMargin = sphereSeparationMargin,
                 SphereSeparationWeight = sphereSeparationWeight,
+                PanicSpeedMultiplier = panicSpeedMultiplier,
+                PanicMinSpeedRatio = panicMinSpeedRatio,
+                PanicRiseRate = panicRiseRate,
+                PanicDecayRate = panicDecayRate,
                 MaxBankAngleDegrees = maxBankAngleDegrees,
                 BankTurnScale = bankTurnScale,
                 BankResponse = bankResponse
@@ -941,6 +955,7 @@ namespace TestBoids.Boids
             public float MaxTurnRate;
             public float MaxSteerForce;
             public float SeparateWeight;
+            public float Panic;
             public int HasCollisionAvoidanceDirection;
         }
 
@@ -988,6 +1003,10 @@ namespace TestBoids.Boids
             public float CollisionAvoidDistance;
             public float SphereSeparationMargin;
             public float SphereSeparationWeight;
+            public float PanicSpeedMultiplier;
+            public float PanicMinSpeedRatio;
+            public float PanicRiseRate;
+            public float PanicDecayRate;
             public float MaxBankAngleDegrees;
             public float BankTurnScale;
             public float BankResponse;
@@ -999,6 +1018,14 @@ namespace TestBoids.Boids
                 float separationRadiusSq = SeparationRadius * SeparationRadius;
                 float3 currentFlowAxis = ReadFlowAxis(ElapsedTime);
                 float flowPhase = ElapsedTime * ToroidalAxisSpeed * 3.7f;
+                float3 forward = SafeNormalize(current.Velocity);
+                bool headingForCollision = IsHeadingForCollision(current.Position, forward);
+                bool panicTriggered = headingForCollision || IsInsideSphereObstacleInfluence(current.Position);
+
+                current.Panic = UpdatePanic(current.Panic, panicTriggered);
+                float effectiveMaxSpeed = current.MaxSpeed * math.lerp(1f, math.max(1f, PanicSpeedMultiplier), current.Panic);
+                float panicMinSpeed = math.max(current.MinSpeed, current.MaxSpeed * math.max(0f, PanicMinSpeedRatio));
+                float effectiveMinSpeed = math.min(effectiveMaxSpeed, math.lerp(current.MinSpeed, panicMinSpeed, current.Panic));
 
                 float3 acceleration = float3.zero;
                 float3 headingSum = float3.zero;
@@ -1034,20 +1061,19 @@ namespace TestBoids.Boids
                 if (neighborCount > 0)
                 {
                     centerSum /= neighborCount;
-                    acceleration += SteerTowards(headingSum, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * AlignWeight;
-                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * CohesionWeight;
-                    acceleration += SteerTowards(avoidanceSum, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * current.SeparateWeight;
+                    acceleration += SteerTowards(headingSum, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * AlignWeight;
+                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * CohesionWeight;
+                    acceleration += SteerTowards(avoidanceSum, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * current.SeparateWeight;
                 }
 
-                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * CenteringWeight;
-                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase, current.MaxSpeed, current.MaxSteerForce) * ToroidalFlowWeight;
-                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity, current.MaxSpeed, current.MaxSteerForce);
+                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * CenteringWeight;
+                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase, effectiveMaxSpeed, current.MaxSteerForce) * ToroidalFlowWeight;
+                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce);
 
-                float3 forward = SafeNormalize(current.Velocity);
-                if (IsHeadingForCollision(current.Position, forward))
+                if (headingForCollision)
                 {
                     float3 clearDirection = ObstacleRays(current.Position, forward, ref current);
-                    acceleration += SteerTowards(clearDirection, current.Velocity, current.MaxSpeed, current.MaxSteerForce) * AvoidCollisionWeight;
+                    acceleration += SteerTowards(clearDirection, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * AvoidCollisionWeight;
                 }
                 else
                 {
@@ -1055,7 +1081,7 @@ namespace TestBoids.Boids
                 }
 
                 float3 desiredVelocity = current.Velocity + acceleration * Dt;
-                float speed = math.clamp(math.length(desiredVelocity), current.MinSpeed, current.MaxSpeed);
+                float speed = math.clamp(math.length(desiredVelocity), effectiveMinSpeed, effectiveMaxSpeed);
                 desiredVelocity = SafeNormalize(desiredVelocity) * speed;
                 float3 velocity = LimitTurn(current.Velocity, desiredVelocity, Dt, current.MaxTurnRate);
                 float3 nextPosition = current.Position + velocity * Dt;
@@ -1101,6 +1127,14 @@ namespace TestBoids.Boids
             private bool IsHeadingForCollision(float3 position, float3 forward)
             {
                 return Obstacles.Length > 0 && RayHitsObstacle(position, forward, CollisionAvoidDistance);
+            }
+
+            private float UpdatePanic(float currentPanic, bool triggered)
+            {
+                float target = triggered ? 1f : 0f;
+                float response = triggered ? PanicRiseRate : PanicDecayRate;
+                float t = 1f - math.exp(-math.max(0f, response) * Dt);
+                return math.saturate(math.lerp(math.saturate(currentPanic), target, t));
             }
 
             private float3 ObstacleRays(float3 position, float3 forward, ref FishState state)
@@ -1186,6 +1220,33 @@ namespace TestBoids.Boids
                 }
 
                 return far >= 0f && far <= maxDistance ? far : float.PositiveInfinity;
+            }
+
+            private bool IsInsideSphereObstacleInfluence(float3 position)
+            {
+                float margin = math.max(0f, SphereSeparationMargin);
+                if (margin <= 0f || Obstacles.Length == 0)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < Obstacles.Length; i++)
+                {
+                    ObstacleData obstacle = Obstacles[i];
+                    if (obstacle.Shape != (int)BoidObstacleShape.Sphere)
+                    {
+                        continue;
+                    }
+
+                    float influenceRadius = obstacle.Radius + margin;
+                    float3 offset = position - obstacle.Position;
+                    if (math.lengthsq(offset) < influenceRadius * influenceRadius)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
             private float RayBoxObstacleHitDistance(float3 origin, float3 direction, float maxDistance, ObstacleData obstacle)
