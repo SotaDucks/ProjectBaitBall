@@ -49,6 +49,10 @@ namespace TestBoids.Boids
         [SerializeField, Range(0f, 0.9f)] private float baitBallBottomTaper = 0.42f;
         [SerializeField, Range(0f, 0.45f)] private float baitBallShapeAmount = 0.22f;
         [SerializeField, Min(0f)] private float baitBallShapeSpeed = 0.07f;
+        [SerializeField] private bool baitBallMorphEnabled = true;
+        [SerializeField, Min(0.25f)] private float baitBallMorphInterval = 8f;
+        [SerializeField, Min(0f)] private float baitBallMorphResponse = 0.45f;
+        [SerializeField, Range(0f, 1f)] private float baitBallMorphAmount = 0.65f;
 
         [Header("Boids")]
         [SerializeField, HideInInspector] private float minSpeed = 2.8f;
@@ -102,6 +106,11 @@ namespace TestBoids.Boids
         private Matrix4x4 prefabRenderLocalMatrix = Matrix4x4.identity;
         private Quaternion localAxisCorrection = Quaternion.identity;
         private float elapsedTime;
+        private BoidRandom baitBallMorphRandom;
+        private BaitBallShape currentBaitBallShape;
+        private BaitBallShape targetBaitBallShape;
+        private float baitBallMorphTimer;
+        private bool baitBallMorphInitialized;
 
         private bool HasFish => fish.IsCreated && fish.Length > 0;
 
@@ -122,6 +131,10 @@ namespace TestBoids.Boids
             baitBallBottomTaper = 0.42f;
             baitBallShapeAmount = 0.22f;
             baitBallShapeSpeed = 0.07f;
+            baitBallMorphEnabled = true;
+            baitBallMorphInterval = 8f;
+            baitBallMorphResponse = 0.45f;
+            baitBallMorphAmount = 0.65f;
             minSpeed = 2.8f;
             maxSpeed = 7f;
             maxTurnRate = 18f;
@@ -161,6 +174,11 @@ namespace TestBoids.Boids
         {
             InitializeIndividualRandomRangesFromLegacyValues();
             NormalizeIndividualRandomRanges();
+            if (!Application.isPlaying)
+            {
+                baitBallMorphInitialized = false;
+            }
+
             RefreshAxisCorrection();
         }
 
@@ -226,6 +244,7 @@ namespace TestBoids.Boids
             count = Mathf.Max(0, count);
             fishCount = count;
             elapsedTime = 0f;
+            InitializeBaitBallMorph(randomSeed);
 
             ResolveRenderResources();
             EnsureRayDirections();
@@ -274,6 +293,7 @@ namespace TestBoids.Boids
         private void UpdateSimulation(float dt)
         {
             int count = fish.Length;
+            UpdateBaitBallMorph(dt);
             FishSimulationJob simulationJob = new()
             {
                 Fish = fish,
@@ -286,16 +306,16 @@ namespace TestBoids.Boids
                 TransformRotation = ToQuaternion(transform.rotation),
                 Dt = dt,
                 ElapsedTime = elapsedTime,
-                BaitBallRadius = baitBallRadius,
+                BaitBallRadius = currentBaitBallShape.Radius,
                 BaitBallCoreRatio = baitBallCoreRatio,
                 CenteringWeight = centeringWeight,
                 ToroidalFlowWeight = toroidalFlowWeight,
                 ToroidalRollWeight = toroidalRollWeight,
                 ToroidalAxisSpeed = toroidalAxisSpeed,
-                BaitBallWidthScale = baitBallWidthScale,
-                BaitBallHeightScale = baitBallHeightScale,
-                BaitBallBottomDrop = baitBallBottomDrop,
-                BaitBallBottomTaper = baitBallBottomTaper,
+                BaitBallWidthScale = currentBaitBallShape.WidthScale,
+                BaitBallHeightScale = currentBaitBallShape.HeightScale,
+                BaitBallBottomDrop = currentBaitBallShape.BottomDrop,
+                BaitBallBottomTaper = currentBaitBallShape.BottomTaper,
                 BaitBallShapeAmount = baitBallShapeAmount,
                 BaitBallShapeSpeed = baitBallShapeSpeed,
                 PerceptionRadius = perceptionRadius,
@@ -646,14 +666,15 @@ namespace TestBoids.Boids
         private float3 CreateInitialPosition(ref BoidRandom random, float3 center)
         {
             float3 direction = CreateRandomUnitVector(ref random);
+            BaitBallShape shape = baitBallMorphInitialized ? currentBaitBallShape : ReadBaseBaitBallShape();
             float radius = ComputeBaitBallTargetRadius(
                 direction,
                 ToQuaternion(transform.rotation),
-                baitBallRadius,
-                baitBallWidthScale,
-                baitBallHeightScale,
-                baitBallBottomDrop,
-                baitBallBottomTaper,
+                shape.Radius,
+                shape.WidthScale,
+                shape.HeightScale,
+                shape.BottomDrop,
+                shape.BottomTaper,
                 baitBallShapeAmount,
                 0f,
                 baitBallShapeSpeed);
@@ -744,6 +765,105 @@ namespace TestBoids.Boids
         private static float SampleRange(Vector2 range, ref BoidRandom random)
         {
             return Mathf.Lerp(range.x, range.y, random.Next01());
+        }
+
+        private void InitializeBaitBallMorph(int randomSeed)
+        {
+            baitBallMorphRandom = new BoidRandom((uint)randomSeed ^ 0xA511E9B3u);
+            currentBaitBallShape = ReadBaseBaitBallShape();
+            targetBaitBallShape = SampleBaitBallMorphTarget(currentBaitBallShape, ref baitBallMorphRandom);
+            baitBallMorphTimer = SampleMorphInterval(ref baitBallMorphRandom);
+            baitBallMorphInitialized = true;
+        }
+
+        private void UpdateBaitBallMorph(float dt)
+        {
+            if (!baitBallMorphInitialized)
+            {
+                InitializeBaitBallMorph(seed);
+            }
+
+            BaitBallShape baseShape = ReadBaseBaitBallShape();
+            if (!baitBallMorphEnabled || baitBallMorphAmount <= 0f)
+            {
+                currentBaitBallShape = baseShape;
+                targetBaitBallShape = baseShape;
+                baitBallMorphTimer = 0f;
+                return;
+            }
+
+            baitBallMorphTimer -= dt;
+            if (baitBallMorphTimer <= 0f)
+            {
+                targetBaitBallShape = SampleBaitBallMorphTarget(baseShape, ref baitBallMorphRandom);
+                baitBallMorphTimer = SampleMorphInterval(ref baitBallMorphRandom);
+            }
+
+            float t = 1f - Mathf.Exp(-Mathf.Max(0f, baitBallMorphResponse) * dt);
+            currentBaitBallShape = LerpBaitBallShape(currentBaitBallShape, targetBaitBallShape, t);
+        }
+
+        private BaitBallShape ReadBaseBaitBallShape()
+        {
+            return new BaitBallShape
+            {
+                Radius = Mathf.Max(0.001f, baitBallRadius),
+                WidthScale = Mathf.Max(0.1f, baitBallWidthScale),
+                HeightScale = Mathf.Max(0.1f, baitBallHeightScale),
+                BottomDrop = Mathf.Clamp01(baitBallBottomDrop),
+                BottomTaper = Mathf.Clamp(baitBallBottomTaper, 0f, 0.9f)
+            };
+        }
+
+        private BaitBallShape SampleBaitBallMorphTarget(BaitBallShape baseShape, ref BoidRandom random)
+        {
+            float amount = Mathf.Clamp01(baitBallMorphAmount);
+            return new BaitBallShape
+            {
+                Radius = SampleRelative(baseShape.Radius, 0.86f, 1.16f, amount, ref random),
+                WidthScale = SampleRelative(baseShape.WidthScale, 0.86f, 1.14f, amount, ref random),
+                HeightScale = SampleRelative(baseShape.HeightScale, 0.82f, 1.18f, amount, ref random),
+                BottomDrop = SampleBlendedRange(baseShape.BottomDrop, 0.12f, 0.62f, amount, ref random),
+                BottomTaper = SampleBlendedRange(baseShape.BottomTaper, 0.18f, 0.68f, amount, ref random)
+            };
+        }
+
+        private float SampleMorphInterval(ref BoidRandom random)
+        {
+            return Mathf.Max(0.25f, baitBallMorphInterval) * Mathf.Lerp(0.75f, 1.25f, random.Next01());
+        }
+
+        private static float SampleRelative(float value, float minMultiplier, float maxMultiplier, float amount, ref BoidRandom random)
+        {
+            float target = value * Mathf.Lerp(minMultiplier, maxMultiplier, random.Next01());
+            return Mathf.Lerp(value, target, amount);
+        }
+
+        private static float SampleBlendedRange(float value, float min, float max, float amount, ref BoidRandom random)
+        {
+            float target = Mathf.Lerp(min, max, random.Next01());
+            return Mathf.Lerp(value, target, amount);
+        }
+
+        private static BaitBallShape LerpBaitBallShape(BaitBallShape from, BaitBallShape to, float t)
+        {
+            return new BaitBallShape
+            {
+                Radius = Mathf.Lerp(from.Radius, to.Radius, t),
+                WidthScale = Mathf.Lerp(from.WidthScale, to.WidthScale, t),
+                HeightScale = Mathf.Lerp(from.HeightScale, to.HeightScale, t),
+                BottomDrop = Mathf.Lerp(from.BottomDrop, to.BottomDrop, t),
+                BottomTaper = Mathf.Lerp(from.BottomTaper, to.BottomTaper, t)
+            };
+        }
+
+        private struct BaitBallShape
+        {
+            public float Radius;
+            public float WidthScale;
+            public float HeightScale;
+            public float BottomDrop;
+            public float BottomTaper;
         }
 
         private static Vector2 Around(float value, float ratio)
