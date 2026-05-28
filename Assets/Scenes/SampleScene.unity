@@ -335,9 +335,8 @@ MonoBehaviour:
   coastFacingSpeed: 0.6
   configureRigidbodyOnAwake: 1
   maxBankAngle: 35
-  bankTurnTorque: 10
+  manualBankBlend: 0.35
   bankDirection: -1
-  yawDirection: 1
 --- !u!54 &109750651
 Rigidbody:
   m_ObjectHideFlags: 0

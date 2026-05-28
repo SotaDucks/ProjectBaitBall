@@ -29,19 +29,19 @@ namespace TestBoids.Tuna
 
         [Header("Banking")]
         [SerializeField, Min(0f)] private float maxBankAngle = 35f;
-        [SerializeField, Min(0f)] private float bankTurnTorque = 2.5f;
+        [SerializeField, Range(0f, 1f)] private float manualBankBlend = 0.35f;
         [SerializeField] private float bankDirection = -1f;
-        [SerializeField] private float yawDirection = 1f;
 
         private Rigidbody body;
         private Vector3 desiredDirection = Vector3.forward;
         private bool hasMoveInput;
         private bool hasThrustInput;
         private float turnInput;
+        private float bankAmount;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
-        public float CurrentBankInput => turnInput;
+        public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
 
         private void Reset()
@@ -96,7 +96,6 @@ namespace TestBoids.Tuna
             ApplySpeedLimit();
             ApplyMinimumSwimSpeed();
             ApplyTurn();
-            ApplyBankTurn();
             UpdateTurnAmount();
         }
 
@@ -187,7 +186,8 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection.normalized, BuildDorsal(targetDirection, turnInput));
+            float targetBankAmount = BuildBankAmount();
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection.normalized, BuildDorsal(targetDirection, targetBankAmount));
             Quaternion rotationError = targetRotation * Quaternion.Inverse(body.rotation);
             rotationError.ToAngleAxis(out float angleDegrees, out Vector3 axis);
 
@@ -206,16 +206,6 @@ namespace TestBoids.Tuna
             body.AddTorque(springTorque + dampingTorque, ForceMode.Acceleration);
         }
 
-        private void ApplyBankTurn()
-        {
-            if (Mathf.Abs(turnInput) <= 0f || bankTurnTorque <= 0f)
-            {
-                return;
-            }
-
-            body.AddTorque(transform.up * (turnInput * bankTurnTorque * yawDirection), ForceMode.Acceleration);
-        }
-
         private Vector3 BuildDorsal(Vector3 forward, float bankInput)
         {
             Vector3 dorsal = Vector3.up - forward * Vector3.Dot(Vector3.up, forward);
@@ -231,6 +221,16 @@ namespace TestBoids.Tuna
             dorsal = fallback - forward * Vector3.Dot(fallback, forward);
             dorsal = dorsal.sqrMagnitude > 0.000001f ? dorsal.normalized : Vector3.up;
             return Quaternion.AngleAxis(bankInput * maxBankAngle * bankDirection, forward.normalized) * dorsal;
+        }
+
+        private float BuildBankAmount()
+        {
+            Vector3 localAngularVelocity = transform.InverseTransformDirection(body.angularVelocity);
+            float turnBank = maxAngularVelocity > 0.0001f
+                ? Mathf.Clamp(localAngularVelocity.y / maxAngularVelocity, -1f, 1f)
+                : 0f;
+            bankAmount = Mathf.Clamp(turnBank + turnInput * manualBankBlend, -1f, 1f);
+            return bankAmount;
         }
 
         private void UpdateTurnAmount()
