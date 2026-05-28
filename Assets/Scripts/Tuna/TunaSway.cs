@@ -42,6 +42,11 @@ namespace TestBoids.Tuna
         [SerializeField] private SwaySettings mediumSpeed = new() { amplitude = 9f, frequency = 2.2f };
         [SerializeField] private SwaySettings highSpeed = new() { amplitude = 16f, frequency = 3.6f };
 
+        [Header("Dynamic Bone Damping")]
+        public DynamicBone dynamicBone;
+        [Range(0f, 1f)] public float lowSpeedDamping = 0.1f;
+        [Range(0f, 1f)] public float mediumHighSpeedDamping = 0.1f;
+
         [Header("Blending")]
         [SerializeField, Min(0f)] private float response = 8f;
         [SerializeField, Min(0f)] private float globalIntensity = 1f;
@@ -49,6 +54,7 @@ namespace TestBoids.Tuna
 
         private float currentAmplitude;
         private float currentFrequency;
+        private float currentDynamicBoneDamping;
         private float phase;
         private Quaternion lastOffset = Quaternion.identity;
 
@@ -56,6 +62,7 @@ namespace TestBoids.Tuna
         {
             targetBone = transform;
             targetRigidbody = GetComponentInParent<Rigidbody>();
+            dynamicBone = GetComponent<DynamicBone>();
         }
 
         private void Awake()
@@ -70,8 +77,16 @@ namespace TestBoids.Tuna
                 targetRigidbody = GetComponentInParent<Rigidbody>();
             }
 
+            if (!dynamicBone)
+            {
+                dynamicBone = GetComponent<DynamicBone>();
+            }
+
             NormalizeSpeedBands();
-            SelectSettings(GetSpeed(), out currentAmplitude, out currentFrequency);
+            float speed = GetSpeed();
+            SelectSettings(speed, out currentAmplitude, out currentFrequency);
+            currentDynamicBoneDamping = SelectDynamicBoneDamping(speed);
+            ApplyDynamicBoneDamping(currentDynamicBoneDamping);
         }
 
         private void OnDisable()
@@ -92,10 +107,16 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            SelectSettings(GetSpeed(), out float targetAmplitude, out float targetFrequency);
+            float speed = GetSpeed();
+            SelectSettings(speed, out float targetAmplitude, out float targetFrequency);
             float blend = 1f - Mathf.Exp(-response * Time.deltaTime);
             currentAmplitude = Mathf.Lerp(currentAmplitude, targetAmplitude, blend);
             currentFrequency = Mathf.Lerp(currentFrequency, targetFrequency, blend);
+            currentDynamicBoneDamping = Mathf.Lerp(
+                currentDynamicBoneDamping,
+                SelectDynamicBoneDamping(speed),
+                blend);
+            ApplyDynamicBoneDamping(currentDynamicBoneDamping);
 
             phase += Time.deltaTime * Mathf.Max(0f, currentFrequency);
             if (phase > 1000f)
@@ -137,6 +158,28 @@ namespace TestBoids.Tuna
             frequency = Mathf.Max(0f, settings.frequency);
         }
 
+        private float SelectDynamicBoneDamping(float speed)
+        {
+            return Mathf.Clamp01(speed <= lowSpeedMax ? lowSpeedDamping : mediumHighSpeedDamping);
+        }
+
+        private void ApplyDynamicBoneDamping(float damping)
+        {
+            if (!dynamicBone)
+            {
+                return;
+            }
+
+            float clampedDamping = Mathf.Clamp01(damping);
+            if (Mathf.Approximately(dynamicBone.m_Damping, clampedDamping))
+            {
+                return;
+            }
+
+            dynamicBone.m_Damping = clampedDamping;
+            dynamicBone.UpdateParameters();
+        }
+
         private void ApplyOffset(Quaternion currentOffset)
         {
             if (spaceMode == SpaceMode.Local)
@@ -171,6 +214,8 @@ namespace TestBoids.Tuna
             lowSpeed = NormalizeSettings(lowSpeed);
             mediumSpeed = NormalizeSettings(mediumSpeed);
             highSpeed = NormalizeSettings(highSpeed);
+            lowSpeedDamping = Mathf.Clamp01(lowSpeedDamping);
+            mediumHighSpeedDamping = Mathf.Clamp01(mediumHighSpeedDamping);
         }
 
         private void NormalizeSpeedBands()
