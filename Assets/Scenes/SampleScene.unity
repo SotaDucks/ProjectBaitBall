@@ -326,7 +326,7 @@ MonoBehaviour:
   waterDrag: 0.75
   idleDragMultiplier: 1.8
   speedLimitDamping: 6
-  directionalThrustBlend: 1
+  directionalThrustBlend: 0
   inputDeadZone: 0.08
   turnSpring: 92.4
   turnDamping: 9
@@ -403,7 +403,7 @@ MonoBehaviour:
     amplitude: 9
     frequency: 2.2
   highSpeed:
-    amplitude: 12
+    amplitude: 10
     frequency: 3.6
   dynamicBone: {fileID: 109750648}
   lowSpeedDamping: 0.8
@@ -584,11 +584,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaCameraController
   input: {fileID: 109750652}
   cameraPivot: {fileID: 384348368}
-  sensitivity: {x: 0.12, y: 0.12}
+  followTarget: {fileID: 0}
+  followOffset: {x: 0, y: 0, z: 0}
+  positionDamping: {x: 0, y: 0, z: 0}
+  sensitivity: {x: 0.08, y: 0.08}
   invertY: 0
   scaleLookByDeltaTime: 0
-  minimumPitch: -65
-  maximumPitch: 65
+  minimumPitch: -35
+  maximumPitch: 35
+  pitchDamping: 0.2
+  yawDamping: 0.2
+  rollDamping: 0.2
 --- !u!4 &384348368
 Transform:
   m_ObjectHideFlags: 0
@@ -844,7 +850,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 938804939}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
