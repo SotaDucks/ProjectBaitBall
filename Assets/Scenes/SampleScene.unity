@@ -305,24 +305,6 @@ MonoBehaviour:
   m_ReferenceObject: {fileID: 0}
   m_DistanceToObject: 20
   m_Multithread: 1
---- !u!114 &109750649
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109750646}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b6acae9f02654fe09ce6e3447ea3251d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaVisualBank
-  motor: {fileID: 109750650}
-  visualRoot: {fileID: 109750647}
-  localBankAxis: {x: 0, y: 0, z: 1}
-  maxBankAngle: 20
-  response: 8
-  direction: -1
 --- !u!114 &109750650
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,9 +1180,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 109750653}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 109750649}
   m_SourcePrefab: {fileID: 100100000, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
 --- !u!1001 &1587529782
 PrefabInstance:
