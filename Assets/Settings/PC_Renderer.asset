@@ -28,7 +28,7 @@ MonoBehaviour:
   heightProcessingShader: {fileID: 4800000, guid: a1cfcf2c2c8140c084fb10845093540e, type: 3}
   underwaterRenderingSettings:
     enable: 1
-    renderMethod: 0
+    renderMethod: 1
     ignoreSceneView: 0
   underwaterResources: {fileID: 11400000, guid: 185c96ef53e9cf14bbc913f624752e24, type: 2}
 --- !u!114 &11400000

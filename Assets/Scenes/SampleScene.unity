@@ -20,7 +20,7 @@ RenderSettings:
   m_FogDensity: 0.01
   m_LinearFogStart: 0
   m_LinearFogEnd: 300
-  m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
+  m_AmbientSkyColor: {r: 0.3177287, g: 0.431945, b: 0.6603774, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
   m_AmbientIntensity: 1
@@ -1039,15 +1039,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.48
+      value: 0.7962906
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.82
+      value: -7.218949
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.94
+      value: -30.150024
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1206,15 +1206,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.48
+      value: 0.7962906
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.82
+      value: -7.218949
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.94
+      value: -30.150024
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1276,7 +1276,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1718917403}
-  - component: {fileID: 1718917402}
   - component: {fileID: 1718917404}
   - component: {fileID: 1718917405}
   m_Layer: 0
@@ -1286,51 +1285,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1718917402
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1718917401}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79c8a4fc0690eb7489e7e329989b802c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.FishSchoolManager
-  fishPrefab: {fileID: 1038897721975819879, guid: 380f3f7c48a67204f97a7f5ed195d2bf, type: 3}
-  fishCount: 500
-  fishParent: {fileID: 0}
-  spawnOnStart: 1
-  useExistingChildAgents: 0
-  seed: 42
-  baitBallRadius: 3.3
-  baitBallCoreRatio: 0.34
-  centeringWeight: 1.4
-  toroidalFlowWeight: 1.9
-  toroidalRollWeight: 0.38
-  toroidalAxisSpeed: 0.42
-  minSpeed: 1
-  maxSpeed: 2
-  maxTurnRate: 4
-  perceptionRadius: 2.7
-  separationRadius: 1.25
-  maxSteerForce: 3
-  alignWeight: 1
-  cohesionWeight: 1
-  separateWeight: 1.1
-  boundsRadius: 0.27
-  avoidCollisionWeight: 10
-  collisionAvoidDistance: 4
-  sphereSeparationMargin: 2
-  sphereSeparationWeight: 20
-  obstacleRayCount: 32
-  autoCollectObstacles: 1
-  obstacles:
-  - {fileID: 0}
-  maxBankAngleDegrees: 12
-  bankTurnScale: 0.18
-  bankResponse: 8
 --- !u!4 &1718917403
 Transform:
   m_ObjectHideFlags: 0
@@ -1370,7 +1324,7 @@ MonoBehaviour:
   shadowCasting: 1
   receiveShadows: 1
   layer: 0
-  fishCount: 10000
+  fishCount: 15000
   spawnOnStart: 1
   seed: 42
   baitBallRadius: 2
@@ -1487,15 +1441,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.48
+      value: 0.7962906
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -7.82
+      value: -7.218949
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.94
+      value: -30.150024
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
