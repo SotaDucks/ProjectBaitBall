@@ -322,6 +322,7 @@ MonoBehaviour:
   cameraPivot: {fileID: 0}
   acceleration: 9
   reverseAccelerationScale: 0.45
+  minimumSwimSpeed: 1.5
   maxSpeed: 12
   waterDrag: 0.75
   idleDragMultiplier: 1.8
@@ -333,6 +334,10 @@ MonoBehaviour:
   maxAngularVelocity: 8
   coastFacingSpeed: 0.6
   configureRigidbodyOnAwake: 1
+  maxBankAngle: 35
+  bankTurnTorque: 10
+  bankDirection: -1
+  yawDirection: 1
 --- !u!54 &109750651
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -584,17 +589,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaCameraController
   input: {fileID: 109750652}
   cameraPivot: {fileID: 384348368}
-  followTarget: {fileID: 0}
+  followTarget: {fileID: 109750647}
   followOffset: {x: 0, y: 0, z: 0}
-  positionDamping: {x: 0, y: 0, z: 0}
+  positionDamping: {x: 0.02, y: 0.001, z: 0.3}
   sensitivity: {x: 0.08, y: 0.08}
   invertY: 0
   scaleLookByDeltaTime: 0
   minimumPitch: -35
   maximumPitch: 35
-  pitchDamping: 0.2
-  yawDamping: 0.2
-  rollDamping: 0.2
+  pitchDamping: 0.1
+  yawDamping: 0.1
+  rollDamping: 0.1
 --- !u!4 &384348368
 Transform:
   m_ObjectHideFlags: 0
@@ -603,13 +608,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 384348366}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -8, z: -28.18}
+  m_LocalScale: {x: 0.2, y: 0.2, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 330585546}
-  m_Father: {fileID: 109750647}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &410087039
 GameObject:
@@ -1043,7 +1048,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.3199997
+      value: -29.94
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1127,7 +1132,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.56
+      value: -28.18
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1175,9 +1180,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
       insertIndex: -1
       addedObject: {fileID: 938804944}
-    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 384348368}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 09365c92697323c4f807a7581f9922eb, type: 3}
       insertIndex: -1
@@ -1213,7 +1215,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.3199997
+      value: -29.94
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1494,7 +1496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -7.3199997
+      value: -29.94
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1543,3 +1545,4 @@ SceneRoots:
   - {fileID: 6595979}
   - {fileID: 954030724}
   - {fileID: 1546201921}
+  - {fileID: 384348368}

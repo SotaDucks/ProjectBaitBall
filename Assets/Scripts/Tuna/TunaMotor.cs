@@ -12,6 +12,7 @@ namespace TestBoids.Tuna
         [Header("Movement")]
         [SerializeField, Min(0f)] private float acceleration = 16f;
         [SerializeField, Min(0f)] private float reverseAccelerationScale = 0.45f;
+        [SerializeField, Min(0f)] private float minimumSwimSpeed = 1.5f;
         [SerializeField, Min(0f)] private float maxSpeed = 9f;
         [SerializeField, Min(0f)] private float waterDrag = 0.75f;
         [SerializeField, Min(0f)] private float idleDragMultiplier = 1.8f;
@@ -26,12 +27,21 @@ namespace TestBoids.Tuna
         [SerializeField, Min(0f)] private float coastFacingSpeed = 0.6f;
         [SerializeField] private bool configureRigidbodyOnAwake = true;
 
+        [Header("Banking")]
+        [SerializeField, Min(0f)] private float maxBankAngle = 35f;
+        [SerializeField, Min(0f)] private float bankTurnTorque = 2.5f;
+        [SerializeField] private float bankDirection = -1f;
+        [SerializeField] private float yawDirection = 1f;
+
         private Rigidbody body;
         private Vector3 desiredDirection = Vector3.forward;
         private bool hasMoveInput;
+        private bool hasThrustInput;
+        private float turnInput;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
+        public float CurrentBankInput => turnInput;
         public float CurrentTurnAmount { get; private set; }
 
         private void Reset()
@@ -73,53 +83,42 @@ namespace TestBoids.Tuna
         {
             Vector2 move = input ? input.Move : Vector2.zero;
             hasMoveInput = move.sqrMagnitude > inputDeadZone * inputDeadZone;
+            hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
+            turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
+            desiredDirection = BuildDesiredDirection(hasThrustInput ? move.y : 1f);
 
-            if (hasMoveInput)
+            if (hasThrustInput)
             {
-                desiredDirection = BuildDesiredDirection(move);
                 ApplyThrust(move);
             }
 
             ApplyWaterDrag();
             ApplySpeedLimit();
+            ApplyMinimumSwimSpeed();
             ApplyTurn();
+            ApplyBankTurn();
             UpdateTurnAmount();
         }
 
-        private Vector3 BuildDesiredDirection(Vector2 move)
+        private Vector3 BuildDesiredDirection(float thrustInput)
         {
-            Vector3 forward;
-            Vector3 right;
-
             if (cameraController)
             {
-                forward = cameraController.Forward;
-                right = cameraController.Right;
-            }
-            else if (cameraPivot)
-            {
-                forward = cameraPivot.forward;
-                right = cameraPivot.right;
-            }
-            else
-            {
-                forward = transform.forward;
-                right = transform.right;
+                return cameraController.Forward * Mathf.Sign(thrustInput);
             }
 
-            Vector3 direction = forward * move.y + right * move.x;
-            if (direction.sqrMagnitude <= 0.000001f)
+            if (cameraPivot)
             {
-                return transform.forward;
+                return cameraPivot.forward * Mathf.Sign(thrustInput);
             }
 
-            return direction.normalized;
+            return transform.forward * Mathf.Sign(thrustInput);
         }
 
         private void ApplyThrust(Vector2 move)
         {
-            float inputStrength = Mathf.Clamp01(move.magnitude);
-            float reverseScale = move.y < -Mathf.Abs(move.x) ? reverseAccelerationScale : 1f;
+            float inputStrength = Mathf.Clamp01(Mathf.Abs(move.y));
+            float reverseScale = move.y < 0f ? reverseAccelerationScale : 1f;
             Vector3 thrustDirection = Vector3.Slerp(transform.forward, desiredDirection, directionalThrustBlend).normalized;
             body.AddForce(thrustDirection * (acceleration * inputStrength * reverseScale), ForceMode.Acceleration);
         }
@@ -149,13 +148,38 @@ namespace TestBoids.Tuna
             body.AddForce(-velocity.normalized * (excessSpeed * speedLimitDamping), ForceMode.Acceleration);
         }
 
+        private void ApplyMinimumSwimSpeed()
+        {
+            if (minimumSwimSpeed <= 0f)
+            {
+                return;
+            }
+
+            float effectiveMinimumSpeed = maxSpeed > 0f ? Mathf.Min(minimumSwimSpeed, maxSpeed) : minimumSwimSpeed;
+            Vector3 velocity = body.linearVelocity;
+            float speed = velocity.magnitude;
+            if (speed >= effectiveMinimumSpeed)
+            {
+                return;
+            }
+
+            body.linearVelocity = desiredDirection.normalized * effectiveMinimumSpeed;
+        }
+
         private void ApplyTurn()
         {
             Vector3 targetDirection = desiredDirection;
             Vector3 velocity = body.linearVelocity;
-            if (!hasMoveInput && velocity.sqrMagnitude > coastFacingSpeed * coastFacingSpeed)
+            if (!hasThrustInput)
             {
-                targetDirection = velocity.normalized;
+                if (Mathf.Abs(turnInput) > 0f || velocity.sqrMagnitude <= coastFacingSpeed * coastFacingSpeed || minimumSwimSpeed > 0f)
+                {
+                    targetDirection = desiredDirection;
+                }
+                else
+                {
+                    targetDirection = velocity.normalized;
+                }
             }
 
             if (targetDirection.sqrMagnitude <= 0.000001f)
@@ -163,7 +187,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection.normalized, BuildDorsal(targetDirection));
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection.normalized, BuildDorsal(targetDirection, turnInput));
             Quaternion rotationError = targetRotation * Quaternion.Inverse(body.rotation);
             rotationError.ToAngleAxis(out float angleDegrees, out Vector3 axis);
 
@@ -182,19 +206,31 @@ namespace TestBoids.Tuna
             body.AddTorque(springTorque + dampingTorque, ForceMode.Acceleration);
         }
 
-        private Vector3 BuildDorsal(Vector3 forward)
+        private void ApplyBankTurn()
+        {
+            if (Mathf.Abs(turnInput) <= 0f || bankTurnTorque <= 0f)
+            {
+                return;
+            }
+
+            body.AddTorque(transform.up * (turnInput * bankTurnTorque * yawDirection), ForceMode.Acceleration);
+        }
+
+        private Vector3 BuildDorsal(Vector3 forward, float bankInput)
         {
             Vector3 dorsal = Vector3.up - forward * Vector3.Dot(Vector3.up, forward);
             if (dorsal.sqrMagnitude > 0.000001f)
             {
-                return dorsal.normalized;
+                dorsal = dorsal.normalized;
+                return Quaternion.AngleAxis(bankInput * maxBankAngle * bankDirection, forward.normalized) * dorsal;
             }
 
             Vector3 fallback = Mathf.Abs(Vector3.Dot(forward.normalized, Vector3.forward)) < 0.92f
                 ? Vector3.forward
                 : Vector3.right;
             dorsal = fallback - forward * Vector3.Dot(fallback, forward);
-            return dorsal.sqrMagnitude > 0.000001f ? dorsal.normalized : Vector3.up;
+            dorsal = dorsal.sqrMagnitude > 0.000001f ? dorsal.normalized : Vector3.up;
+            return Quaternion.AngleAxis(bankInput * maxBankAngle * bankDirection, forward.normalized) * dorsal;
         }
 
         private void UpdateTurnAmount()
