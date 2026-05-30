@@ -5,9 +5,21 @@ namespace TestBoids.Tuna
     [RequireComponent(typeof(Rigidbody))]
     public sealed class TunaMotor : MonoBehaviour
     {
+        private enum LocomotionState
+        {
+            Swimming,
+            Airborne
+        }
+
         [SerializeField] private TunaInputReader input;
         [SerializeField] private TunaCameraController cameraController;
         [SerializeField] private Transform cameraPivot;
+
+        [Header("Water")]
+        [Tooltip("World-space Y height of the water surface. Tuna becomes airborne above this height.")]
+        [SerializeField] private float waterSurfaceHeight;
+        [Tooltip("Distance below the water surface required before swimming control returns.")]
+        [SerializeField, Min(0f)] private float fullySubmergedDepth = 0.75f;
 
         [Header("Movement")]
         [SerializeField, Min(0f)] private float acceleration = 16f;
@@ -38,9 +50,11 @@ namespace TestBoids.Tuna
         private bool hasThrustInput;
         private float turnInput;
         private float bankAmount;
+        private LocomotionState locomotionState = LocomotionState.Swimming;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
+        public bool IsAirborne => locomotionState == LocomotionState.Airborne;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
 
@@ -77,10 +91,26 @@ namespace TestBoids.Tuna
                 body.interpolation = RigidbodyInterpolation.Interpolate;
                 body.maxAngularVelocity = maxAngularVelocity;
             }
+
+            locomotionState = IsAboveWaterSurface() ? LocomotionState.Airborne : LocomotionState.Swimming;
+            ApplyLocomotionState();
+        }
+
+        private void OnValidate()
+        {
+            fullySubmergedDepth = Mathf.Max(0f, fullySubmergedDepth);
         }
 
         private void FixedUpdate()
         {
+            UpdateLocomotionState();
+            if (locomotionState == LocomotionState.Airborne)
+            {
+                ClearControlState();
+                UpdateTurnAmount();
+                return;
+            }
+
             Vector2 move = input ? input.Move : Vector2.zero;
             hasMoveInput = move.sqrMagnitude > inputDeadZone * inputDeadZone;
             hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
@@ -97,6 +127,54 @@ namespace TestBoids.Tuna
             ApplyMinimumSwimSpeed();
             ApplyTurn();
             UpdateTurnAmount();
+        }
+
+        private void UpdateLocomotionState()
+        {
+            if (locomotionState == LocomotionState.Swimming)
+            {
+                if (IsAboveWaterSurface())
+                {
+                    locomotionState = LocomotionState.Airborne;
+                    ApplyLocomotionState();
+                }
+
+                return;
+            }
+
+            if (IsFullySubmerged())
+            {
+                locomotionState = LocomotionState.Swimming;
+                ApplyLocomotionState();
+            }
+        }
+
+        private void ApplyLocomotionState()
+        {
+            if (!body)
+            {
+                return;
+            }
+
+            body.useGravity = locomotionState == LocomotionState.Airborne;
+        }
+
+        private bool IsAboveWaterSurface()
+        {
+            return transform.position.y > waterSurfaceHeight;
+        }
+
+        private bool IsFullySubmerged()
+        {
+            return transform.position.y <= waterSurfaceHeight - fullySubmergedDepth;
+        }
+
+        private void ClearControlState()
+        {
+            hasMoveInput = false;
+            hasThrustInput = false;
+            turnInput = 0f;
+            bankAmount = 0f;
         }
 
         private Vector3 BuildDesiredDirection(float thrustInput)
