@@ -47,7 +47,7 @@ namespace TestBoids.Boids
         private int neighborScanLimit;
 
         [Header("Individual Randomization")]
-        [SerializeField, MinMax(0.5f, 1.5f)] private Vector2 scaleMultiplierRange = new(0.95f, 1.05f);
+        [SerializeField, MinMax(0.01f, 1.5f)] private Vector2 scaleMultiplierRange = new(0.18f, 0.25f);
         [SerializeField, MinMax(0f, 12f)] private Vector2 speedRange = new(3f, 7.5f);
         [SerializeField, HideInInspector] private bool individualRandomRangesInitialized;
 

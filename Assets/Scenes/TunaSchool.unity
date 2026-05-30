@@ -440,15 +440,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.908405
+      value: 1.8760723
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.3147726
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.55379677
+      value: -0.19359857
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1112,15 +1112,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.908405
+      value: 1.8760723
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.55379677
+      value: -0.19359857
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1193,15 +1193,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.908405
+      value: 1.8760723
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -1.3147726
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.55379677
+      value: -0.19359857
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1350,6 +1350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1718917403}
   - component: {fileID: 1718917405}
+  - component: {fileID: 1718917406}
   m_Layer: 0
   m_Name: TunaSchoolManager
   m_TagString: Untagged
@@ -1366,7 +1367,7 @@ Transform:
   m_GameObject: {fileID: 1718917401}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -7, z: 0}
+  m_LocalPosition: {x: -0, y: -12.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1420,6 +1421,53 @@ MonoBehaviour:
     durationRange: {x: 4.2, y: 4.644854}
     transitionRange: {x: 2, y: 5}
     selectionWeight: 1
+--- !u!114 &1718917406
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1718917401}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79c8a4fc0690eb7489e7e329989b802c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.FishSchoolManager
+  fishPrefab: {fileID: 4002616582596920899, guid: 00416c6792078c94498b06db76e3b333, type: 3}
+  fishCount: 200
+  sceneFishRoot: {fileID: 0}
+  sceneFish: []
+  spawnOnStart: 1
+  parentSpawnedFishToManager: 1
+  destroySpawnedFishOnDisable: 1
+  seed: 42
+  aquariumHalfSize: {x: 44.6, y: 15.8, z: 32.22}
+  spawnBoundsScale: 0.62
+  boundaryMargin: 2
+  boundaryWeight: 9
+  schoolRadius: 25
+  schoolCoreRatio: 0.18
+  centeringWeight: 1.1
+  flowWeight: 0.65
+  flowAxisSpeed: 0.25
+  schoolWidthScale: 1.55
+  schoolHeightScale: 0.82
+  minSpeed: 0.75
+  maxSpeed: 3.5
+  maxTurnRateDegrees: 230
+  perceptionRadius: 2.7
+  separationRadius: 2.7
+  maxSteerForce: 3
+  alignWeight: 1
+  cohesionWeight: 1
+  separateWeight: 1.35
+  neighborScanLimit: 0
+  scaleMultiplierRange: {x: 0.18, y: 0.25}
+  speedRange: {x: 9.25, y: 12}
+  individualRandomRangesInitialized: 1
+  maxBankAngleDegrees: 12
+  bankTurnScale: 0.18
+  bankResponse: 8
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
