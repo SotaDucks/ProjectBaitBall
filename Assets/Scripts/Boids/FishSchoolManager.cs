@@ -1,95 +1,104 @@
+using System;
 using System.Collections.Generic;
+using FishFlock.Utils;
 using UnityEngine;
 
 namespace TestBoids.Boids
 {
+    [DisallowMultipleComponent]
     public sealed class FishSchoolManager : MonoBehaviour
     {
-        private static readonly Vector3 DefaultFlowAxis = Vector3.up;
-        private const float MinCachedClearDirectionDot = 0.5f;
-
-        [Header("School")]
-        [SerializeField] private FishAgent fishPrefab;
-        [SerializeField, Min(0)] private int fishCount = 72;
-        [SerializeField] private Transform fishParent;
+        [Header("Fish Source")]
+        [SerializeField] private GameObject fishPrefab;
+        [SerializeField, Min(0)] private int fishCount = 60;
+        [SerializeField] private Transform sceneFishRoot;
+        [SerializeField] private FishAgent[] sceneFish = Array.Empty<FishAgent>();
         [SerializeField] private bool spawnOnStart = true;
-        [SerializeField] private bool useExistingChildAgents;
+        [SerializeField] private bool parentSpawnedFishToManager = true;
+        [SerializeField] private bool destroySpawnedFishOnDisable = true;
         [SerializeField] private int seed = 42;
 
-        [Header("Bait Ball")]
-        [SerializeField] private float baitBallRadius = 3.3f;
-        [SerializeField] private float baitBallCoreRatio = 0.34f;
-        [SerializeField] private float centeringWeight = 1.4f;
-        [SerializeField] private float toroidalFlowWeight = 1.9f;
-        [SerializeField] private float toroidalRollWeight = 0.38f;
-        [SerializeField] private float toroidalAxisSpeed = 0.42f;
+        [Header("Aquarium")]
+        [SerializeField] private Vector3 aquariumHalfSize = new(11f, 6.6f, 8.5f);
+        [SerializeField, Range(0.05f, 1f)] private float spawnBoundsScale = 0.62f;
+        [SerializeField, Min(0f)] private float boundaryMargin = 2f;
+        [SerializeField, Min(0f)] private float boundaryWeight = 9f;
+
+        [Header("School Shape")]
+        [SerializeField, Min(0.1f)] private float schoolRadius = 5.5f;
+        [SerializeField, Range(0f, 0.9f)] private float schoolCoreRatio = 0.18f;
+        [SerializeField, Min(0f)] private float centeringWeight = 1.1f;
+        [SerializeField, Min(0f)] private float flowWeight = 0.65f;
+        [SerializeField, Min(0f)] private float flowAxisSpeed = 0.25f;
+        [SerializeField, Min(0.1f)] private float schoolWidthScale = 1.55f;
+        [SerializeField, Min(0.1f)] private float schoolHeightScale = 0.82f;
 
         [Header("Boids")]
-        [SerializeField] private float minSpeed = 2.8f;
-        [SerializeField] private float maxSpeed = 7f;
-        [SerializeField] private float maxTurnRate = 18f;
-        [SerializeField] private float perceptionRadius = 4.2f;
-        [SerializeField] private float separationRadius = 1.25f;
-        [SerializeField] private float maxSteerForce = 4.2f;
-        [SerializeField] private float alignWeight = 0.5f;
-        [SerializeField] private float cohesionWeight = 0.9f;
-        [SerializeField] private float separateWeight = 3f;
+        [SerializeField, HideInInspector] private float minSpeed = 3f;
+        [SerializeField, HideInInspector] private float maxSpeed = 7.5f;
+        [SerializeField, Min(0f)] private float maxTurnRateDegrees = 540f;
+        [SerializeField, Min(0f)] private float perceptionRadius = 4.2f;
+        [SerializeField, Min(0f)] private float separationRadius = 1.25f;
+        [SerializeField, Min(0f)] private float maxSteerForce = 4.2f;
+        [SerializeField, Min(0f)] private float alignWeight = 0.75f;
+        [SerializeField, Min(0f)] private float cohesionWeight = 1.15f;
+        [SerializeField, Min(0f)] private float separateWeight = 2.4f;
+        [SerializeField, Min(0), Tooltip("Maximum other fish sampled by each fish each frame. Set to 0 to scan every fish.")]
+        private int neighborScanLimit;
 
-        [Header("Obstacle Avoidance")]
-        [SerializeField] private float boundsRadius = 0.27f;
-        [SerializeField] private float avoidCollisionWeight = 4f;
-        [SerializeField] private float collisionAvoidDistance = 7f;
-        [SerializeField] private float sphereSeparationMargin = 4f;
-        [SerializeField] private float sphereSeparationWeight = 20f;
-        [SerializeField, Min(8)] private int obstacleRayCount = 300;
-        [SerializeField] private bool autoCollectObstacles = true;
-        [SerializeField] private BoidObstacle[] obstacles = new BoidObstacle[0];
+        [Header("Individual Randomization")]
+        [SerializeField, MinMax(0.5f, 1.5f)] private Vector2 scaleMultiplierRange = new(0.95f, 1.05f);
+        [SerializeField, MinMax(0f, 12f)] private Vector2 speedRange = new(3f, 7.5f);
+        [SerializeField, HideInInspector] private bool individualRandomRangesInitialized;
 
         [Header("Pose")]
-        [SerializeField] private float maxBankAngleDegrees = 12f;
-        [SerializeField] private float bankTurnScale = 0.18f;
-        [SerializeField] private float bankResponse = 8f;
+        [SerializeField, Min(0f)] private float maxBankAngleDegrees = 12f;
+        [SerializeField, Min(0f)] private float bankTurnScale = 0.18f;
+        [SerializeField, Min(0f)] private float bankResponse = 8f;
 
-        private readonly List<FishAgent> agents = new();
-        private readonly List<BoidObstacle> activeObstacles = new();
-        private FishState[] fish = new FishState[0];
-        private Vector3[] nextVelocities = new Vector3[0];
-        private Vector3[] nextPositions = new Vector3[0];
-        private Vector3[] rayDirections = new Vector3[0];
-        private Vector3 flowAxis = DefaultFlowAxis;
-        private float elapsedTime;
+        private readonly List<GameObject> spawnedFishObjects = new();
+        private FishAgent[] agents = Array.Empty<FishAgent>();
+        private FishState[] fish = Array.Empty<FishState>();
+        private FishState[] nextFish = Array.Empty<FishState>();
+        private int simulationFrame;
 
+        private bool HasFish => fish != null && fish.Length > 0;
         public IReadOnlyList<FishAgent> Agents => agents;
 
-        [ContextMenu("Apply Three.js Bait Ball Defaults")]
-        private void ApplyBaitBallDefaults()
+        private void OnValidate()
         {
-            fishCount = 72;
-            seed = 42;
-            baitBallRadius = 3.3f;
-            baitBallCoreRatio = 0.34f;
-            centeringWeight = 1.4f;
-            toroidalFlowWeight = 1.9f;
-            toroidalRollWeight = 0.38f;
-            toroidalAxisSpeed = 0.42f;
-            minSpeed = 2.8f;
-            maxSpeed = 7f;
-            maxTurnRate = 18f;
-            perceptionRadius = 4.2f;
-            separationRadius = 1.25f;
-            maxSteerForce = 4.2f;
-            alignWeight = 0.5f;
-            cohesionWeight = 0.9f;
-            separateWeight = 3f;
-            boundsRadius = 0.27f;
-            avoidCollisionWeight = 4f;
-            collisionAvoidDistance = 7f;
-            sphereSeparationMargin = 4f;
-            sphereSeparationWeight = 20f;
-            obstacleRayCount = 300;
-            maxBankAngleDegrees = 12f;
-            bankTurnScale = 0.18f;
-            bankResponse = 8f;
+            InitializeIndividualRandomRangesFromLegacyValues();
+            NormalizeIndividualRandomRanges();
+            fishCount = Mathf.Max(0, fishCount);
+            aquariumHalfSize = new Vector3(
+                Mathf.Max(0f, aquariumHalfSize.x),
+                Mathf.Max(0f, aquariumHalfSize.y),
+                Mathf.Max(0f, aquariumHalfSize.z));
+
+            schoolRadius = Mathf.Max(0.1f, schoolRadius);
+            schoolCoreRatio = Mathf.Clamp01(schoolCoreRatio);
+            schoolWidthScale = Mathf.Max(0.1f, schoolWidthScale);
+            schoolHeightScale = Mathf.Max(0.1f, schoolHeightScale);
+            perceptionRadius = Mathf.Max(0f, perceptionRadius);
+            separationRadius = Mathf.Min(Mathf.Max(0f, separationRadius), perceptionRadius);
+            neighborScanLimit = Mathf.Max(0, neighborScanLimit);
+        }
+
+        private void InitializeIndividualRandomRangesFromLegacyValues()
+        {
+            if (individualRandomRangesInitialized)
+            {
+                return;
+            }
+
+            speedRange = OrderedRange(minSpeed, maxSpeed);
+            individualRandomRangesInitialized = true;
+        }
+
+        private void NormalizeIndividualRandomRanges()
+        {
+            scaleMultiplierRange = OrderedRange(scaleMultiplierRange);
+            speedRange = OrderedRange(speedRange);
         }
 
         private void Start()
@@ -103,13 +112,30 @@ namespace TestBoids.Boids
         private void Update()
         {
             float dt = Mathf.Min(Time.deltaTime, 1f / 30f);
-            if (dt <= 0f || fish.Length == 0)
+            if (dt <= 0f || !HasFish)
             {
                 return;
             }
 
             UpdateSimulation(dt);
-            ApplyAgents();
+            ApplyAgentPoses();
+            simulationFrame++;
+        }
+
+        private void OnDisable()
+        {
+            if (destroySpawnedFishOnDisable)
+            {
+                DestroySpawnedFish();
+                agents = Array.Empty<FishAgent>();
+                fish = Array.Empty<FishState>();
+                nextFish = Array.Empty<FishState>();
+            }
+        }
+
+        public void ResetSchool()
+        {
+            ResetSchool(fishCount, seed);
         }
 
         public void ResetSchool(int count)
@@ -119,36 +145,25 @@ namespace TestBoids.Boids
 
         public void ResetSchool(int count, int randomSeed)
         {
-            count = Mathf.Max(0, count);
-            EnsureRayDirections();
-            RefreshObstacles();
-            ClearSpawnedAgents();
+            fishCount = Mathf.Max(0, count);
+            seed = randomSeed;
+            simulationFrame = 0;
 
-            if (useExistingChildAgents)
+            DestroySpawnedFish();
+            FishAgent[] sceneAgents = CollectSceneAgents();
+            if (sceneAgents.Length > 0)
             {
-                agents.AddRange(GetComponentsInChildren<FishAgent>());
-                count = agents.Count;
+                agents = sceneAgents;
+                fishCount = agents.Length;
             }
             else
             {
-                SpawnAgents(count);
-                count = agents.Count;
+                SpawnPrefabAgents(fishCount, randomSeed);
             }
 
-            fish = new FishState[count];
-            nextVelocities = new Vector3[count];
-            nextPositions = new Vector3[count];
-            elapsedTime = 0f;
-
-            BoidRandom random = new((uint)randomSeed);
-            for (int i = 0; i < count; i++)
-            {
-                Vector3 position = CreateInitialPosition(ref random);
-                Vector3 direction = CreateInitialDirection(position, ref random);
-                float speed = Mathf.Lerp(minSpeed, maxSpeed, random.Next01());
-                fish[i] = new FishState(position, direction * speed);
-                agents[i].Initialize(position, fish[i].Velocity, fish[i].Bank);
-            }
+            AllocateFishState(agents.Length);
+            InitializeFishState(randomSeed);
+            ApplyAgentPoses();
         }
 
         public void SetCount(int count)
@@ -156,74 +171,124 @@ namespace TestBoids.Boids
             ResetSchool(count, seed);
         }
 
-        private void SpawnAgents(int count)
+        private FishAgent[] CollectSceneAgents()
         {
-            if (!fishPrefab)
+            List<FishAgent> collected = new();
+
+            if (sceneFish != null)
             {
-                Debug.LogWarning($"{nameof(FishSchoolManager)} needs a fish prefab before it can spawn a school.", this);
+                for (int i = 0; i < sceneFish.Length; i++)
+                {
+                    AddUniqueAgent(collected, sceneFish[i]);
+                }
+            }
+
+            if (sceneFishRoot)
+            {
+                FishAgent[] childAgents = sceneFishRoot.GetComponentsInChildren<FishAgent>();
+                for (int i = 0; i < childAgents.Length; i++)
+                {
+                    AddUniqueAgent(collected, childAgents[i]);
+                }
+            }
+
+            return collected.ToArray();
+        }
+
+        private static void AddUniqueAgent(List<FishAgent> target, FishAgent agent)
+        {
+            if (agent && !target.Contains(agent))
+            {
+                target.Add(agent);
+            }
+        }
+
+        private void SpawnPrefabAgents(int count, int randomSeed)
+        {
+            DestroySpawnedFish();
+            if (!fishPrefab || count <= 0)
+            {
+                agents = Array.Empty<FishAgent>();
                 return;
             }
 
-            Transform parent = fishParent ? fishParent : transform;
+            BoidRandom random = new((uint)randomSeed);
+            agents = new FishAgent[count];
             for (int i = 0; i < count; i++)
             {
-                FishAgent agent = Instantiate(fishPrefab, parent);
-                agent.name = $"{fishPrefab.name} {i:000}";
-                agents.Add(agent);
+                Vector3 position = CreateInitialPosition(ref random);
+                Vector3 direction = CreateRandomDirection(ref random);
+                Quaternion rotation = Quaternion.LookRotation(direction, Vector3.up);
+                Transform parent = parentSpawnedFishToManager ? transform : null;
+                GameObject instance = Instantiate(fishPrefab, position, rotation, parent);
+                FishAgent agent = instance.GetComponent<FishAgent>();
+                if (!agent)
+                {
+                    agent = instance.GetComponentInChildren<FishAgent>();
+                }
+
+                if (!agent)
+                {
+                    agent = instance.AddComponent<FishAgent>();
+                }
+
+                float scaleMultiplier = Mathf.Max(0.001f, SampleRange(scaleMultiplierRange, ref random));
+                instance.transform.localScale *= scaleMultiplier;
+                spawnedFishObjects.Add(instance);
+                agents[i] = agent;
             }
         }
 
-        private void ClearSpawnedAgents()
+        private void AllocateFishState(int count)
         {
-            if (!useExistingChildAgents)
-            {
-                for (int i = agents.Count - 1; i >= 0; i--)
-                {
-                    if (agents[i])
-                    {
-                        Destroy(agents[i].gameObject);
-                    }
-                }
-            }
-
-            agents.Clear();
+            fish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
+            nextFish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
         }
 
-        private void RefreshObstacles()
+        private void InitializeFishState(int randomSeed)
         {
-            activeObstacles.Clear();
-            if (obstacles != null)
+            BoidRandom random = new((uint)randomSeed);
+            for (int i = 0; i < fish.Length; i++)
             {
-                foreach (BoidObstacle obstacle in obstacles)
+                FishAgent agent = agents[i];
+                Vector3 position = agent ? agent.transform.position : CreateInitialPosition(ref random);
+                Vector3 direction = ReadInitialDirection(agent, position, ref random);
+                float speed = Mathf.Max(0.001f, SampleRange(speedRange, ref random));
+                FishState state = new()
                 {
-                    if (obstacle && obstacle.isActiveAndEnabled)
-                    {
-                        activeObstacles.Add(obstacle);
-                    }
-                }
+                    Position = position,
+                    Velocity = direction * speed,
+                    MinSpeed = Mathf.Max(0.001f, speed * 0.88f),
+                    MaxSpeed = Mathf.Max(0.001f, speed * 1.12f),
+                    Bank = agent ? agent.Bank : 0f
+                };
+
+                fish[i] = state;
+                nextFish[i] = state;
+            }
+        }
+
+        private Vector3 ReadInitialDirection(FishAgent agent, Vector3 position, ref BoidRandom random)
+        {
+            if (agent && agent.Velocity.sqrMagnitude > 0.000001f)
+            {
+                return agent.Velocity.normalized;
             }
 
-            if (!autoCollectObstacles)
+            if (agent && agent.transform.forward.sqrMagnitude > 0.000001f)
             {
-                return;
+                return agent.transform.forward.normalized;
             }
 
-            BoidObstacle[] found = FindObjectsByType<BoidObstacle>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-            foreach (BoidObstacle obstacle in found)
-            {
-                if (obstacle && obstacle.isActiveAndEnabled && !activeObstacles.Contains(obstacle))
-                {
-                    activeObstacles.Add(obstacle);
-                }
-            }
+            return CreateInitialDirection(position, ref random);
         }
 
         private void UpdateSimulation(float dt)
         {
             float perceptionRadiusSq = perceptionRadius * perceptionRadius;
             float separationRadiusSq = separationRadius * separationRadius;
-            Vector3 currentFlowAxis = ReadFlowAxis(elapsedTime);
-            float flowPhase = elapsedTime * toroidalAxisSpeed * 3.7f;
+            Vector3 flowAxis = ReadFlowAxis(Time.time);
+            float flowPhase = Time.time * flowAxisSpeed * 3.7f;
 
             for (int i = 0; i < fish.Length; i++)
             {
@@ -231,353 +296,189 @@ namespace TestBoids.Boids
                 Vector3 acceleration = Vector3.zero;
                 Vector3 headingSum = Vector3.zero;
                 Vector3 centerSum = Vector3.zero;
-                Vector3 avoidanceSum = Vector3.zero;
+                Vector3 separationSum = Vector3.zero;
                 int neighborCount = 0;
+                int sampleCount = ReadNeighborSampleCount(fish.Length);
 
-                for (int j = 0; j < fish.Length; j++)
+                for (int sampleIndex = 0; sampleIndex < sampleCount; sampleIndex++)
                 {
-                    if (i == j)
+                    int otherIndex = ReadNeighborIndex(i, sampleIndex, fish.Length);
+                    if (otherIndex == i)
                     {
                         continue;
                     }
 
-                    FishState other = fish[j];
-                    Vector3 offset = other.Position - current.Position;
-                    float distanceSq = offset.sqrMagnitude;
-
-                    if (distanceSq < perceptionRadiusSq)
-                    {
-                        neighborCount++;
-                        headingSum += SafeNormalize(other.Velocity);
-                        centerSum += other.Position;
-
-                        if (distanceSq < separationRadiusSq)
-                        {
-                            float distance = Mathf.Sqrt(Mathf.Max(distanceSq, 0.0001f));
-                            avoidanceSum += offset * (-1f / distance);
-                        }
-                    }
+                    AccumulateNeighbor(
+                        current,
+                        fish[otherIndex],
+                        perceptionRadiusSq,
+                        separationRadiusSq,
+                        ref headingSum,
+                        ref centerSum,
+                        ref separationSum,
+                        ref neighborCount);
                 }
 
                 if (neighborCount > 0)
                 {
-                    centerSum /= neighborCount;
-                    acceleration += SteerTowards(headingSum, current.Velocity) * alignWeight;
-                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity) * cohesionWeight;
-                    acceleration += SteerTowards(avoidanceSum, current.Velocity) * separateWeight;
+                    Vector3 center = centerSum / neighborCount;
+                    acceleration += SteerTowards(headingSum, current.Velocity, current.MaxSpeed) * alignWeight;
+                    acceleration += SteerTowards(center - current.Position, current.Velocity, current.MaxSpeed) * cohesionWeight;
+                    acceleration += SteerTowards(separationSum, current.Velocity, current.MaxSpeed) * separateWeight;
                 }
 
-                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity) * centeringWeight;
-                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase) * toroidalFlowWeight;
-                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity);
+                acceleration += SchoolEnvelopeForce(current.Position, current.Velocity, current.MaxSpeed) * centeringWeight;
+                acceleration += SchoolFlowForce(current.Position, current.Velocity, flowAxis, flowPhase, current.MaxSpeed) * flowWeight;
 
-                Vector3 forward = SafeNormalize(current.Velocity);
-                if (IsHeadingForCollision(current.Position, forward))
+                Vector3 boundary = AquariumBoundarySteer(current.Position);
+                if (boundary.sqrMagnitude > 0.000001f)
                 {
-                    Vector3 clearDirection = ObstacleRays(current.Position, forward, ref current);
-                    acceleration += SteerTowards(clearDirection, current.Velocity) * avoidCollisionWeight;
-                }
-                else
-                {
-                    current.HasCollisionAvoidanceDirection = false;
+                    acceleration += SteerTowards(boundary, current.Velocity, current.MaxSpeed) * boundaryWeight;
                 }
 
                 Vector3 desiredVelocity = current.Velocity + acceleration * dt;
-                float speed = Mathf.Clamp(desiredVelocity.magnitude, minSpeed, maxSpeed);
-                desiredVelocity = SafeNormalize(desiredVelocity) * speed;
-                Vector3 velocity = LimitTurn(current.Velocity, desiredVelocity, dt);
-
-                fish[i] = current;
-                nextVelocities[i] = velocity;
-                nextPositions[i] = current.Position + velocity * dt;
-            }
-
-            for (int i = 0; i < fish.Length; i++)
-            {
-                UpdateMotionState(ref fish[i], nextVelocities[i], dt);
-                fish[i].Velocity = nextVelocities[i];
-                fish[i].Position = nextPositions[i];
-            }
-
-            elapsedTime += dt;
-        }
-
-        private void ApplyAgents()
-        {
-            int count = Mathf.Min(agents.Count, fish.Length);
-            for (int i = 0; i < count; i++)
-            {
-                if (agents[i])
+                float speed = Mathf.Clamp(desiredVelocity.magnitude, current.MinSpeed, current.MaxSpeed);
+                if (desiredVelocity.sqrMagnitude <= 0.000001f)
                 {
-                    agents[i].ApplyPose(fish[i].Position, fish[i].Velocity, fish[i].Bank);
-                }
-            }
-        }
-
-        private Vector3 SteerTowards(Vector3 vector, Vector3 velocity)
-        {
-            if (vector.sqrMagnitude < 0.000001f)
-            {
-                return Vector3.zero;
-            }
-
-            Vector3 desired = vector.normalized * maxSpeed;
-            return Vector3.ClampMagnitude(desired - velocity, maxSteerForce);
-        }
-
-        private Vector3 LimitTurn(Vector3 currentVelocity, Vector3 desiredVelocity, float dt)
-        {
-            Vector3 currentDirection = SafeNormalize(currentVelocity);
-            Vector3 desiredDirection = SafeNormalize(desiredVelocity);
-            float angle = Vector3.Angle(currentDirection, desiredDirection) * Mathf.Deg2Rad;
-            float maxAngle = maxTurnRate * dt;
-
-            if (angle <= maxAngle || angle < 0.000001f)
-            {
-                return desiredVelocity;
-            }
-
-            float t = maxAngle / angle;
-            Vector3 direction = Vector3.Slerp(currentDirection, desiredDirection, t).normalized;
-            return direction * desiredVelocity.magnitude;
-        }
-
-        private bool IsHeadingForCollision(Vector3 position, Vector3 forward)
-        {
-            return activeObstacles.Count > 0 && RayHitsObstacle(position, forward, collisionAvoidDistance);
-        }
-
-        private Vector3 ObstacleRays(Vector3 position, Vector3 forward, ref FishState state)
-        {
-            if (state.HasCollisionAvoidanceDirection
-                && Vector3.Dot(state.CollisionAvoidanceDirection, forward) > MinCachedClearDirectionDot
-                && IsDirectionClear(position, state.CollisionAvoidanceDirection, collisionAvoidDistance))
-            {
-                return state.CollisionAvoidanceDirection;
-            }
-
-            Vector3 result = FindClearObstacleDirection(position, forward);
-            state.CollisionAvoidanceDirection = result;
-            state.HasCollisionAvoidanceDirection = true;
-            return result;
-        }
-
-        private Vector3 FindClearObstacleDirection(Vector3 position, Vector3 forward)
-        {
-            Vector3 forwardDirection = SafeNormalize(forward);
-            Quaternion rotation = Quaternion.FromToRotation(Vector3.forward, forwardDirection);
-            for (int i = 0; i < rayDirections.Length; i++)
-            {
-                Vector3 direction = (rotation * rayDirections[i]).normalized;
-
-                if (IsDirectionClear(position, direction, collisionAvoidDistance))
-                {
-                    return direction;
-                }
-            }
-
-            return forwardDirection;
-        }
-
-        private bool IsDirectionClear(Vector3 origin, Vector3 direction, float maxDistance)
-        {
-            return activeObstacles.Count == 0 || !RayHitsObstacle(origin, direction, maxDistance);
-        }
-
-        private bool RayHitsObstacle(Vector3 origin, Vector3 direction, float maxDistance)
-        {
-            return float.IsFinite(RayObstacleHitDistance(origin, direction, maxDistance));
-        }
-
-        private float RayObstacleHitDistance(Vector3 origin, Vector3 direction, float maxDistance)
-        {
-            for (int i = 0; i < activeObstacles.Count; i++)
-            {
-                BoidObstacle obstacle = activeObstacles[i];
-                if (!obstacle)
-                {
-                    continue;
-                }
-
-                if (obstacle.Shape == BoidObstacleShape.Box || obstacle.Shape == BoidObstacleShape.Plate)
-                {
-                    float distance = RayBoxObstacleHitDistance(origin, direction, maxDistance, obstacle);
-                    if (distance <= maxDistance) return distance;
+                    desiredVelocity = current.Velocity.sqrMagnitude > 0.000001f
+                        ? current.Velocity.normalized * speed
+                        : transform.forward * speed;
                 }
                 else
                 {
-                    float distance = RaySphereObstacleHitDistance(origin, direction, maxDistance, obstacle);
-                    if (distance <= maxDistance) return distance;
+                    desiredVelocity = desiredVelocity.normalized * speed;
                 }
+
+                Vector3 velocity = LimitTurn(current.Velocity, desiredVelocity, dt);
+                current.Bank = UpdateBank(current.Bank, current.Velocity, velocity, dt);
+                current.Velocity = velocity;
+                current.Position += velocity * dt;
+                nextFish[i] = current;
             }
 
-            return float.PositiveInfinity;
+            (fish, nextFish) = (nextFish, fish);
         }
 
-        private float RaySphereObstacleHitDistance(Vector3 origin, Vector3 direction, float maxDistance, BoidObstacle obstacle)
+        private int ReadNeighborSampleCount(int count)
         {
-            float radius = obstacle.Radius + boundsRadius;
-            Vector3 offset = origin - obstacle.Position;
-            float b = Vector3.Dot(offset, direction);
-            float c = offset.sqrMagnitude - radius * radius;
-            float discriminant = b * b - c;
-
-            if (discriminant < 0f)
+            if (count <= 1)
             {
-                return float.PositiveInfinity;
+                return 0;
             }
 
-            float root = Mathf.Sqrt(discriminant);
-            float near = -b - root;
-            float far = -b + root;
-            if (near >= 0f && near <= maxDistance)
+            int maximumNeighbors = count - 1;
+            return neighborScanLimit <= 0 ? maximumNeighbors : Mathf.Min(neighborScanLimit, maximumNeighbors);
+        }
+
+        private int ReadNeighborIndex(int fishIndex, int sampleIndex, int count)
+        {
+            if (neighborScanLimit <= 0 || neighborScanLimit >= count - 1)
             {
-                return near;
+                return sampleIndex < fishIndex ? sampleIndex : sampleIndex + 1;
             }
 
-            return far >= 0f && far <= maxDistance ? far : float.PositiveInfinity;
+            return SampleNeighborIndex(fishIndex, sampleIndex, count, simulationFrame);
         }
 
-        private float RayBoxObstacleHitDistance(Vector3 origin, Vector3 direction, float maxDistance, BoidObstacle obstacle)
+        private static void AccumulateNeighbor(
+            FishState current,
+            FishState other,
+            float perceptionRadiusSq,
+            float separationRadiusSq,
+            ref Vector3 headingSum,
+            ref Vector3 centerSum,
+            ref Vector3 separationSum,
+            ref int neighborCount)
         {
-            Quaternion inverseRotation = Quaternion.Inverse(obstacle.Rotation);
-            Vector3 localOrigin = inverseRotation * (origin - obstacle.Position);
-            Vector3 localDirection = inverseRotation * direction;
-            Vector3 halfSize = obstacle.Size * 0.5f + Vector3.one * boundsRadius;
-
-            return RayExpandedBoxHitDistance(localOrigin, localDirection, halfSize, maxDistance);
-        }
-
-        private static float RayExpandedBoxHitDistance(Vector3 origin, Vector3 direction, Vector3 halfSize, float maxDistance)
-        {
-            float near = 0f;
-            float far = maxDistance;
-
-            if (!ClipSlab(origin.x, direction.x, halfSize.x, ref near, ref far)) return float.PositiveInfinity;
-            if (!ClipSlab(origin.y, direction.y, halfSize.y, ref near, ref far)) return float.PositiveInfinity;
-            if (!ClipSlab(origin.z, direction.z, halfSize.z, ref near, ref far)) return float.PositiveInfinity;
-
-            return far >= 0f && near <= maxDistance ? near : float.PositiveInfinity;
-        }
-
-        private static bool ClipSlab(float origin, float direction, float halfSize, ref float near, ref float far)
-        {
-            if (Mathf.Abs(direction) < 0.000001f)
+            Vector3 offset = other.Position - current.Position;
+            float distanceSq = offset.sqrMagnitude;
+            if (distanceSq >= perceptionRadiusSq)
             {
-                return origin >= -halfSize && origin <= halfSize;
+                return;
             }
 
-            float inverseDirection = 1f / direction;
-            float axisNear = (-halfSize - origin) * inverseDirection;
-            float axisFar = (halfSize - origin) * inverseDirection;
-            if (axisNear > axisFar)
+            neighborCount++;
+            if (other.Velocity.sqrMagnitude > 0.000001f)
             {
-                (axisNear, axisFar) = (axisFar, axisNear);
+                headingSum += other.Velocity.normalized;
             }
 
-            near = Mathf.Max(near, axisNear);
-            far = Mathf.Min(far, axisFar);
-            return near <= far;
+            centerSum += other.Position;
+
+            if (distanceSq < separationRadiusSq)
+            {
+                float distance = Mathf.Sqrt(Mathf.Max(distanceSq, 0.0001f));
+                separationSum += offset * (-1f / distance);
+            }
         }
 
-        private Vector3 SphereObstacleSeparationForce(Vector3 position, Vector3 velocity)
+        private Vector3 AquariumBoundarySteer(Vector3 position)
         {
-            float margin = Mathf.Max(0f, sphereSeparationMargin);
-            float weight = Mathf.Max(0f, sphereSeparationWeight);
-            if (margin <= 0f || weight <= 0f || activeObstacles.Count == 0)
+            if (boundaryMargin <= 0f)
             {
                 return Vector3.zero;
             }
 
-            Vector3 away = Vector3.zero;
-            float maxPressure = 0f;
-
-            for (int i = 0; i < activeObstacles.Count; i++)
-            {
-                BoidObstacle obstacle = activeObstacles[i];
-                if (!obstacle || obstacle.Shape != BoidObstacleShape.Sphere)
-                {
-                    continue;
-                }
-
-                float radius = obstacle.Radius;
-                float influenceRadius = radius + margin;
-                Vector3 offset = position - obstacle.Position;
-                float distanceSq = offset.sqrMagnitude;
-
-                if (distanceSq >= influenceRadius * influenceRadius)
-                {
-                    continue;
-                }
-
-                float distance = Mathf.Sqrt(distanceSq);
-                if (distance < 0.000001f)
-                {
-                    offset = -velocity;
-                    if (offset.sqrMagnitude < 0.000001f)
-                    {
-                        offset = Vector3.right;
-                    }
-
-                    distance = offset.magnitude;
-                }
-
-                float surfaceDistance = distance - radius;
-                float pressure = surfaceDistance >= 0f
-                    ? 1f - surfaceDistance / margin
-                    : 1f + Mathf.Min(1f, -surfaceDistance / Mathf.Max(radius, 0.000001f));
-
-                away += offset * (pressure / distance);
-                maxPressure = Mathf.Max(maxPressure, pressure);
-            }
-
-            if (away.sqrMagnitude < 0.000001f)
-            {
-                return Vector3.zero;
-            }
-
-            return SteerTowards(away, velocity) * (weight * maxPressure);
+            Vector3 localPosition = transform.InverseTransformPoint(position);
+            Vector3 localSteer = Vector3.zero;
+            localSteer.x = AxisBoundarySteer(localPosition.x, aquariumHalfSize.x, boundaryMargin);
+            localSteer.y = AxisBoundarySteer(localPosition.y, aquariumHalfSize.y, boundaryMargin);
+            localSteer.z = AxisBoundarySteer(localPosition.z, aquariumHalfSize.z, boundaryMargin);
+            return transform.TransformDirection(localSteer);
         }
 
-        private Vector3 SphericalEnvelopeForce(Vector3 position, Vector3 velocity)
+        private Vector3 SchoolEnvelopeForce(Vector3 position, Vector3 velocity, float targetMaxSpeed)
         {
-            float targetRadius = Mathf.Max(0.001f, baitBallRadius);
-            float coreRadius = targetRadius * Mathf.Max(0f, baitBallCoreRatio);
-            Vector3 radial = position - transform.position;
-            float distance = radial.magnitude;
-
-            if (distance < 0.000001f)
+            Vector3 offset = position - transform.position;
+            if (offset.sqrMagnitude < 0.000001f)
             {
                 return Vector3.zero;
             }
 
-            Vector3 radialDirection = radial / distance;
-            Vector3 force = Vector3.zero;
-            float pressure = 1f;
-
-            if (distance > targetRadius)
+            Vector3 localOffset = transform.InverseTransformDirection(offset);
+            Vector3 normalized = new(
+                localOffset.x / schoolWidthScale,
+                localOffset.y / schoolHeightScale,
+                localOffset.z);
+            float normalizedDistance = normalized.magnitude;
+            if (normalizedDistance < 0.000001f)
             {
-                float overshoot = Mathf.Max(0f, (distance - targetRadius) / targetRadius);
-                pressure = 1f + overshoot * 3f;
-                force += radialDirection * (-1f - overshoot);
+                return Vector3.zero;
             }
-            else if (distance < coreRadius)
+
+            Vector3 localRadialDirection = normalized / normalizedDistance;
+            Vector3 worldRadialDirection = transform.TransformDirection(new Vector3(
+                localRadialDirection.x * schoolWidthScale,
+                localRadialDirection.y * schoolHeightScale,
+                localRadialDirection.z)).normalized;
+            float targetRadius = Mathf.Max(0.001f, schoolRadius);
+            float coreRadius = targetRadius * schoolCoreRatio;
+            Vector3 force;
+            float pressure;
+
+            if (normalizedDistance > targetRadius)
             {
-                float corePressure = 1f - distance / Mathf.Max(coreRadius, 0.000001f);
-                pressure = 0.5f + corePressure * 1.5f;
-                force += radialDirection * corePressure;
+                float overshoot = (normalizedDistance - targetRadius) / targetRadius;
+                force = -worldRadialDirection * (1f + overshoot * 2.4f);
+                pressure = 1f + overshoot * 2f;
+            }
+            else if (normalizedDistance < coreRadius)
+            {
+                float corePressure = 1f - normalizedDistance / Mathf.Max(coreRadius, 0.0001f);
+                force = worldRadialDirection * corePressure;
+                pressure = 0.55f + corePressure;
             }
             else
             {
-                float inwardBias = 0.28f * (distance / targetRadius);
-                pressure = 0.55f + inwardBias;
-                force += radialDirection * -inwardBias;
+                float edgeBias = normalizedDistance / targetRadius;
+                force = -worldRadialDirection * (edgeBias * 0.18f);
+                pressure = 0.45f + edgeBias * 0.35f;
             }
 
-            return SteerTowards(force, velocity) * pressure;
+            return SteerTowards(force, velocity, targetMaxSpeed) * pressure;
         }
 
-        private Vector3 ToroidalFlowForce(Vector3 position, Vector3 velocity, Vector3 axis, float phase)
+        private Vector3 SchoolFlowForce(Vector3 position, Vector3 velocity, Vector3 axis, float phase, float targetMaxSpeed)
         {
             Vector3 radial = position - transform.position;
             if (radial.sqrMagnitude < 0.000001f)
@@ -596,68 +497,86 @@ namespace TestBoids.Boids
                 }
             }
 
-            Vector3 toroidal = Vector3.Cross(axis, ringRadial).normalized;
-            Vector3 radialDirection = radial.normalized;
-            Vector3 poloidal = Vector3.Cross(toroidal, radialDirection).normalized;
-            float roll = Mathf.Sin(phase + axialOffset * 0.72f);
-            Vector3 desiredDirection = toroidal + poloidal * (roll * toroidalRollWeight);
+            Vector3 lateralFlow = Vector3.Cross(axis, ringRadial).normalized;
+            Vector3 forwardBias = transform.forward.sqrMagnitude > 0.000001f ? transform.forward.normalized : Vector3.forward;
+            float roll = Mathf.Sin(phase + axialOffset * 0.72f) * 0.22f;
+            Vector3 desiredDirection = lateralFlow + forwardBias * 0.35f + axis * roll;
 
-            return SteerTowards(desiredDirection, velocity);
+            return SteerTowards(desiredDirection, velocity, targetMaxSpeed);
         }
 
         private Vector3 ReadFlowAxis(float time)
         {
-            float speed = toroidalAxisSpeed;
-            flowAxis.Set(
-                Mathf.Sin(time * speed * 0.83f) * 0.62f,
-                1f + Mathf.Sin(time * speed * 0.47f) * 0.22f,
-                Mathf.Cos(time * speed) * 0.62f);
-            return transform.TransformDirection(flowAxis.normalized);
+            float speed = flowAxisSpeed;
+            Vector3 localAxis = new(
+                Mathf.Sin(time * speed * 0.83f) * 0.42f,
+                1f + Mathf.Sin(time * speed * 0.47f) * 0.14f,
+                Mathf.Cos(time * speed) * 0.42f);
+            return transform.TransformDirection(localAxis.normalized);
         }
 
-        private Vector3 CreateInitialPosition(ref BoidRandom random)
+        private static float AxisBoundarySteer(float value, float halfSize, float margin)
         {
-            float radius = Mathf.Max(0.001f, baitBallRadius);
-            Vector3 direction = CreateRandomUnitVector(ref random);
-            float shellBias = 0.32f + 0.68f * Mathf.Pow(random.Next01(), 1f / 3f);
-            return transform.position + direction * (radius * shellBias);
-        }
-
-        private Vector3 CreateInitialDirection(Vector3 position, ref BoidRandom random)
-        {
-            Vector3 localPosition = position - transform.position;
-            Vector3 tangent = Vector3.Cross(DefaultFlowAxis, localPosition);
-            if (tangent.sqrMagnitude < 0.000001f)
+            if (halfSize <= 0f)
             {
-                tangent = Vector3.Cross(Vector3.right, localPosition);
+                return 0f;
             }
 
-            tangent.Normalize();
-            Vector3 radial = SafeNormalize(localPosition);
-            tangent += radial * ((random.Next01() * 2f - 1f) * 0.18f);
-            return SafeNormalize(tangent);
-        }
-
-        private static Vector3 CreateRandomUnitVector(ref BoidRandom random)
-        {
-            float z = random.Next01() * 2f - 1f;
-            float angle = random.Next01() * Mathf.PI * 2f;
-            float radius = Mathf.Sqrt(Mathf.Max(0f, 1f - z * z));
-
-            return new Vector3(Mathf.Cos(angle) * radius, z, Mathf.Sin(angle) * radius);
-        }
-
-        private void UpdateMotionState(ref FishState current, Vector3 nextVelocity, float dt)
-        {
-            Vector3 previousDirection = SafeNormalize(current.Velocity);
-            Vector3 nextDirection = SafeNormalize(nextVelocity);
-
-            if (previousDirection.sqrMagnitude <= 0.000001f || nextDirection.sqrMagnitude <= 0.000001f)
+            float innerLimit = Mathf.Max(0f, halfSize - margin);
+            if (value > innerLimit)
             {
-                current.Bank = DampAngle(current.Bank, 0f, bankResponse, dt);
-                return;
+                return -(value - innerLimit) / Mathf.Max(0.0001f, margin);
             }
 
+            if (value < -innerLimit)
+            {
+                return (-innerLimit - value) / Mathf.Max(0.0001f, margin);
+            }
+
+            return 0f;
+        }
+
+        private Vector3 SteerTowards(Vector3 vector, Vector3 velocity, float targetMaxSpeed)
+        {
+            if (vector.sqrMagnitude < 0.000001f)
+            {
+                return Vector3.zero;
+            }
+
+            Vector3 desired = vector.normalized * Mathf.Max(0.001f, targetMaxSpeed);
+            return Vector3.ClampMagnitude(desired - velocity, maxSteerForce);
+        }
+
+        private Vector3 LimitTurn(Vector3 currentVelocity, Vector3 desiredVelocity, float dt)
+        {
+            if (currentVelocity.sqrMagnitude <= 0.000001f || desiredVelocity.sqrMagnitude <= 0.000001f)
+            {
+                return desiredVelocity;
+            }
+
+            Vector3 currentDirection = currentVelocity.normalized;
+            Vector3 desiredDirection = desiredVelocity.normalized;
+            float angle = Vector3.Angle(currentDirection, desiredDirection) * Mathf.Deg2Rad;
+            float maxAngle = maxTurnRateDegrees * Mathf.Deg2Rad * dt;
+            if (angle <= maxAngle || angle < 0.000001f)
+            {
+                return desiredVelocity;
+            }
+
+            float t = maxAngle / angle;
+            Vector3 direction = Vector3.Slerp(currentDirection, desiredDirection, t).normalized;
+            return direction * desiredVelocity.magnitude;
+        }
+
+        private float UpdateBank(float currentBank, Vector3 previousVelocity, Vector3 nextVelocity, float dt)
+        {
+            if (dt <= 0f || previousVelocity.sqrMagnitude <= 0.000001f || nextVelocity.sqrMagnitude <= 0.000001f)
+            {
+                return DampAngle(currentBank, 0f, bankResponse, dt);
+            }
+
+            Vector3 previousDirection = previousVelocity.normalized;
+            Vector3 nextDirection = nextVelocity.normalized;
             float turnAngle = Vector3.Angle(previousDirection, nextDirection) * Mathf.Deg2Rad;
             Vector3 turnAxis = Vector3.Cross(previousDirection, nextDirection);
             float turnSign = Vector3.Dot(turnAxis, Vector3.up);
@@ -665,7 +584,7 @@ namespace TestBoids.Boids
             float maxBankAngle = maxBankAngleDegrees * Mathf.Deg2Rad;
             float targetBank = Mathf.Clamp(-turnSign * turnRate * bankTurnScale, -maxBankAngle, maxBankAngle);
 
-            current.Bank = DampAngle(current.Bank, targetBank, bankResponse, dt);
+            return DampAngle(currentBank, targetBank, bankResponse, dt);
         }
 
         private static float DampAngle(float current, float target, float response, float dt)
@@ -673,50 +592,142 @@ namespace TestBoids.Boids
             return Mathf.Lerp(current, target, 1f - Mathf.Exp(-Mathf.Max(0f, response) * dt));
         }
 
-        private void EnsureRayDirections()
+        private void ApplyAgentPoses()
         {
-            if (rayDirections.Length == obstacleRayCount)
+            int count = Mathf.Min(agents.Length, fish.Length);
+            for (int i = 0; i < count; i++)
             {
-                return;
-            }
-
-            rayDirections = new Vector3[obstacleRayCount];
-            float goldenRatio = (1f + Mathf.Sqrt(5f)) * 0.5f;
-            float angleIncrement = Mathf.PI * 2f * goldenRatio;
-
-            for (int i = 0; i < obstacleRayCount; i++)
-            {
-                float t = (float)i / obstacleRayCount;
-                float inclination = Mathf.Acos(1f - 2f * t);
-                float azimuth = angleIncrement * i;
-                rayDirections[i] = new Vector3(
-                    Mathf.Sin(inclination) * Mathf.Cos(azimuth),
-                    Mathf.Sin(inclination) * Mathf.Sin(azimuth),
-                    Mathf.Cos(inclination));
+                FishAgent agent = agents[i];
+                if (agent)
+                {
+                    FishState state = fish[i];
+                    agent.ApplyPose(state.Position, state.Velocity, state.Bank);
+                }
             }
         }
 
-        private static Vector3 SafeNormalize(Vector3 vector)
+        private Vector3 CreateInitialPosition(ref BoidRandom random)
         {
-            return vector.sqrMagnitude > 0.000001f ? vector.normalized : Vector3.zero;
+            Vector3 localDirection = CreateRandomDirection(ref random);
+            float radius = schoolRadius * Mathf.Pow(random.Next01(), 1f / 3f);
+            Vector3 localPosition = new(
+                localDirection.x * radius * schoolWidthScale,
+                localDirection.y * radius * schoolHeightScale,
+                localDirection.z * radius);
+            Vector3 clampedHalfSize = aquariumHalfSize * spawnBoundsScale;
+            localPosition.x = Mathf.Clamp(localPosition.x, -clampedHalfSize.x, clampedHalfSize.x);
+            localPosition.y = Mathf.Clamp(localPosition.y, -clampedHalfSize.y, clampedHalfSize.y);
+            localPosition.z = Mathf.Clamp(localPosition.z, -clampedHalfSize.z, clampedHalfSize.z);
+            return transform.TransformPoint(localPosition);
+        }
+
+        private Vector3 CreateInitialDirection(Vector3 position, ref BoidRandom random)
+        {
+            Vector3 radial = position - transform.position;
+            Vector3 axis = transform.up.sqrMagnitude > 0.000001f ? transform.up.normalized : Vector3.up;
+            Vector3 tangent = Vector3.Cross(axis, radial);
+            if (tangent.sqrMagnitude < 0.000001f)
+            {
+                tangent = Vector3.Cross(transform.right, radial);
+            }
+
+            if (tangent.sqrMagnitude < 0.000001f)
+            {
+                return CreateRandomDirection(ref random);
+            }
+
+            Vector3 inward = radial.sqrMagnitude > 0.000001f ? -radial.normalized : Vector3.zero;
+            Vector3 jitter = CreateRandomDirection(ref random) * 0.18f;
+            return (tangent.normalized + inward * 0.22f + jitter).normalized;
+        }
+
+        private Vector3 CreateRandomDirection(ref BoidRandom random)
+        {
+            for (int i = 0; i < 24; i++)
+            {
+                Vector3 direction = new(
+                    RandomRange(-1f, 1f, ref random),
+                    RandomRange(-1f, 1f, ref random),
+                    RandomRange(-1f, 1f, ref random));
+                if (direction.sqrMagnitude > 0.000001f)
+                {
+                    return direction.normalized;
+                }
+            }
+
+            return transform.forward.sqrMagnitude > 0.000001f ? transform.forward.normalized : Vector3.forward;
+        }
+
+        private static float RandomRange(float min, float max, ref BoidRandom random)
+        {
+            return Mathf.Lerp(min, max, random.Next01());
+        }
+
+        private static float SampleRange(Vector2 range, ref BoidRandom random)
+        {
+            return Mathf.Lerp(range.x, range.y, random.Next01());
+        }
+
+        private static Vector2 OrderedRange(float x, float y)
+        {
+            return x <= y ? new Vector2(x, y) : new Vector2(y, x);
+        }
+
+        private static Vector2 OrderedRange(Vector2 range)
+        {
+            return OrderedRange(range.x, range.y);
+        }
+
+        private void DestroySpawnedFish()
+        {
+            for (int i = 0; i < spawnedFishObjects.Count; i++)
+            {
+                GameObject instance = spawnedFishObjects[i];
+                if (!instance)
+                {
+                    continue;
+                }
+
+                if (Application.isPlaying)
+                {
+                    Destroy(instance);
+                }
+                else
+                {
+                    DestroyImmediate(instance);
+                }
+            }
+
+            spawnedFishObjects.Clear();
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.color = new Color(0.2f, 0.7f, 1f, 0.35f);
+            Matrix4x4 previous = Gizmos.matrix;
+            Gizmos.matrix = Matrix4x4.TRS(transform.position, transform.rotation, Vector3.one);
+            Gizmos.DrawWireCube(Vector3.zero, aquariumHalfSize * 2f);
+            Gizmos.matrix = previous;
+        }
+
+        private static int SampleNeighborIndex(int fishIndex, int sampleIndex, int fishCount, int sampleFrame)
+        {
+            uint value = (uint)fishIndex * 747796405u
+                + (uint)sampleIndex * 2891336453u
+                + (uint)sampleFrame * 277803737u;
+            value ^= value >> 16;
+            value *= 2246822519u;
+            value ^= value >> 13;
+            return (int)(value % (uint)fishCount);
         }
 
         private struct FishState
         {
             public Vector3 Position;
             public Vector3 Velocity;
-            public Vector3 CollisionAvoidanceDirection;
+            public float MinSpeed;
+            public float MaxSpeed;
             public float Bank;
-            public bool HasCollisionAvoidanceDirection;
-
-            public FishState(Vector3 position, Vector3 velocity)
-            {
-                Position = position;
-                Velocity = velocity;
-                CollisionAvoidanceDirection = Vector3.zero;
-                Bank = 0f;
-                HasCollisionAvoidanceDirection = false;
-            }
         }
     }
 }

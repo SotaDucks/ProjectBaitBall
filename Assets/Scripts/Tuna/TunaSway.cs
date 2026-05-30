@@ -1,4 +1,5 @@
 using UnityEngine;
+using TestBoids.Boids;
 
 namespace TestBoids.Tuna
 {
@@ -58,6 +59,7 @@ namespace TestBoids.Tuna
         private float phase;
         private Quaternion lastOffset = Quaternion.identity;
         private bool forceLowSpeed;
+        private FishAgent schoolAgent;
 
         public bool ForceLowSpeed
         {
@@ -88,6 +90,8 @@ namespace TestBoids.Tuna
             {
                 dynamicBone = GetComponent<DynamicBone>();
             }
+
+            schoolAgent = GetComponentInParent<FishAgent>();
 
             NormalizeSpeedBands();
             float speed = GetSpeed();
@@ -141,6 +145,11 @@ namespace TestBoids.Tuna
 
         private float GetSpeed()
         {
+            if (schoolAgent)
+            {
+                return 0f;
+            }
+
             return targetRigidbody ? targetRigidbody.linearVelocity.magnitude : 0f;
         }
 
