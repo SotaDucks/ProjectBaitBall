@@ -14524,6 +14524,7 @@ MonoBehaviour:
   schoolManager: {fileID: 1718917406}
   playerAgent: {fileID: 109750654}
   tunaMotor: {fileID: 109750650}
+  tunaCameraController: {fileID: 0}
   playerRigidbody: {fileID: 109750651}
   inheritSchoolVelocity: 1
   activateMotorOnPhaseBaitBall: 1
@@ -14533,6 +14534,7 @@ MonoBehaviour:
   scriptedExitOutwardWeight: 0.5
   scriptedExitTurnInput: -1
   scriptedExitTurnSpeedScale: 0.2
+  playerLookResumeDelay: 0.15
 --- !u!1 &110564798
 GameObject:
   m_ObjectHideFlags: 0
@@ -38799,15 +38801,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.29417795
+      value: -0.33479622
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.850401
+      value: -1.876857
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.9929786
+      value: 0.8983874
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -40355,8 +40357,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.99506265, z: 0, w: 0.09924894}
-  m_LocalPosition: {x: -3.4420044, y: -27.87, z: 16.534079}
+  m_LocalRotation: {x: -0.06443007, y: 0.43024313, z: 0.030804642, w: 0.89988375}
+  m_LocalPosition: {x: -5.021943, y: -28.152855, z: 13.47581}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -47598,7 +47600,7 @@ MonoBehaviour:
   followTarget: {fileID: 109750647}
   followOffset: {x: 0, y: 0, z: 0}
   positionDamping: {x: 0.02, y: 0.001, z: 0.2}
-  sensitivity: {x: 0.08, y: 0.08}
+  sensitivity: {x: 0.05, y: 0.05}
   invertY: 0
   scaleLookByDeltaTime: 0
   minimumPitch: -35
@@ -125164,7 +125166,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.29417795
+      value: -0.33479622
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -125172,7 +125174,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.9929786
+      value: 0.8983874
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -131212,6 +131214,7 @@ GameObject:
   - component: {fileID: 1033788102}
   - component: {fileID: 1033788101}
   - component: {fileID: 1033788100}
+  - component: {fileID: 1033788103}
   - component: {fileID: 1033788099}
   m_Layer: 0
   m_Name: Third Person Aim Camera
@@ -131253,7 +131256,7 @@ MonoBehaviour:
   Damping: {x: 0.1, y: 0.5, z: 0.3}
   ShoulderOffset: {x: 0.92, y: -0.48, z: 0}
   VerticalArmLength: 0.5
-  CameraSide: 0.228
+  CameraSide: 0.2
   CameraDistance: 2.09
   AvoidObstacles:
     Enabled: 0
@@ -131264,6 +131267,24 @@ MonoBehaviour:
     CameraRadius: 0.2
     DampingIntoCollision: 0
     DampingFromCollision: 0.5
+--- !u!114 &1033788103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033788098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f8b1c6d4e9471d9b3a6f0c5e8d2a14, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaCameraSideSwitcher
+  input: {fileID: 109750652}
+  thirdPersonFollow: {fileID: 1033788100}
+  leftLookCameraSide: 0.2
+  rightLookCameraSide: 0.8
+  cameraSideChangeSpeed: 2
+  lookThreshold: 0.1
 --- !u!114 &1033788101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131278,7 +131299,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 44
+    m_Value: 156
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
@@ -131316,7 +131337,7 @@ Transform:
   m_GameObject: {fileID: 1033788098}
   serializedVersion: 2
   m_LocalRotation: {x: -0.064430065, y: 0.4302431, z: 0.030804636, w: 0.89988375}
-  m_LocalPosition: {x: -4.9895945, y: -28.152855, z: 13.435712}
+  m_LocalPosition: {x: -5.021943, y: -28.152855, z: 13.47581}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -162096,15 +162117,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.29417795
+      value: -0.33479622
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.850401
+      value: -1.876857
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.9929786
+      value: 0.8983874
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
