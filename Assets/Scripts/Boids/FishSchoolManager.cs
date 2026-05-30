@@ -196,6 +196,36 @@ namespace TestBoids.Boids
             ResetSchool(count, seed);
         }
 
+        public bool TryReleaseAgent(FishAgent agent, out Vector3 velocity)
+        {
+            velocity = Vector3.zero;
+            if (!agent || agents == null)
+            {
+                return false;
+            }
+
+            int index = Array.IndexOf(agents, agent);
+            if (index < 0)
+            {
+                return false;
+            }
+
+            if (fish != null && index < fish.Length)
+            {
+                velocity = fish[index].Velocity;
+            }
+            else if (agent.Velocity.sqrMagnitude > 0.000001f)
+            {
+                velocity = agent.Velocity;
+            }
+
+            agents = RemoveAt(agents, index);
+            fish = RemoveAt(fish, index);
+            nextFish = RemoveAt(nextFish, index);
+            fishCount = agents.Length;
+            return true;
+        }
+
         public void BakeStableInitialStateForEditor()
         {
             if (Application.isPlaying)
@@ -921,6 +951,33 @@ namespace TestBoids.Boids
             value *= 2246822519u;
             value ^= value >> 13;
             return (int)(value % (uint)fishCount);
+        }
+
+        private static T[] RemoveAt<T>(T[] source, int index)
+        {
+            if (source == null || index < 0 || index >= source.Length)
+            {
+                return source ?? Array.Empty<T>();
+            }
+
+            if (source.Length == 1)
+            {
+                return Array.Empty<T>();
+            }
+
+            T[] result = new T[source.Length - 1];
+            if (index > 0)
+            {
+                Array.Copy(source, 0, result, 0, index);
+            }
+
+            int tailCount = source.Length - index - 1;
+            if (tailCount > 0)
+            {
+                Array.Copy(source, index + 1, result, index, tailCount);
+            }
+
+            return result;
         }
 
         private struct FishState
