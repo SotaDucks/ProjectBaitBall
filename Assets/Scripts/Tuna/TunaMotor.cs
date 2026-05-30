@@ -21,6 +21,16 @@ namespace TestBoids.Tuna
         [Tooltip("Distance below the water surface required before swimming control returns.")]
         [SerializeField, Min(0f)] private float fullySubmergedDepth = 0.75f;
 
+        [Header("Airborne")]
+        [Tooltip("TunaSway component to force into low-speed sway while the tuna is out of the water.")]
+        [SerializeField] private TunaSway sway;
+        [Tooltip("Degrees per second added around the tuna's local X axis while airborne.")]
+        [SerializeField, Min(0f)] private float airbornePitchSpeed = 90f;
+        [Tooltip("Maximum local X-axis pitch applied after leaving the water.")]
+        [SerializeField, Min(0f)] private float maxAirbornePitchAngle = 35f;
+        [Tooltip("Use 1 or -1 to choose which local X direction points the tuna nose-down.")]
+        [SerializeField] private float airbornePitchDirection = 1f;
+
         [Header("Movement")]
         [SerializeField, Min(0f)] private float acceleration = 16f;
         [SerializeField, Min(0f)] private float reverseAccelerationScale = 0.45f;
@@ -51,6 +61,7 @@ namespace TestBoids.Tuna
         private float turnInput;
         private float bankAmount;
         private LocomotionState locomotionState = LocomotionState.Swimming;
+        private float airbornePitchAmount;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
@@ -62,6 +73,7 @@ namespace TestBoids.Tuna
         {
             input = GetComponent<TunaInputReader>();
             cameraController = GetComponentInChildren<TunaCameraController>();
+            sway = GetComponentInChildren<TunaSway>();
             body = GetComponent<Rigidbody>();
         }
 
@@ -83,6 +95,11 @@ namespace TestBoids.Tuna
                 cameraPivot = cameraController.transform;
             }
 
+            if (!sway)
+            {
+                sway = GetComponentInChildren<TunaSway>();
+            }
+
             desiredDirection = transform.forward;
 
             if (configureRigidbodyOnAwake)
@@ -92,13 +109,21 @@ namespace TestBoids.Tuna
                 body.maxAngularVelocity = maxAngularVelocity;
             }
 
-            locomotionState = IsAboveWaterSurface() ? LocomotionState.Airborne : LocomotionState.Swimming;
-            ApplyLocomotionState();
+            if (IsAboveWaterSurface())
+            {
+                EnterAirborne();
+            }
+            else
+            {
+                EnterSwimming();
+            }
         }
 
         private void OnValidate()
         {
             fullySubmergedDepth = Mathf.Max(0f, fullySubmergedDepth);
+            airbornePitchSpeed = Mathf.Max(0f, airbornePitchSpeed);
+            maxAirbornePitchAngle = Mathf.Max(0f, maxAirbornePitchAngle);
         }
 
         private void FixedUpdate()
@@ -107,6 +132,7 @@ namespace TestBoids.Tuna
             if (locomotionState == LocomotionState.Airborne)
             {
                 ClearControlState();
+                UpdateAirborneMotion();
                 UpdateTurnAmount();
                 return;
             }
@@ -135,8 +161,7 @@ namespace TestBoids.Tuna
             {
                 if (IsAboveWaterSurface())
                 {
-                    locomotionState = LocomotionState.Airborne;
-                    ApplyLocomotionState();
+                    EnterAirborne();
                 }
 
                 return;
@@ -144,19 +169,64 @@ namespace TestBoids.Tuna
 
             if (IsFullySubmerged())
             {
-                locomotionState = LocomotionState.Swimming;
-                ApplyLocomotionState();
+                EnterSwimming();
             }
         }
 
-        private void ApplyLocomotionState()
+        private void EnterSwimming()
         {
-            if (!body)
+            locomotionState = LocomotionState.Swimming;
+            airbornePitchAmount = 0f;
+
+            if (body)
+            {
+                body.useGravity = false;
+            }
+
+            SetSwayLowSpeedOverride(false);
+        }
+
+        private void EnterAirborne()
+        {
+            locomotionState = LocomotionState.Airborne;
+            airbornePitchAmount = 0f;
+            ClearControlState();
+
+            if (body)
+            {
+                body.useGravity = true;
+            }
+
+            SetSwayLowSpeedOverride(true);
+        }
+
+        private void UpdateAirborneMotion()
+        {
+            if (!body || airbornePitchSpeed <= 0f || maxAirbornePitchAngle <= 0f)
             {
                 return;
             }
 
-            body.useGravity = locomotionState == LocomotionState.Airborne;
+            float remainingPitch = maxAirbornePitchAngle - airbornePitchAmount;
+            if (remainingPitch <= 0f || Mathf.Approximately(airbornePitchDirection, 0f))
+            {
+                return;
+            }
+
+            float pitchDelta = Mathf.Min(airbornePitchSpeed * Time.fixedDeltaTime, remainingPitch);
+            Quaternion pitchRotation = Quaternion.AngleAxis(
+                pitchDelta * Mathf.Sign(airbornePitchDirection),
+                Vector3.right);
+            body.MoveRotation(body.rotation * pitchRotation);
+            airbornePitchAmount += pitchDelta;
+        }
+
+        private void SetSwayLowSpeedOverride(bool forced)
+        {
+            if (sway)
+            {
+                sway.ForceLowSpeed = forced;
+            }
         }
 
         private bool IsAboveWaterSurface()

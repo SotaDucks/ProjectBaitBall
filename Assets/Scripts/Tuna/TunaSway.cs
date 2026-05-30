@@ -57,6 +57,13 @@ namespace TestBoids.Tuna
         private float currentDynamicBoneDamping;
         private float phase;
         private Quaternion lastOffset = Quaternion.identity;
+        private bool forceLowSpeed;
+
+        public bool ForceLowSpeed
+        {
+            get => forceLowSpeed;
+            set => forceLowSpeed = value;
+        }
 
         private void Reset()
         {
@@ -96,8 +103,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            RemoveLastOffset();
-            lastOffset = Quaternion.identity;
+            ClearLastOffset();
         }
 
         private void LateUpdate()
@@ -107,7 +113,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            float speed = GetSpeed();
+            float speed = forceLowSpeed ? 0f : GetSpeed();
             SelectSettings(speed, out float targetAmplitude, out float targetFrequency);
             float blend = 1f - Mathf.Exp(-response * Time.deltaTime);
             currentAmplitude = Mathf.Lerp(currentAmplitude, targetAmplitude, blend);
@@ -204,6 +210,17 @@ namespace TestBoids.Tuna
             }
 
             targetBone.rotation = Quaternion.Inverse(lastOffset) * targetBone.rotation;
+        }
+
+        private void ClearLastOffset()
+        {
+            if (!targetBone)
+            {
+                return;
+            }
+
+            RemoveLastOffset();
+            lastOffset = Quaternion.identity;
         }
 
         private void OnValidate()
