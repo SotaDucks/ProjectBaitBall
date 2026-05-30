@@ -13,6 +13,7 @@ namespace TestBoids.Boids
         [SerializeField, Min(0)] private int fishCount = 60;
         [SerializeField] private Transform sceneFishRoot;
         [SerializeField] private FishAgent[] sceneFish = Array.Empty<FishAgent>();
+        [SerializeField] private bool autoCollectChildFish = true;
         [SerializeField] private bool spawnOnStart = true;
         [SerializeField] private bool parentSpawnedFishToManager = true;
         [SerializeField] private bool destroySpawnedFishOnDisable = true;
@@ -56,14 +57,23 @@ namespace TestBoids.Boids
         [SerializeField, Min(0f)] private float bankTurnScale = 0.18f;
         [SerializeField, Min(0f)] private float bankResponse = 8f;
 
+        [Header("Baked Initial State")]
+        [SerializeField] private bool useBakedInitialState = true;
+        [SerializeField, Min(0)] private int bakeWarmupFrames = 360;
+        [SerializeField, Min(0.001f)] private float bakeTimeStep = 0.03333334f;
+        [SerializeField, HideInInspector] private BakedFishState[] bakedInitialStates = Array.Empty<BakedFishState>();
+
         private readonly List<GameObject> spawnedFishObjects = new();
         private FishAgent[] agents = Array.Empty<FishAgent>();
         private FishState[] fish = Array.Empty<FishState>();
         private FishState[] nextFish = Array.Empty<FishState>();
         private int simulationFrame;
+        private float simulationTime;
 
         private bool HasFish => fish != null && fish.Length > 0;
+        private bool HasBakedInitialState => useBakedInitialState && bakedInitialStates != null && bakedInitialStates.Length > 0;
         public IReadOnlyList<FishAgent> Agents => agents;
+        public int BakedInitialStateCount => bakedInitialStates?.Length ?? 0;
 
         private void OnValidate()
         {
@@ -82,6 +92,8 @@ namespace TestBoids.Boids
             perceptionRadius = Mathf.Max(0f, perceptionRadius);
             separationRadius = Mathf.Min(Mathf.Max(0f, separationRadius), perceptionRadius);
             neighborScanLimit = Mathf.Max(0, neighborScanLimit);
+            bakeWarmupFrames = Mathf.Max(0, bakeWarmupFrames);
+            bakeTimeStep = Mathf.Max(0.001f, bakeTimeStep);
         }
 
         private void InitializeIndividualRandomRangesFromLegacyValues()
@@ -148,6 +160,7 @@ namespace TestBoids.Boids
             fishCount = Mathf.Max(0, count);
             seed = randomSeed;
             simulationFrame = 0;
+            simulationTime = 0f;
 
             DestroySpawnedFish();
             FishAgent[] sceneAgents = CollectSceneAgents();
@@ -155,20 +168,121 @@ namespace TestBoids.Boids
             {
                 agents = sceneAgents;
                 fishCount = agents.Length;
+                AllocateFishState(agents.Length);
+                if (!TryInitializeFishStateFromBaked())
+                {
+                    InitializeFishState(randomSeed);
+                }
+            }
+            else if (HasBakedInitialState && fishPrefab)
+            {
+                SpawnPrefabAgentsFromBaked();
+                fishCount = agents.Length;
+                AllocateFishState(agents.Length);
+                TryInitializeFishStateFromBaked();
             }
             else
             {
                 SpawnPrefabAgents(fishCount, randomSeed);
+                AllocateFishState(agents.Length);
+                InitializeFishState(randomSeed);
             }
 
-            AllocateFishState(agents.Length);
-            InitializeFishState(randomSeed);
             ApplyAgentPoses();
         }
 
         public void SetCount(int count)
         {
             ResetSchool(count, seed);
+        }
+
+        public void BakeStableInitialStateForEditor()
+        {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
+            InitializeIndividualRandomRangesFromLegacyValues();
+            NormalizeIndividualRandomRanges();
+
+            simulationFrame = 0;
+            simulationTime = 0f;
+            DestroySpawnedFish();
+
+            FishAgent[] sceneAgents = CollectSceneAgents();
+            bool generatedFromPrefab = sceneAgents.Length == 0;
+            if (sceneAgents.Length > 0)
+            {
+                agents = sceneAgents;
+                fishCount = agents.Length;
+            }
+            else
+            {
+                SpawnPrefabAgents(fishCount, seed);
+            }
+
+            AllocateFishState(agents.Length);
+            InitializeFishState(seed);
+            ApplyAgentPoses();
+
+            int frames = Mathf.Max(0, bakeWarmupFrames);
+            float dt = Mathf.Max(0.001f, bakeTimeStep);
+            for (int i = 0; i < frames; i++)
+            {
+                UpdateSimulation(dt);
+                ApplyAgentPoses();
+                simulationFrame++;
+            }
+
+            CaptureBakedInitialState();
+            useBakedInitialState = true;
+
+            if (!Application.isPlaying && generatedFromPrefab && parentSpawnedFishToManager)
+            {
+                spawnedFishObjects.Clear();
+            }
+            else if (!Application.isPlaying && generatedFromPrefab)
+            {
+                DestroySpawnedFish();
+                agents = Array.Empty<FishAgent>();
+                fish = Array.Empty<FishState>();
+                nextFish = Array.Empty<FishState>();
+            }
+        }
+
+        public void ClearBakedInitialStateForEditor()
+        {
+            if (Application.isPlaying)
+            {
+                return;
+            }
+
+            bakedInitialStates = Array.Empty<BakedFishState>();
+        }
+
+        private void CaptureBakedInitialState()
+        {
+            int count = Mathf.Min(agents.Length, fish.Length);
+            bakedInitialStates = count > 0 ? new BakedFishState[count] : Array.Empty<BakedFishState>();
+            for (int i = 0; i < count; i++)
+            {
+                FishAgent agent = agents[i];
+                FishState state = fish[i];
+                Vector3 direction = state.Velocity.sqrMagnitude > 0.000001f ? state.Velocity.normalized : transform.forward;
+                Quaternion rotation = agent ? agent.transform.rotation : Quaternion.LookRotation(direction, Vector3.up);
+                Vector3 localScale = agent ? agent.transform.localScale : Vector3.one;
+                bakedInitialStates[i] = new BakedFishState
+                {
+                    Position = state.Position,
+                    Rotation = rotation,
+                    LocalScale = localScale,
+                    Velocity = state.Velocity,
+                    MinSpeed = state.MinSpeed,
+                    MaxSpeed = state.MaxSpeed,
+                    Bank = state.Bank
+                };
+            }
         }
 
         private FishAgent[] CollectSceneAgents()
@@ -192,6 +306,15 @@ namespace TestBoids.Boids
                 }
             }
 
+            if (autoCollectChildFish)
+            {
+                FishAgent[] childAgents = GetComponentsInChildren<FishAgent>();
+                for (int i = 0; i < childAgents.Length; i++)
+                {
+                    AddUniqueAgent(collected, childAgents[i]);
+                }
+            }
+
             return collected.ToArray();
         }
 
@@ -200,6 +323,40 @@ namespace TestBoids.Boids
             if (agent && !target.Contains(agent))
             {
                 target.Add(agent);
+            }
+        }
+
+        private void SpawnPrefabAgentsFromBaked()
+        {
+            DestroySpawnedFish();
+            if (!fishPrefab || !HasBakedInitialState)
+            {
+                agents = Array.Empty<FishAgent>();
+                return;
+            }
+
+            int count = bakedInitialStates.Length;
+            agents = new FishAgent[count];
+            for (int i = 0; i < count; i++)
+            {
+                BakedFishState baked = bakedInitialStates[i];
+                Transform parent = parentSpawnedFishToManager ? transform : null;
+                GameObject instance = Instantiate(fishPrefab, baked.Position, baked.Rotation, parent);
+                instance.transform.localScale = baked.LocalScale;
+
+                FishAgent agent = instance.GetComponent<FishAgent>();
+                if (!agent)
+                {
+                    agent = instance.GetComponentInChildren<FishAgent>();
+                }
+
+                if (!agent)
+                {
+                    agent = instance.AddComponent<FishAgent>();
+                }
+
+                spawnedFishObjects.Add(instance);
+                agents[i] = agent;
             }
         }
 
@@ -268,6 +425,50 @@ namespace TestBoids.Boids
             }
         }
 
+        private bool TryInitializeFishStateFromBaked()
+        {
+            if (!HasBakedInitialState || bakedInitialStates.Length != agents.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < bakedInitialStates.Length; i++)
+            {
+                BakedFishState baked = bakedInitialStates[i];
+                FishAgent agent = agents[i];
+                if (agent)
+                {
+                    agent.transform.position = baked.Position;
+                    agent.transform.rotation = baked.Rotation;
+                    agent.transform.localScale = baked.LocalScale;
+                }
+
+                float min = Mathf.Max(0.001f, baked.MinSpeed);
+                float max = Mathf.Max(min, baked.MaxSpeed);
+                Vector3 velocity = baked.Velocity;
+                if (velocity.sqrMagnitude <= 0.000001f)
+                {
+                    Vector3 direction = agent && agent.transform.forward.sqrMagnitude > 0.000001f
+                        ? agent.transform.forward.normalized
+                        : transform.forward.normalized;
+                    velocity = direction * min;
+                }
+
+                FishState state = new()
+                {
+                    Position = baked.Position,
+                    Velocity = velocity,
+                    MinSpeed = min,
+                    MaxSpeed = max,
+                    Bank = baked.Bank
+                };
+                fish[i] = state;
+                nextFish[i] = state;
+            }
+
+            return true;
+        }
+
         private Vector3 ReadInitialDirection(FishAgent agent, Vector3 position, ref BoidRandom random)
         {
             if (agent && agent.Velocity.sqrMagnitude > 0.000001f)
@@ -287,8 +488,8 @@ namespace TestBoids.Boids
         {
             float perceptionRadiusSq = perceptionRadius * perceptionRadius;
             float separationRadiusSq = separationRadius * separationRadius;
-            Vector3 flowAxis = ReadFlowAxis(Time.time);
-            float flowPhase = Time.time * flowAxisSpeed * 3.7f;
+            Vector3 flowAxis = ReadFlowAxis(simulationTime);
+            float flowPhase = simulationTime * flowAxisSpeed * 3.7f;
 
             for (int i = 0; i < fish.Length; i++)
             {
@@ -357,6 +558,7 @@ namespace TestBoids.Boids
             }
 
             (fish, nextFish) = (nextFish, fish);
+            simulationTime += dt;
         }
 
         private int ReadNeighborSampleCount(int count)
@@ -724,6 +926,18 @@ namespace TestBoids.Boids
         private struct FishState
         {
             public Vector3 Position;
+            public Vector3 Velocity;
+            public float MinSpeed;
+            public float MaxSpeed;
+            public float Bank;
+        }
+
+        [Serializable]
+        private struct BakedFishState
+        {
+            public Vector3 Position;
+            public Quaternion Rotation;
+            public Vector3 LocalScale;
             public Vector3 Velocity;
             public float MinSpeed;
             public float MaxSpeed;
