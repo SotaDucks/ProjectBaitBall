@@ -131214,8 +131214,8 @@ GameObject:
   - component: {fileID: 1033788102}
   - component: {fileID: 1033788101}
   - component: {fileID: 1033788100}
-  - component: {fileID: 1033788103}
   - component: {fileID: 1033788099}
+  - component: {fileID: 1033788103}
   m_Layer: 0
   m_Name: Third Person Aim Camera
   m_TagString: Untagged
@@ -131267,24 +131267,6 @@ MonoBehaviour:
     CameraRadius: 0.2
     DampingIntoCollision: 0
     DampingFromCollision: 0.5
---- !u!114 &1033788103
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1033788098}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a2f8b1c6d4e9471d9b3a6f0c5e8d2a14, type: 3}
-  m_Name:
-  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaCameraSideSwitcher
-  input: {fileID: 109750652}
-  thirdPersonFollow: {fileID: 1033788100}
-  leftLookCameraSide: 0.2
-  rightLookCameraSide: 0.8
-  cameraSideChangeSpeed: 2
-  lookThreshold: 0.1
 --- !u!114 &1033788101
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131343,6 +131325,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1033788103
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1033788098}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2f8b1c6d4e9471d9b3a6f0c5e8d2a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaCameraSideSwitcher
+  input: {fileID: 109750652}
+  thirdPersonFollow: {fileID: 1033788100}
+  leftLookCameraSide: 0.2
+  rightLookCameraSide: 0.8
+  cameraSideChangeSpeed: 0.4
+  lookThreshold: 60
 --- !u!1 &1034349783
 GameObject:
   m_ObjectHideFlags: 0
