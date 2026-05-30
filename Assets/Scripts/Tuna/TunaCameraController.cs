@@ -39,6 +39,45 @@ namespace TestBoids.Tuna
         public Vector3 Forward => LookRotation * Vector3.forward;
         public Vector3 Right => LookRotation * Vector3.right;
 
+        public void ResetLookToForward(Vector3 forward, float lookSuppressionDuration = 0f)
+        {
+            if (forward.sqrMagnitude <= 0.000001f)
+            {
+                forward = transform.forward;
+            }
+
+            Quaternion targetRotation = Quaternion.LookRotation(forward.normalized, Vector3.up);
+            Vector3 euler = targetRotation.eulerAngles;
+
+            yaw = NormalizeAngle(euler.y);
+            pitch = Mathf.Clamp(NormalizeAngle(euler.x), minimumPitch, maximumPitch);
+            roll = 0f;
+            dampedYaw = yaw;
+            dampedPitch = pitch;
+            dampedRoll = roll;
+            yawVelocity = 0f;
+            pitchVelocity = 0f;
+            rollVelocity = 0f;
+
+            if (cameraPivot)
+            {
+                cameraPivot.rotation = LookRotation;
+            }
+
+            if (input)
+            {
+                input.SuppressLookForSeconds(lookSuppressionDuration);
+            }
+        }
+
+        public void SuppressLookForSeconds(float duration)
+        {
+            if (input)
+            {
+                input.SuppressLookForSeconds(duration);
+            }
+        }
+
         private void Reset()
         {
             input = GetComponentInParent<TunaInputReader>();

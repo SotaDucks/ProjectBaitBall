@@ -16,9 +16,27 @@ namespace TestBoids.Tuna
 
         private bool enabledMoveAction;
         private bool enabledLookAction;
+        private float lookSuppressedUntil;
 
         public Vector2 Move { get; private set; }
         public Vector2 Look { get; private set; }
+
+        public void ClearLook()
+        {
+            Look = Vector2.zero;
+        }
+
+        public void SuppressLookForSeconds(float duration)
+        {
+            ClearLook();
+
+            if (duration <= 0f)
+            {
+                return;
+            }
+
+            lookSuppressedUntil = Mathf.Max(lookSuppressedUntil, Time.unscaledTime + duration);
+        }
 
         private void OnEnable()
         {
@@ -62,7 +80,12 @@ namespace TestBoids.Tuna
         private void Update()
         {
             Move = ReadVector2(moveAction);
-            Look = ReadVector2(lookAction);
+            Look = IsLookSuppressed() ? Vector2.zero : ReadVector2(lookAction);
+        }
+
+        private bool IsLookSuppressed()
+        {
+            return Time.unscaledTime < lookSuppressedUntil;
         }
 
         private static bool EnableAction(InputActionReference actionReference)

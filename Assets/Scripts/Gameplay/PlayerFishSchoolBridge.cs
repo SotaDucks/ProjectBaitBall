@@ -12,6 +12,7 @@ namespace TestBoids.Gameplay
         [SerializeField] private FishSchoolManager schoolManager;
         [SerializeField] private FishAgent playerAgent;
         [SerializeField] private TunaMotor tunaMotor;
+        [SerializeField] private TunaCameraController tunaCameraController;
         [SerializeField] private Rigidbody playerRigidbody;
         [SerializeField] private bool inheritSchoolVelocity = true;
         [SerializeField] private bool activateMotorOnPhaseBaitBall = true;
@@ -24,6 +25,7 @@ namespace TestBoids.Gameplay
         [SerializeField, Range(-1f, 1f)] private float scriptedExitTurnInput = -1f;
         [Tooltip("Multiplier for the scripted exit turn response. Lower than 1 turns slower; higher than 1 turns faster.")]
         [SerializeField, Min(0f)] private float scriptedExitTurnSpeedScale = 1f;
+        [SerializeField, Min(0f)] private float playerLookResumeDelay = 0.15f;
 
         private bool released;
         private bool subscribed;
@@ -34,6 +36,7 @@ namespace TestBoids.Gameplay
         {
             playerAgent = GetComponent<FishAgent>();
             tunaMotor = GetComponent<TunaMotor>();
+            ResolveTunaCameraController();
             playerRigidbody = GetComponent<Rigidbody>();
         }
 
@@ -57,6 +60,11 @@ namespace TestBoids.Gameplay
             if (!tunaMotor)
             {
                 tunaMotor = GetComponent<TunaMotor>();
+            }
+
+            if (!tunaCameraController)
+            {
+                ResolveTunaCameraController();
             }
 
             if (!playerRigidbody)
@@ -152,6 +160,8 @@ namespace TestBoids.Gameplay
                     scriptedExitTurnSpeedScale);
             }
 
+            SuppressPlayerLook(scriptedExitDuration + playerLookResumeDelay);
+
             StopScriptedExit();
             if (scriptedExitDuration <= 0f)
             {
@@ -195,7 +205,63 @@ namespace TestBoids.Gameplay
 
             if (tunaMotor)
             {
+                if (tunaMotor.IsScripted)
+                {
+                    ResetPlayerLook();
+                }
+
                 tunaMotor.EndScriptedSwim();
+            }
+        }
+
+        private void ResetPlayerLook()
+        {
+            ResolveTunaCameraController();
+
+            if (tunaCameraController)
+            {
+                tunaCameraController.ResetLookToForward(transform.forward, playerLookResumeDelay);
+            }
+        }
+
+        private void SuppressPlayerLook(float duration)
+        {
+            ResolveTunaCameraController();
+
+            if (tunaCameraController)
+            {
+                tunaCameraController.SuppressLookForSeconds(duration);
+            }
+        }
+
+        private void ResolveTunaCameraController()
+        {
+            if (tunaCameraController)
+            {
+                return;
+            }
+
+            tunaCameraController = GetComponentInChildren<TunaCameraController>();
+            if (tunaCameraController)
+            {
+                return;
+            }
+
+            TunaCameraController[] controllers = FindObjectsByType<TunaCameraController>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            foreach (TunaCameraController controller in controllers)
+            {
+                if (controller && controller.followTarget == transform)
+                {
+                    tunaCameraController = controller;
+                    return;
+                }
+            }
+
+            if (controllers.Length == 1)
+            {
+                tunaCameraController = controllers[0];
             }
         }
 
