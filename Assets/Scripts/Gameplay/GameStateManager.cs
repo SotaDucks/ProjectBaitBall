@@ -43,7 +43,7 @@ namespace TestBoids.Gameplay
                 && CurrentState == GameState.Intro
                 && WasPhaseBaitBallTestKeyPressed())
             {
-                SetState(GameState.PhaseBaitBall);
+                SetState(GameState.PhaseBaitBallTransition);
             }
         }
 

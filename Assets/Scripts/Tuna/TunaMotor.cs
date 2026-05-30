@@ -11,6 +11,12 @@ namespace TestBoids.Tuna
             Airborne
         }
 
+        private enum ControlMode
+        {
+            Manual,
+            Scripted
+        }
+
         [SerializeField] private TunaInputReader input;
         [SerializeField] private TunaCameraController cameraController;
         [SerializeField] private Transform cameraPivot;
@@ -61,11 +67,15 @@ namespace TestBoids.Tuna
         private float turnInput;
         private float bankAmount;
         private LocomotionState locomotionState = LocomotionState.Swimming;
+        private ControlMode controlMode = ControlMode.Manual;
         private float airbornePitchAmount;
+        private Vector3 scriptedDirection = Vector3.forward;
+        private float scriptedTurnInput;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
         public bool IsAirborne => locomotionState == LocomotionState.Airborne;
+        public bool IsScripted => controlMode == ControlMode.Scripted;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
 
@@ -137,7 +147,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            Vector2 move = input ? input.Move : Vector2.zero;
+            Vector2 move = ReadControlMove();
             hasMoveInput = move.sqrMagnitude > inputDeadZone * inputDeadZone;
             hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
             turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
@@ -153,6 +163,39 @@ namespace TestBoids.Tuna
             ApplyMinimumSwimSpeed();
             ApplyTurn();
             UpdateTurnAmount();
+        }
+
+        public void BeginScriptedSwim(Vector3 worldDirection, float turnInput)
+        {
+            controlMode = ControlMode.Scripted;
+            scriptedDirection = ResolveScriptedDirection(worldDirection);
+            scriptedTurnInput = Mathf.Clamp(turnInput, -1f, 1f);
+        }
+
+        public void SetScriptedSwimDirection(Vector3 worldDirection)
+        {
+            scriptedDirection = ResolveScriptedDirection(worldDirection);
+        }
+
+        public void EndScriptedSwim()
+        {
+            if (controlMode != ControlMode.Scripted)
+            {
+                return;
+            }
+
+            controlMode = ControlMode.Manual;
+            ClearControlState();
+        }
+
+        private Vector2 ReadControlMove()
+        {
+            if (controlMode == ControlMode.Scripted)
+            {
+                return new Vector2(scriptedTurnInput, 0f);
+            }
+
+            return input ? input.Move : Vector2.zero;
         }
 
         private void UpdateLocomotionState()
@@ -249,6 +292,11 @@ namespace TestBoids.Tuna
 
         private Vector3 BuildDesiredDirection(float thrustInput)
         {
+            if (controlMode == ControlMode.Scripted)
+            {
+                return scriptedDirection * Mathf.Sign(thrustInput);
+            }
+
             if (cameraController)
             {
                 return cameraController.Forward * Mathf.Sign(thrustInput);
@@ -260,6 +308,21 @@ namespace TestBoids.Tuna
             }
 
             return transform.forward * Mathf.Sign(thrustInput);
+        }
+
+        private Vector3 ResolveScriptedDirection(Vector3 worldDirection)
+        {
+            if (worldDirection.sqrMagnitude > 0.000001f)
+            {
+                return worldDirection.normalized;
+            }
+
+            if (desiredDirection.sqrMagnitude > 0.000001f)
+            {
+                return desiredDirection.normalized;
+            }
+
+            return transform.forward.sqrMagnitude > 0.000001f ? transform.forward.normalized : Vector3.forward;
         }
 
         private void ApplyThrust(Vector2 move)
@@ -304,6 +367,12 @@ namespace TestBoids.Tuna
 
             float effectiveMinimumSpeed = maxSpeed > 0f ? Mathf.Min(minimumSwimSpeed, maxSpeed) : minimumSwimSpeed;
             Vector3 velocity = body.linearVelocity;
+            if (controlMode == ControlMode.Scripted)
+            {
+                body.linearVelocity = desiredDirection.normalized * effectiveMinimumSpeed;
+                return;
+            }
+
             float speed = velocity.magnitude;
             if (speed >= effectiveMinimumSpeed)
             {

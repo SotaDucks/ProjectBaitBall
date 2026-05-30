@@ -1,3 +1,4 @@
+using System.Collections;
 using TestBoids.Boids;
 using TestBoids.Tuna;
 using UnityEngine;
@@ -16,8 +17,16 @@ namespace TestBoids.Gameplay
         [SerializeField] private bool activateMotorOnPhaseBaitBall = true;
         [SerializeField] private bool destroyFishAgentOnRelease = true;
 
+        [Header("Scripted Exit")]
+        [SerializeField, Min(0f)] private float scriptedExitDuration = 1.5f;
+        [SerializeField, Min(0f)] private float scriptedExitLeftWeight = 0.75f;
+        [SerializeField, Min(0f)] private float scriptedExitOutwardWeight = 0.55f;
+        [SerializeField, Range(-1f, 1f)] private float scriptedExitTurnInput = -1f;
+
         private bool released;
         private bool subscribed;
+        private Coroutine scriptedExitRoutine;
+        private Vector3 scriptedExitDirection = Vector3.forward;
 
         private void Reset()
         {
@@ -66,6 +75,8 @@ namespace TestBoids.Gameplay
 
         private void OnDisable()
         {
+            StopScriptedExit();
+
             if (stateManager && subscribed)
             {
                 stateManager.StateChanged -= OnStateChanged;
@@ -76,9 +87,13 @@ namespace TestBoids.Gameplay
 
         private void OnStateChanged(GameState previousState, GameState nextState)
         {
-            if (nextState == GameState.PhaseBaitBall)
+            if (nextState == GameState.PhaseBaitBallTransition)
             {
-                ReleasePlayerFish();
+                BeginScriptedExit();
+            }
+            else if (nextState == GameState.PhaseBaitBall)
+            {
+                CompletePlayerControl();
             }
         }
 
@@ -98,9 +113,13 @@ namespace TestBoids.Gameplay
             stateManager.StateChanged += OnStateChanged;
             subscribed = true;
 
-            if (stateManager.CurrentState == GameState.PhaseBaitBall)
+            if (stateManager.CurrentState == GameState.PhaseBaitBallTransition)
             {
-                ReleasePlayerFish();
+                BeginScriptedExit();
+            }
+            else if (stateManager.CurrentState == GameState.PhaseBaitBall)
+            {
+                CompletePlayerControl();
             }
         }
 
@@ -115,6 +134,77 @@ namespace TestBoids.Gameplay
             {
                 stateManager = FindFirstObjectByType<GameStateManager>();
             }
+        }
+
+        private void BeginScriptedExit()
+        {
+            ReleasePlayerFish();
+            EnableTunaMotor();
+
+            scriptedExitDirection = BuildScriptedExitDirection();
+            if (tunaMotor)
+            {
+                tunaMotor.BeginScriptedSwim(
+                    scriptedExitDirection,
+                    scriptedExitTurnInput);
+            }
+
+            StopScriptedExit();
+            if (scriptedExitDuration <= 0f)
+            {
+                AdvanceToPhaseBaitBall();
+                return;
+            }
+
+            scriptedExitRoutine = StartCoroutine(RunScriptedExit());
+        }
+
+        private IEnumerator RunScriptedExit()
+        {
+            float remaining = scriptedExitDuration;
+            while (remaining > 0f)
+            {
+                remaining -= Time.deltaTime;
+                yield return null;
+            }
+
+            scriptedExitRoutine = null;
+            AdvanceToPhaseBaitBall();
+        }
+
+        private void AdvanceToPhaseBaitBall()
+        {
+            if (stateManager && stateManager.CurrentState == GameState.PhaseBaitBallTransition)
+            {
+                stateManager.SetState(GameState.PhaseBaitBall);
+            }
+            else
+            {
+                CompletePlayerControl();
+            }
+        }
+
+        private void CompletePlayerControl()
+        {
+            StopScriptedExit();
+            ReleasePlayerFish();
+            EnableTunaMotor();
+
+            if (tunaMotor)
+            {
+                tunaMotor.EndScriptedSwim();
+            }
+        }
+
+        private void StopScriptedExit()
+        {
+            if (scriptedExitRoutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(scriptedExitRoutine);
+            scriptedExitRoutine = null;
         }
 
         private void ReleasePlayerFish()
@@ -148,10 +238,34 @@ namespace TestBoids.Gameplay
                 playerAgent = null;
             }
 
+            EnableTunaMotor();
+        }
+
+        private void EnableTunaMotor()
+        {
             if (activateMotorOnPhaseBaitBall && tunaMotor)
             {
                 tunaMotor.enabled = true;
             }
+        }
+
+        private Vector3 BuildScriptedExitDirection()
+        {
+            Vector3 left = transform.right.sqrMagnitude > 0.000001f
+                ? -transform.right.normalized
+                : Vector3.left;
+            Vector3 direction = left * scriptedExitLeftWeight;
+
+            if (schoolManager)
+            {
+                Vector3 outward = transform.position - schoolManager.transform.position;
+                if (outward.sqrMagnitude > 0.000001f)
+                {
+                    direction += outward.normalized * scriptedExitOutwardWeight;
+                }
+            }
+
+            return direction.sqrMagnitude > 0.000001f ? direction.normalized : left;
         }
     }
 }
