@@ -14528,10 +14528,11 @@ MonoBehaviour:
   inheritSchoolVelocity: 1
   activateMotorOnPhaseBaitBall: 1
   destroyFishAgentOnRelease: 1
-  scriptedExitDuration: 3
-  scriptedExitLeftWeight: 0.75
-  scriptedExitOutwardWeight: 0.55
+  scriptedExitDuration: 5
+  scriptedExitLeftWeight: 0.5
+  scriptedExitOutwardWeight: 0.5
   scriptedExitTurnInput: -1
+  scriptedExitTurnSpeedScale: 0.2
 --- !u!1 &110564798
 GameObject:
   m_ObjectHideFlags: 0
@@ -38798,15 +38799,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.22946697
+      value: -0.29417795
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.8580002
+      value: -1.850401
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.1022719
+      value: 0.9929786
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -40429,7 +40430,7 @@ MonoBehaviour:
     DefaultMode: 2
   DefaultBlend:
     Style: 1
-    Time: 2
+    Time: 4
     CustomCurve:
       serializedVersion: 2
       m_Curve: []
@@ -49916,7 +49917,7 @@ Light:
   serializedVersion: 12
   m_Type: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 2
+  m_Intensity: 0.8
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -78137,7 +78138,7 @@ MonoBehaviour:
     colorAbsorption: 0.01
     heightFogDensity: 4
     heightFogStart: 1
-    heightFogEnd: 20
+    heightFogEnd: 50
     heightFogBrightness: 0.5
     causticsBrightness: 1
     translucencyStrength: 0.5
@@ -125163,7 +125164,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.22946697
+      value: -0.29417795
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -125171,7 +125172,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.1022719
+      value: 0.9929786
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -162095,15 +162096,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.22946697
+      value: -0.29417795
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.8580002
+      value: -1.850401
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.1022719
+      value: 0.9929786
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w

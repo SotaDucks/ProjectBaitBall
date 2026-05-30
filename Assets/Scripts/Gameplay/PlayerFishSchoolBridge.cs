@@ -22,6 +22,8 @@ namespace TestBoids.Gameplay
         [SerializeField, Min(0f)] private float scriptedExitLeftWeight = 0.75f;
         [SerializeField, Min(0f)] private float scriptedExitOutwardWeight = 0.55f;
         [SerializeField, Range(-1f, 1f)] private float scriptedExitTurnInput = -1f;
+        [Tooltip("Multiplier for the scripted exit turn response. Lower than 1 turns slower; higher than 1 turns faster.")]
+        [SerializeField, Min(0f)] private float scriptedExitTurnSpeedScale = 1f;
 
         private bool released;
         private bool subscribed;
@@ -146,7 +148,8 @@ namespace TestBoids.Gameplay
             {
                 tunaMotor.BeginScriptedSwim(
                     scriptedExitDirection,
-                    scriptedExitTurnInput);
+                    scriptedExitTurnInput,
+                    scriptedExitTurnSpeedScale);
             }
 
             StopScriptedExit();

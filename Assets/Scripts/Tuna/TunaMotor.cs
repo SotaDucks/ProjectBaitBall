@@ -71,6 +71,7 @@ namespace TestBoids.Tuna
         private float airbornePitchAmount;
         private Vector3 scriptedDirection = Vector3.forward;
         private float scriptedTurnInput;
+        private float scriptedTurnSpeedScale = 1f;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
@@ -165,11 +166,12 @@ namespace TestBoids.Tuna
             UpdateTurnAmount();
         }
 
-        public void BeginScriptedSwim(Vector3 worldDirection, float turnInput)
+        public void BeginScriptedSwim(Vector3 worldDirection, float turnInput, float turnSpeedScale = 1f)
         {
             controlMode = ControlMode.Scripted;
             scriptedDirection = ResolveScriptedDirection(worldDirection);
             scriptedTurnInput = Mathf.Clamp(turnInput, -1f, 1f);
+            scriptedTurnSpeedScale = Mathf.Max(0f, turnSpeedScale);
         }
 
         public void SetScriptedSwimDirection(Vector3 worldDirection)
@@ -185,6 +187,7 @@ namespace TestBoids.Tuna
             }
 
             controlMode = ControlMode.Manual;
+            scriptedTurnSpeedScale = 1f;
             ClearControlState();
         }
 
@@ -418,7 +421,10 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            Vector3 springTorque = axis.normalized * (angleDegrees * Mathf.Deg2Rad * turnSpring);
+            float effectiveTurnSpring = controlMode == ControlMode.Scripted
+                ? turnSpring * scriptedTurnSpeedScale
+                : turnSpring;
+            Vector3 springTorque = axis.normalized * (angleDegrees * Mathf.Deg2Rad * effectiveTurnSpring);
             Vector3 dampingTorque = -body.angularVelocity * turnDamping;
             body.AddTorque(springTorque + dampingTorque, ForceMode.Acceleration);
         }
