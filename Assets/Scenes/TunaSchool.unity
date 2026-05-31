@@ -14444,10 +14444,11 @@ MonoBehaviour:
   airbornePitchSpeed: 50
   maxAirbornePitchAngle: 90
   airbornePitchDirection: 1
+  airborneLookResumeDelay: 0.15
   acceleration: 9
   reverseAccelerationScale: 0.45
   minimumSwimSpeed: 1.5
-  maxSpeed: 12
+  maxSpeed: 9
   waterDrag: 0.75
   idleDragMultiplier: 1.8
   speedLimitDamping: 6
@@ -14528,11 +14529,11 @@ MonoBehaviour:
     amplitude: 5
     frequency: 1.2
   mediumSpeed:
-    amplitude: 9
+    amplitude: 8
     frequency: 2.2
   highSpeed:
-    amplitude: 10
-    frequency: 3.6
+    amplitude: 9
+    frequency: 2.8
   dynamicBone: {fileID: 109750648}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18

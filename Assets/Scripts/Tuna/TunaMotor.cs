@@ -36,6 +36,8 @@ namespace TestBoids.Tuna
         [SerializeField, Min(0f)] private float maxAirbornePitchAngle = 35f;
         [Tooltip("Use 1 or -1 to choose which local X direction points the tuna nose-down.")]
         [SerializeField] private float airbornePitchDirection = 1f;
+        [Tooltip("Time to ignore look input after the tuna fully re-enters the water.")]
+        [SerializeField, Min(0f)] private float airborneLookResumeDelay = 0.15f;
 
         [Header("Movement")]
         [SerializeField, Min(0f)] private float acceleration = 16f;
@@ -135,6 +137,7 @@ namespace TestBoids.Tuna
             fullySubmergedDepth = Mathf.Max(0f, fullySubmergedDepth);
             airbornePitchSpeed = Mathf.Max(0f, airbornePitchSpeed);
             maxAirbornePitchAngle = Mathf.Max(0f, maxAirbornePitchAngle);
+            airborneLookResumeDelay = Mathf.Max(0f, airborneLookResumeDelay);
         }
 
         private void FixedUpdate()
@@ -221,12 +224,18 @@ namespace TestBoids.Tuna
 
         private void EnterSwimming()
         {
+            bool wasAirborne = locomotionState == LocomotionState.Airborne;
             locomotionState = LocomotionState.Swimming;
             airbornePitchAmount = 0f;
 
             if (body)
             {
                 body.useGravity = false;
+            }
+
+            if (wasAirborne && cameraController)
+            {
+                cameraController.ResetLookToForward(transform.forward, airborneLookResumeDelay);
             }
 
             SetSwayLowSpeedOverride(false);
