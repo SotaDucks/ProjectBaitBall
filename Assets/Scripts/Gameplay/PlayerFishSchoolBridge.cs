@@ -22,6 +22,7 @@ namespace TestBoids.Gameplay
         [SerializeField, Min(0f)] private float scriptedExitDuration = 1.5f;
         [SerializeField, Min(0f)] private float scriptedExitLeftWeight = 0.75f;
         [SerializeField, Min(0f)] private float scriptedExitOutwardWeight = 0.55f;
+        [SerializeField, Min(0f)] private float scriptedExitSurfaceWeight = 0.45f;
         [SerializeField, Range(-1f, 1f)] private float scriptedExitTurnInput = -1f;
         [Tooltip("Multiplier for the scripted exit turn response. Lower than 1 turns slower; higher than 1 turns faster.")]
         [SerializeField, Min(0f)] private float scriptedExitTurnSpeedScale = 1f;
@@ -328,11 +329,14 @@ namespace TestBoids.Gameplay
             if (schoolManager)
             {
                 Vector3 outward = transform.position - schoolManager.transform.position;
+                outward = Vector3.ProjectOnPlane(outward, Vector3.up);
                 if (outward.sqrMagnitude > 0.000001f)
                 {
                     direction += outward.normalized * scriptedExitOutwardWeight;
                 }
             }
+
+            direction += Vector3.up * scriptedExitSurfaceWeight;
 
             return direction.sqrMagnitude > 0.000001f ? direction.normalized : left;
         }
