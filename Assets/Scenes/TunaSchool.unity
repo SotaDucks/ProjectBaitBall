@@ -14843,8 +14843,16 @@ MonoBehaviour:
   guideRoot: {fileID: 126516749}
   guideImage: {fileID: 574700274}
   guideCanvasGroup: {fileID: 574700277}
+  stateManager: {fileID: 0}
   directionMode: 0
   minimumDistanceToShow: 0.5
+  backSideDeadZone: 0.15
+  defaultBackSide: 1
+  verticalCueThreshold: 0.35
+  verticalCueStrength: 1
+  hideDuringIntro: 1
+  hideWhenTargetOnScreen: 1
+  screenPadding: 0.1
   edgeInset: 0
   positionSmoothTime: 0.08
   visibleAlpha: 0.75
