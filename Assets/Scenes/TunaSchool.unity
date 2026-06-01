@@ -12543,6 +12543,9 @@ MonoBehaviour:
   maxAirbornePitchAngle: 90
   airbornePitchDirection: 1
   airborneLookResumeDelay: 0.15
+  airborneEntryHorizontalSpeedRetention: 0.8
+  airborneEntryUpwardSpeedRetention: 0.45
+  airborneEntryMaxSpeed: 15
   acceleration: 9
   reverseAccelerationScale: 0.45
   minimumSwimSpeed: 1.5

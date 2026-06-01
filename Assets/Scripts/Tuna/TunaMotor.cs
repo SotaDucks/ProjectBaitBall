@@ -39,6 +39,12 @@ namespace TestBoids.Tuna
         [SerializeField] private float airbornePitchDirection = 1f;
         [Tooltip("Time to ignore look input after the tuna fully re-enters the water.")]
         [SerializeField, Min(0f)] private float airborneLookResumeDelay = 0.15f;
+        [Tooltip("Horizontal speed retained once when the tuna breaks through the water surface.")]
+        [SerializeField, Range(0f, 1f)] private float airborneEntryHorizontalSpeedRetention = 0.8f;
+        [Tooltip("Upward speed retained once when the tuna breaks through the water surface.")]
+        [SerializeField, Range(0f, 1f)] private float airborneEntryUpwardSpeedRetention = 0.45f;
+        [Tooltip("Maximum speed allowed immediately after leaving the water. Use 0 to disable this cap.")]
+        [SerializeField, Min(0f)] private float airborneEntryMaxSpeed = 10f;
 
         [Header("Movement")]
         [SerializeField, Min(0f)] private float acceleration = 16f;
@@ -170,6 +176,9 @@ namespace TestBoids.Tuna
             airbornePitchSpeed = Mathf.Max(0f, airbornePitchSpeed);
             maxAirbornePitchAngle = Mathf.Max(0f, maxAirbornePitchAngle);
             airborneLookResumeDelay = Mathf.Max(0f, airborneLookResumeDelay);
+            airborneEntryHorizontalSpeedRetention = Mathf.Clamp01(airborneEntryHorizontalSpeedRetention);
+            airborneEntryUpwardSpeedRetention = Mathf.Clamp01(airborneEntryUpwardSpeedRetention);
+            airborneEntryMaxSpeed = Mathf.Max(0f, airborneEntryMaxSpeed);
             sprintRequiredClicks = Mathf.Max(2, sprintRequiredClicks);
             sprintClickWindow = Mathf.Max(0.01f, sprintClickWindow);
             sprintDuration = Mathf.Max(0f, sprintDuration);
@@ -296,6 +305,7 @@ namespace TestBoids.Tuna
             if (body)
             {
                 body.useGravity = true;
+                ApplyAirborneEntrySpeedLoss();
             }
 
             ClearSprintState();
@@ -305,6 +315,28 @@ namespace TestBoids.Tuna
             }
 
             SetSwayLowSpeedOverride(true);
+        }
+
+        private void ApplyAirborneEntrySpeedLoss()
+        {
+            Vector3 velocity = body.linearVelocity;
+            if (velocity.sqrMagnitude <= 0.000001f)
+            {
+                return;
+            }
+
+            Vector3 horizontalVelocity = Vector3.ProjectOnPlane(velocity, Vector3.up) * airborneEntryHorizontalSpeedRetention;
+            float verticalSpeed = velocity.y > 0f
+                ? velocity.y * airborneEntryUpwardSpeedRetention
+                : velocity.y;
+            Vector3 reducedVelocity = horizontalVelocity + Vector3.up * verticalSpeed;
+
+            if (airborneEntryMaxSpeed > 0f && reducedVelocity.sqrMagnitude > airborneEntryMaxSpeed * airborneEntryMaxSpeed)
+            {
+                reducedVelocity = reducedVelocity.normalized * airborneEntryMaxSpeed;
+            }
+
+            body.linearVelocity = reducedVelocity;
         }
 
         private void UpdateAirborneMotion()
