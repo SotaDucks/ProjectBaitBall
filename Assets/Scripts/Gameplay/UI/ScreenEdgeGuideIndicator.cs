@@ -24,6 +24,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private RectTransform guideRoot;
         [SerializeField] private RectTransform guideImage;
         [SerializeField] private CanvasGroup guideCanvasGroup;
+        [SerializeField] private GameStateManager stateManager;
 
         [Header("Direction")]
         [SerializeField] private DirectionMode directionMode = DirectionMode.CameraHorizontalPlane;
@@ -36,6 +37,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField, Min(0f)] private float verticalCueStrength = 1f;
 
         [Header("Visibility")]
+        [SerializeField] private bool hideDuringIntro = true;
         [SerializeField] private bool hideWhenTargetOnScreen = true;
         [SerializeField, Range(0f, 0.5f)] private float screenPadding = 0.05f;
 
@@ -66,6 +68,12 @@ namespace TestBoids.Gameplay.UI
         private void LateUpdate()
         {
             ResolveReferences();
+
+            if (ShouldHideForCurrentState())
+            {
+                SetAlpha(0f);
+                return;
+            }
 
             if (!source || !target || !guideRoot || !guideImage)
             {
@@ -124,6 +132,16 @@ namespace TestBoids.Gameplay.UI
             if (!guideCanvasGroup && guideImage)
             {
                 guideCanvasGroup = guideImage.GetComponent<CanvasGroup>();
+            }
+
+            if (!stateManager)
+            {
+                stateManager = GameStateManager.Instance;
+            }
+
+            if (!stateManager)
+            {
+                stateManager = FindFirstObjectByType<GameStateManager>();
             }
         }
 
@@ -246,6 +264,13 @@ namespace TestBoids.Gameplay.UI
                 && viewportPoint.x <= 1f - padding
                 && viewportPoint.y >= padding
                 && viewportPoint.y <= 1f - padding;
+        }
+
+        private bool ShouldHideForCurrentState()
+        {
+            return hideDuringIntro
+                && stateManager
+                && stateManager.CurrentState == GameState.Intro;
         }
 
         private Vector2 GetEdgePosition(Vector2 direction)
