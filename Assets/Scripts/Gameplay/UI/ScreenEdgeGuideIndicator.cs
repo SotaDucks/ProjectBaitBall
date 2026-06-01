@@ -11,6 +11,12 @@ namespace TestBoids.Gameplay.UI
             CameraScreenPlane
         }
 
+        public enum BackTargetDefaultSide
+        {
+            Left = -1,
+            Right = 1
+        }
+
         [Header("References")]
         [SerializeField] private Transform source;
         [SerializeField] private Transform target;
@@ -22,6 +28,16 @@ namespace TestBoids.Gameplay.UI
         [Header("Direction")]
         [SerializeField] private DirectionMode directionMode = DirectionMode.CameraHorizontalPlane;
         [SerializeField, Min(0f)] private float minimumDistanceToShow = 0.5f;
+
+        [Header("Horizontal Navigation")]
+        [SerializeField, Range(0f, 1f)] private float backSideDeadZone = 0.15f;
+        [SerializeField] private BackTargetDefaultSide defaultBackSide = BackTargetDefaultSide.Right;
+        [SerializeField, Min(0f)] private float verticalCueThreshold = 0.35f;
+        [SerializeField, Min(0f)] private float verticalCueStrength = 1f;
+
+        [Header("Visibility")]
+        [SerializeField] private bool hideWhenTargetOnScreen = true;
+        [SerializeField, Range(0f, 0.5f)] private float screenPadding = 0.05f;
 
         [Header("Placement")]
         [SerializeField, Min(0f)] private float edgeInset;
@@ -59,6 +75,12 @@ namespace TestBoids.Gameplay.UI
 
             Vector3 offset = target.position - source.position;
             if (offset.sqrMagnitude <= minimumDistanceToShow * minimumDistanceToShow)
+            {
+                SetAlpha(0f);
+                return;
+            }
+
+            if (hideWhenTargetOnScreen && IsTargetOnScreen())
             {
                 SetAlpha(0f);
                 return;
@@ -124,18 +146,7 @@ namespace TestBoids.Gameplay.UI
             }
             else
             {
-                Vector3 flatOffset = Vector3.ProjectOnPlane(worldOffset, Vector3.up);
-                Vector3 flatForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up);
-                Vector3 flatRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up);
-
-                if (flatOffset.sqrMagnitude <= 0.000001f || flatForward.sqrMagnitude <= 0.000001f)
-                {
-                    return false;
-                }
-
-                direction = new Vector2(
-                    Vector3.Dot(flatRight.normalized, flatOffset.normalized),
-                    Vector3.Dot(flatForward.normalized, flatOffset.normalized));
+                return TryGetHorizontalNavigationDirection(worldOffset, cameraTransform, out direction);
             }
 
             if (direction.sqrMagnitude <= 0.000001f)
@@ -145,6 +156,96 @@ namespace TestBoids.Gameplay.UI
 
             direction.Normalize();
             return true;
+        }
+
+        private bool TryGetHorizontalNavigationDirection(
+            Vector3 worldOffset,
+            Transform cameraTransform,
+            out Vector2 direction)
+        {
+            direction = Vector2.zero;
+
+            Vector3 flatOffset = Vector3.ProjectOnPlane(worldOffset, Vector3.up);
+            Vector3 flatForward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up);
+            Vector3 flatRight = Vector3.ProjectOnPlane(cameraTransform.right, Vector3.up);
+
+            float horizontalDistance = flatOffset.magnitude;
+            float verticalCue = GetVerticalCue(worldOffset.y, horizontalDistance);
+
+            if (horizontalDistance <= 0.000001f)
+            {
+                if (Mathf.Abs(verticalCue) <= 0.000001f)
+                {
+                    return false;
+                }
+
+                direction = new Vector2(0f, verticalCue);
+                direction.Normalize();
+                return true;
+            }
+
+            if (flatForward.sqrMagnitude <= 0.000001f || flatRight.sqrMagnitude <= 0.000001f)
+            {
+                return false;
+            }
+
+            Vector3 flatDirection = flatOffset / horizontalDistance;
+            float rightAmount = Vector3.Dot(flatRight.normalized, flatDirection);
+            float forwardAmount = Vector3.Dot(flatForward.normalized, flatDirection);
+
+            if (forwardAmount < 0f)
+            {
+                float sideAmount = Mathf.Abs(rightAmount) < backSideDeadZone
+                    ? (float)defaultBackSide
+                    : rightAmount;
+
+                direction = new Vector2(sideAmount, verticalCue);
+            }
+            else
+            {
+                float upwardCue = Mathf.Max(forwardAmount, verticalCue);
+                direction = new Vector2(rightAmount, verticalCue < 0f ? verticalCue : upwardCue);
+            }
+
+            if (direction.sqrMagnitude <= 0.000001f)
+            {
+                return false;
+            }
+
+            direction.Normalize();
+            return true;
+        }
+
+        private float GetVerticalCue(float verticalOffset, float horizontalDistance)
+        {
+            float distance = Mathf.Max(horizontalDistance, 0.000001f);
+            float verticalRatio = verticalOffset / distance;
+            float verticalAmount = Mathf.Abs(verticalRatio);
+
+            if (verticalAmount <= verticalCueThreshold)
+            {
+                return 0f;
+            }
+
+            return Mathf.Sign(verticalRatio)
+                * Mathf.Clamp01((verticalAmount - verticalCueThreshold) * verticalCueStrength);
+        }
+
+        private bool IsTargetOnScreen()
+        {
+            if (!referenceCamera || !target)
+            {
+                return false;
+            }
+
+            Vector3 viewportPoint = referenceCamera.WorldToViewportPoint(target.position);
+            float padding = Mathf.Clamp01(screenPadding);
+
+            return viewportPoint.z > 0f
+                && viewportPoint.x >= padding
+                && viewportPoint.x <= 1f - padding
+                && viewportPoint.y >= padding
+                && viewportPoint.y <= 1f - padding;
         }
 
         private Vector2 GetEdgePosition(Vector2 direction)
