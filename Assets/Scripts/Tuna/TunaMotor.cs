@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TestBoids.Tuna
@@ -50,6 +51,29 @@ namespace TestBoids.Tuna
         [SerializeField, Range(0f, 1f)] private float directionalThrustBlend = 0.45f;
         [SerializeField, Range(0f, 1f)] private float inputDeadZone = 0.08f;
 
+        [Header("Sprint")]
+        [SerializeField] private bool enableClickSprint = true;
+        [Tooltip("Recent clicks required before a sprint can trigger.")]
+        [SerializeField, Min(2)] private int sprintRequiredClicks = 3;
+        [Tooltip("Only clicks inside this rolling time window count toward sprint.")]
+        [SerializeField, Min(0.01f)] private float sprintClickWindow = 0.75f;
+        [Tooltip("Seconds sprint remains active after the latest valid click cadence.")]
+        [SerializeField, Min(0f)] private float sprintDuration = 0.45f;
+        [Tooltip("Seconds after sprint fully drops before another sprint can start.")]
+        [SerializeField, Min(0f)] private float sprintCooldown = 0.15f;
+        [Tooltip("Slowest average click interval that still triggers tier 1 sprint.")]
+        [SerializeField, Min(0f)] private float sprintTier1MaxAverageClickInterval = 0.3f;
+        [Tooltip("Average click interval required for tier 2 sprint.")]
+        [SerializeField, Min(0f)] private float sprintTier2MaxAverageClickInterval = 0.22f;
+        [Tooltip("Average click interval required for tier 3 sprint.")]
+        [SerializeField, Min(0f)] private float sprintTier3MaxAverageClickInterval = 0.15f;
+        [SerializeField, Min(0f)] private float sprintTier1MaxSpeed = 12f;
+        [SerializeField, Min(0f)] private float sprintTier2MaxSpeed = 15f;
+        [SerializeField, Min(0f)] private float sprintTier3MaxSpeed = 18f;
+        [SerializeField, Min(0f)] private float sprintTier1Acceleration = 28f;
+        [SerializeField, Min(0f)] private float sprintTier2Acceleration = 36f;
+        [SerializeField, Min(0f)] private float sprintTier3Acceleration = 46f;
+
         [Header("Turning")]
         [SerializeField, Min(0f)] private float turnSpring = 42f;
         [SerializeField, Min(0f)] private float turnDamping = 9f;
@@ -74,11 +98,19 @@ namespace TestBoids.Tuna
         private Vector3 scriptedDirection = Vector3.forward;
         private float scriptedTurnInput;
         private float scriptedTurnSpeedScale = 1f;
+        private readonly Queue<float> sprintClickTimes = new Queue<float>();
+        private int currentSprintTier;
+        private float currentSprintMaxSpeed;
+        private float currentSprintAcceleration;
+        private float sprintEndsAt;
+        private float sprintCooldownEndsAt;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
         public bool IsAirborne => locomotionState == LocomotionState.Airborne;
         public bool IsScripted => controlMode == ControlMode.Scripted;
+        public bool IsSprinting => currentSprintTier > 0 && Time.time < sprintEndsAt;
+        public int CurrentSprintTier => IsSprinting ? currentSprintTier : 0;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
 
@@ -138,13 +170,22 @@ namespace TestBoids.Tuna
             airbornePitchSpeed = Mathf.Max(0f, airbornePitchSpeed);
             maxAirbornePitchAngle = Mathf.Max(0f, maxAirbornePitchAngle);
             airborneLookResumeDelay = Mathf.Max(0f, airborneLookResumeDelay);
+            sprintRequiredClicks = Mathf.Max(2, sprintRequiredClicks);
+            sprintClickWindow = Mathf.Max(0.01f, sprintClickWindow);
+            sprintDuration = Mathf.Max(0f, sprintDuration);
+            sprintCooldown = Mathf.Max(0f, sprintCooldown);
+            sprintTier1MaxAverageClickInterval = Mathf.Max(0f, sprintTier1MaxAverageClickInterval);
+            sprintTier2MaxAverageClickInterval = Mathf.Max(0f, sprintTier2MaxAverageClickInterval);
+            sprintTier3MaxAverageClickInterval = Mathf.Max(0f, sprintTier3MaxAverageClickInterval);
         }
 
         private void FixedUpdate()
         {
             UpdateLocomotionState();
+
             if (locomotionState == LocomotionState.Airborne)
             {
+                DiscardSprintClickInput();
                 ClearControlState();
                 UpdateAirborneMotion();
                 UpdateTurnAmount();
@@ -157,11 +198,15 @@ namespace TestBoids.Tuna
             turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
             desiredDirection = BuildDesiredDirection(hasThrustInput ? move.y : 1f);
 
+            UpdateSprintClickInput();
+            UpdateSprintState();
+
             if (hasThrustInput)
             {
                 ApplyThrust(move);
             }
 
+            ApplySprint();
             ApplyWaterDrag();
             ApplySpeedLimit();
             ApplyMinimumSwimSpeed();
@@ -175,6 +220,7 @@ namespace TestBoids.Tuna
             scriptedDirection = ResolveScriptedDirection(worldDirection);
             scriptedTurnInput = Mathf.Clamp(turnInput, -1f, 1f);
             scriptedTurnSpeedScale = Mathf.Max(0f, turnSpeedScale);
+            ClearSprintState();
         }
 
         public void SetScriptedSwimDirection(Vector3 worldDirection)
@@ -252,6 +298,12 @@ namespace TestBoids.Tuna
                 body.useGravity = true;
             }
 
+            ClearSprintState();
+            if (input)
+            {
+                input.ClearSprintClicks();
+            }
+
             SetSwayLowSpeedOverride(true);
         }
 
@@ -302,6 +354,16 @@ namespace TestBoids.Tuna
             bankAmount = 0f;
         }
 
+        private void ClearSprintState()
+        {
+            sprintClickTimes.Clear();
+            currentSprintTier = 0;
+            currentSprintMaxSpeed = 0f;
+            currentSprintAcceleration = 0f;
+            sprintEndsAt = 0f;
+            sprintCooldownEndsAt = 0f;
+        }
+
         private Vector3 BuildDesiredDirection(float thrustInput)
         {
             if (controlMode == ControlMode.Scripted)
@@ -345,6 +407,169 @@ namespace TestBoids.Tuna
             body.AddForce(thrustDirection * (acceleration * inputStrength * reverseScale), ForceMode.Acceleration);
         }
 
+        private void UpdateSprintState()
+        {
+            if (currentSprintTier > 0 && Time.time >= sprintEndsAt)
+            {
+                currentSprintTier = 0;
+                currentSprintMaxSpeed = 0f;
+                currentSprintAcceleration = 0f;
+                sprintCooldownEndsAt = Time.time + sprintCooldown;
+            }
+        }
+
+        private void UpdateSprintClickInput()
+        {
+            if (!input)
+            {
+                return;
+            }
+
+            if (!enableClickSprint || controlMode != ControlMode.Manual)
+            {
+                DiscardSprintClickInput();
+                return;
+            }
+
+            while (input.TryConsumeSprintClick(out float clickTime))
+            {
+                RecordSprintClick(clickTime);
+            }
+        }
+
+        private void DiscardSprintClickInput()
+        {
+            if (!input)
+            {
+                return;
+            }
+
+            input.ClearSprintClicks();
+        }
+
+        private void RecordSprintClick(float clickTime)
+        {
+            sprintClickTimes.Enqueue(clickTime);
+            TrimSprintClicks(clickTime);
+
+            int tier = ResolveSprintTier(clickTime);
+            if (tier <= 0)
+            {
+                return;
+            }
+
+            if (!IsSprinting && Time.time < sprintCooldownEndsAt)
+            {
+                return;
+            }
+
+            RefreshSprint(tier);
+        }
+
+        private void TrimSprintClicks(float now)
+        {
+            while (sprintClickTimes.Count > 0 && now - sprintClickTimes.Peek() > sprintClickWindow)
+            {
+                sprintClickTimes.Dequeue();
+            }
+        }
+
+        private int ResolveSprintTier(float latestClickTime)
+        {
+            if (sprintClickTimes.Count < sprintRequiredClicks)
+            {
+                return 0;
+            }
+
+            float averageInterval = CalculateRecentAverageClickInterval(latestClickTime);
+            if (sprintTier3MaxAverageClickInterval > 0f && averageInterval <= sprintTier3MaxAverageClickInterval)
+            {
+                return 3;
+            }
+
+            if (sprintTier2MaxAverageClickInterval > 0f && averageInterval <= sprintTier2MaxAverageClickInterval)
+            {
+                return 2;
+            }
+
+            if (sprintTier1MaxAverageClickInterval > 0f && averageInterval <= sprintTier1MaxAverageClickInterval)
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+        private float CalculateRecentAverageClickInterval(float latestClickTime)
+        {
+            int skipCount = sprintClickTimes.Count - sprintRequiredClicks;
+            int index = 0;
+            float firstRelevantClickTime = latestClickTime;
+
+            foreach (float clickTime in sprintClickTimes)
+            {
+                if (index == skipCount)
+                {
+                    firstRelevantClickTime = clickTime;
+                    break;
+                }
+
+                index++;
+            }
+
+            return (latestClickTime - firstRelevantClickTime) / (sprintRequiredClicks - 1);
+        }
+
+        private void RefreshSprint(int tier)
+        {
+            currentSprintTier = tier;
+            currentSprintMaxSpeed = GetSprintMaxSpeed(tier);
+            currentSprintAcceleration = GetSprintAcceleration(tier);
+            sprintEndsAt = Time.time + sprintDuration;
+        }
+
+        private float GetSprintMaxSpeed(int tier)
+        {
+            switch (tier)
+            {
+                case 3:
+                    return sprintTier3MaxSpeed;
+                case 2:
+                    return sprintTier2MaxSpeed;
+                default:
+                    return sprintTier1MaxSpeed;
+            }
+        }
+
+        private float GetSprintAcceleration(int tier)
+        {
+            switch (tier)
+            {
+                case 3:
+                    return sprintTier3Acceleration;
+                case 2:
+                    return sprintTier2Acceleration;
+                default:
+                    return sprintTier1Acceleration;
+            }
+        }
+
+        private void ApplySprint()
+        {
+            if (!IsSprinting || currentSprintAcceleration <= 0f)
+            {
+                return;
+            }
+
+            Vector3 sprintDirection = Vector3.Slerp(transform.forward, desiredDirection, directionalThrustBlend);
+            if (sprintDirection.sqrMagnitude <= 0.000001f)
+            {
+                return;
+            }
+
+            body.AddForce(sprintDirection.normalized * currentSprintAcceleration, ForceMode.Acceleration);
+        }
+
         private void ApplyWaterDrag()
         {
             Vector3 velocity = body.linearVelocity;
@@ -361,12 +586,13 @@ namespace TestBoids.Tuna
         {
             Vector3 velocity = body.linearVelocity;
             float speed = velocity.magnitude;
-            if (speed <= maxSpeed || speed <= 0.0001f)
+            float effectiveMaxSpeed = GetEffectiveMaxSpeed();
+            if (speed <= effectiveMaxSpeed || speed <= 0.0001f)
             {
                 return;
             }
 
-            float excessSpeed = speed - maxSpeed;
+            float excessSpeed = speed - effectiveMaxSpeed;
             body.AddForce(-velocity.normalized * (excessSpeed * speedLimitDamping), ForceMode.Acceleration);
         }
 
@@ -377,7 +603,8 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            float effectiveMinimumSpeed = maxSpeed > 0f ? Mathf.Min(minimumSwimSpeed, maxSpeed) : minimumSwimSpeed;
+            float effectiveMaxSpeed = GetEffectiveMaxSpeed();
+            float effectiveMinimumSpeed = effectiveMaxSpeed > 0f ? Mathf.Min(minimumSwimSpeed, effectiveMaxSpeed) : minimumSwimSpeed;
             Vector3 velocity = body.linearVelocity;
             if (controlMode == ControlMode.Scripted)
             {
@@ -392,6 +619,11 @@ namespace TestBoids.Tuna
             }
 
             body.linearVelocity = desiredDirection.normalized * effectiveMinimumSpeed;
+        }
+
+        private float GetEffectiveMaxSpeed()
+        {
+            return IsSprinting ? Mathf.Max(maxSpeed, currentSprintMaxSpeed) : maxSpeed;
         }
 
         private void ApplyTurn()
