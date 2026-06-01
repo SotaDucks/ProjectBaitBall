@@ -22,6 +22,21 @@ namespace TestBoids.Tuna
         private float targetCameraSide;
         private bool hasTargetCameraSide;
 
+        public float CurrentCameraSide => thirdPersonFollow ? thirdPersonFollow.CameraSide : targetCameraSide;
+
+        public float NormalizedCameraSide
+        {
+            get
+            {
+                if (Mathf.Approximately(leftLookCameraSide, rightLookCameraSide))
+                {
+                    return 0f;
+                }
+
+                return Mathf.InverseLerp(leftLookCameraSide, rightLookCameraSide, CurrentCameraSide);
+            }
+        }
+
         private void Reset()
         {
             ResolveReferences();

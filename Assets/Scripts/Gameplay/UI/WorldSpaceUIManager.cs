@@ -1,4 +1,5 @@
 using UnityEngine;
+using TestBoids.Tuna;
 
 namespace TestBoids.Gameplay.UI
 {
@@ -9,6 +10,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private GameStateManager stateManager;
         [SerializeField] private Transform playerFishTarget;
         [SerializeField] private FishStaminaRingView staminaRingPrefab;
+        [SerializeField] private TunaCameraSideSwitcher cameraSideSwitcher;
 
         [Header("Stamina Ring")]
         [SerializeField] private Vector3 staminaRingOffset = new(0f, 0.8f, 0f);
@@ -68,7 +70,8 @@ namespace TestBoids.Gameplay.UI
             }
 
             Transform ringTransform = staminaRingInstance.transform;
-            ringTransform.position = playerFishTarget.position + playerFishTarget.TransformDirection(staminaRingOffset);
+            ringTransform.position = playerFishTarget.position
+                + playerFishTarget.TransformDirection(GetCameraSideAdjustedOffset());
 
             if (billboardToCamera && mainCamera)
             {
@@ -149,6 +152,7 @@ namespace TestBoids.Gameplay.UI
             }
 
             ResolvePlayerFishTarget();
+            ResolveCameraSideSwitcher();
         }
 
         private void ResolvePlayerFishTarget()
@@ -164,6 +168,36 @@ namespace TestBoids.Gameplay.UI
             {
                 playerFishTarget = bridge.transform;
             }
+        }
+
+        private void ResolveCameraSideSwitcher()
+        {
+            if (cameraSideSwitcher)
+            {
+                return;
+            }
+
+            cameraSideSwitcher = FindFirstObjectByType<TunaCameraSideSwitcher>(
+                FindObjectsInactive.Include);
+        }
+
+        private Vector3 GetCameraSideAdjustedOffset()
+        {
+            if (!cameraSideSwitcher)
+            {
+                ResolveCameraSideSwitcher();
+                if (!cameraSideSwitcher)
+                {
+                    return staminaRingOffset;
+                }
+            }
+
+            float side = cameraSideSwitcher.NormalizedCameraSide;
+            float mirroredX = -staminaRingOffset.x;
+            return new Vector3(
+                Mathf.Lerp(staminaRingOffset.x, mirroredX, side),
+                staminaRingOffset.y,
+                staminaRingOffset.z);
         }
     }
 }
