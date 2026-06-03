@@ -9,6 +9,7 @@ namespace TestBoids.Gameplay
         public static GameplayEventBus Instance { get; private set; }
 
         public event Action<TunaSchoolFocusEvent> TunaSchoolFocusTriggered;
+        public event Action<SardineSchoolGatheredEvent> SardineSchoolGathered;
 
         private void Awake()
         {
@@ -32,6 +33,11 @@ namespace TestBoids.Gameplay
         {
             TunaSchoolFocusTriggered?.Invoke(focusEvent);
         }
+
+        public void RaiseSardineSchoolGathered(SardineSchoolGatheredEvent gatheredEvent)
+        {
+            SardineSchoolGathered?.Invoke(gatheredEvent);
+        }
     }
 
     public readonly struct TunaSchoolFocusEvent
@@ -46,5 +52,19 @@ namespace TestBoids.Gameplay
         public Transform Tuna { get; }
         public Transform FishSchool { get; }
         public float Distance { get; }
+    }
+
+    public readonly struct SardineSchoolGatheredEvent
+    {
+        public SardineSchoolGatheredEvent(Transform tuna, Transform fishSchool, float triggerDistance)
+        {
+            Tuna = tuna;
+            FishSchool = fishSchool;
+            TriggerDistance = triggerDistance;
+        }
+
+        public Transform Tuna { get; }
+        public Transform FishSchool { get; }
+        public float TriggerDistance { get; }
     }
 }

@@ -12702,6 +12702,22 @@ MonoBehaviour:
   scriptedExitTurnInput: -1
   scriptedExitTurnSpeedScale: 0.2
   playerLookResumeDelay: 0.15
+--- !u!114 &109750656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f62953676c044efbabbe58e715691d6b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaFreezeController
+  tunaMotor: {fileID: 109750650}
+  body: {fileID: 109750651}
+  disableTunaMotor: 1
+  restoreVelocityOnUnfreeze: 1
 --- !u!1 &110830668
 GameObject:
   m_ObjectHideFlags: 0
@@ -39932,8 +39948,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.812117, z: 0, w: 0.58349466}
-  m_LocalPosition: {x: 9.91059, y: -14.55134, z: 240.74399}
+  m_LocalRotation: {x: 0, y: 0.9996384, z: 0, w: 0.026890948}
+  m_LocalPosition: {x: -1.0565875, y: -25.621, z: 19.500004}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -46696,6 +46712,7 @@ GameObject:
   - component: {fileID: 390895504}
   - component: {fileID: 390895503}
   - component: {fileID: 390895502}
+  - component: {fileID: 390895505}
   m_Layer: 0
   m_Name: GameplayEventBus
   m_TagString: Untagged
@@ -46749,6 +46766,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &390895505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 390895501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ce5c5b32f4c4e729ad4391a5c572ba4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.TunaSchoolFocusSequenceController
+  eventBus: {fileID: 390895503}
+  tunaFreezeController: {fileID: 109750656}
+  thirdPersonAimCamera: {fileID: 1033788101}
+  tunaSchoolFocusCamera: {fileID: 1632201831}
+  narrationSource: {fileID: 0}
+  narrationClip: {fileID: 0}
+  autoResolveMissingReferences: 1
+  freezeDelayAfterFocusCamera: 0
+  narrationDelay: 50
+  useUnscaledTime: 0
+  activePriority: 10
+  inactivePriority: 0
+  triggerOnce: 1
+  stopNarrationOnDisable: 1
 --- !u!1 &391195610
 GameObject:
   m_ObjectHideFlags: 0
@@ -122409,8 +122452,6 @@ MonoBehaviour:
   stateManager: {fileID: 1006078978}
   introCamera: {fileID: 1322702484}
   thirdPersonAimCamera: {fileID: 1033788101}
-  tunaSchoolFocusCamera: {fileID: 1632201831}
-  eventBus: {fileID: 390895503}
   activePriority: 10
   inactivePriority: 0
 --- !u!114 &1006078981
@@ -185658,6 +185699,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 109750655}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750656}
   m_SourcePrefab: {fileID: 100100000, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
 --- !u!1 &1546432515
 GameObject:
@@ -196330,7 +196374,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
   Priority:
     Enabled: 1
-    m_Value: 77
+    m_Value: 0
   OutputChannel: 1
   StandbyUpdate: 2
   m_StreamingVersion: 20241001
