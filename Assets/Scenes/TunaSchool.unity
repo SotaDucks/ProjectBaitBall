@@ -39932,8 +39932,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.9996384, z: 0, w: 0.026890948}
-  m_LocalPosition: {x: -1.0565875, y: -25.621, z: 19.500004}
+  m_LocalRotation: {x: 0, y: 0.8549219, z: 0, w: 0.51875687}
+  m_LocalPosition: {x: 10.970591, y: -14.55134, z: 240.74399}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -56124,6 +56124,12 @@ MonoBehaviour:
   clampIndexToAvailableFish: 1
   matchRotation: 1
   localOffset: {x: 0, y: 0, z: 0}
+  smoothPosition: 1
+  positionSmoothTime: 0.12
+  maxPositionSpeed: 0
+  snapDistance: 5
+  smoothRotation: 1
+  rotationSmoothTime: 0.12
 --- !u!1 &466175313
 GameObject:
   m_ObjectHideFlags: 0
@@ -73907,7 +73913,7 @@ MonoBehaviour:
     SeparationRadius: 1.6
     AlignWeight: 2
     CohesionWeight: 0.25
-  focusTransitionDuration: 3
+  focusTransitionDuration: 3.5
   focusTransitionCurve:
     serializedVersion: 2
     m_Curve:
@@ -73932,8 +73938,11 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  focusSpeedMultiplier: 5
   disableModulatorUntilFocused: 1
   enableModulatorAfterFocused: 1
+  enableKeyboardFocusTest: 1
+  keyboardFocusTestKey: 9
 --- !u!1 &596572968
 GameObject:
   m_ObjectHideFlags: 0
@@ -196302,7 +196311,7 @@ MonoBehaviour:
     BindingMode: 1
     PositionDamping: {x: 1, y: 1, z: 1}
     AngularDampingMode: 0
-    RotationDamping: {x: 1, y: 1, z: 1}
+    RotationDamping: {x: 5, y: 5, z: 5}
     QuaternionDamping: 1
   FollowOffset: {x: -1.94, y: 0, z: 1.01}
 --- !u!114 &1632201831

@@ -18,10 +18,15 @@ namespace TestBoids.Boids
             InstancedFishSchoolManager.FormationSettings.CreateDispersedDefault();
         [SerializeField, Min(0f)] private float focusTransitionDuration = 3f;
         [SerializeField] private AnimationCurve focusTransitionCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+        [Min(1f)] public float focusSpeedMultiplier = 1f;
 
         [Header("Modulator")]
         [SerializeField] private bool disableModulatorUntilFocused = true;
         [SerializeField] private bool enableModulatorAfterFocused = true;
+
+        [Header("Debug")]
+        [SerializeField] private bool enableKeyboardFocusTest = true;
+        [SerializeField] private KeyCode keyboardFocusTestKey = KeyCode.Tab;
 
         private InstancedFishSchoolManager.FormationSettings focusedSettings;
         private InstancedFishSchoolManager.FormationSettings transitionStartSettings;
@@ -57,6 +62,11 @@ namespace TestBoids.Boids
             SubscribeToEventBus();
         }
 
+        private void OnValidate()
+        {
+            focusSpeedMultiplier = Mathf.Max(1f, focusSpeedMultiplier);
+        }
+
         private void OnDisable()
         {
             if (eventBus && subscribed)
@@ -66,14 +76,22 @@ namespace TestBoids.Boids
 
             subscribed = false;
             transitioning = false;
+            ResetFocusSpeedMultiplier();
         }
 
         private void Update()
         {
+            if (enableKeyboardFocusTest && Input.GetKeyDown(keyboardFocusTestKey))
+            {
+                RestartFocusTransitionFromDispersed();
+            }
+
             if (!transitioning || !target)
             {
                 return;
             }
+
+            ApplyFocusSpeedMultiplier();
 
             if (focusTransitionDuration <= 0f)
             {
@@ -113,9 +131,32 @@ namespace TestBoids.Boids
                 return;
             }
 
+            BeginFocusTransition();
+        }
+
+        private void RestartFocusTransitionFromDispersed()
+        {
+            ResolveReferences();
+            CaptureFocusedSettingsIfNeeded();
+            if (!target || !capturedFocusedSettings)
+            {
+                return;
+            }
+
+            ResetFocusSpeedMultiplier();
+            focused = false;
+            transitioning = false;
+            DisableModulatorIfNeeded();
+            target.ApplyFormationSettings(dispersedSettings, true);
+            BeginFocusTransition();
+        }
+
+        private void BeginFocusTransition()
+        {
             transitionStartSettings = target.GetFormationSettings();
             transitionElapsed = 0f;
             transitioning = true;
+            ApplyFocusSpeedMultiplier();
 
             if (focusTransitionDuration <= 0f)
             {
@@ -146,6 +187,7 @@ namespace TestBoids.Boids
             }
 
             target.ApplyFormationSettings(focusedSettings, true);
+            ResetFocusSpeedMultiplier();
             transitioning = false;
             focused = true;
             EnableModulatorIfNeeded();
@@ -225,6 +267,22 @@ namespace TestBoids.Boids
             if (!eventBus)
             {
                 eventBus = FindFirstObjectByType<GameplayEventBus>(FindObjectsInactive.Include);
+            }
+        }
+
+        private void ApplyFocusSpeedMultiplier()
+        {
+            if (target)
+            {
+                target.SetFocusMovementMultiplier(focusSpeedMultiplier);
+            }
+        }
+
+        private void ResetFocusSpeedMultiplier()
+        {
+            if (target)
+            {
+                target.SetFocusMovementMultiplier(1f);
             }
         }
     }

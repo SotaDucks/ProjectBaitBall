@@ -119,6 +119,7 @@ namespace TestBoids.Boids
         private BaitBallShape targetBaitBallShape;
         private float baitBallMorphTimer;
         private bool baitBallMorphInitialized;
+        private float focusMovementMultiplier = 1f;
 
         private bool HasFish => fish.IsCreated && fish.Length > 0;
         public int CurrentFishCount => fish.IsCreated ? fish.Length : 0;
@@ -403,6 +404,11 @@ namespace TestBoids.Boids
             return true;
         }
 
+        internal void SetFocusMovementMultiplier(float multiplier)
+        {
+            focusMovementMultiplier = Mathf.Max(1f, multiplier);
+        }
+
         public void GetBehaviorWeights(out float currentToroidalFlowWeight, out float currentAlignWeight, out float currentCohesionWeight)
         {
             currentToroidalFlowWeight = toroidalFlowWeight;
@@ -519,7 +525,8 @@ namespace TestBoids.Boids
                 PanicDecayRate = panicDecayRate,
                 MaxBankAngleDegrees = maxBankAngleDegrees,
                 BankTurnScale = bankTurnScale,
-                BankResponse = bankResponse
+                BankResponse = bankResponse,
+                FocusMovementMultiplier = focusMovementMultiplier
             };
 
             JobHandle simulationHandle = simulationJob.Schedule(count, 32);
@@ -1211,6 +1218,7 @@ namespace TestBoids.Boids
             public float MaxBankAngleDegrees;
             public float BankTurnScale;
             public float BankResponse;
+            public float FocusMovementMultiplier;
 
             public void Execute(int index)
             {
@@ -1224,9 +1232,12 @@ namespace TestBoids.Boids
                 bool panicTriggered = headingForCollision || IsInsideSphereObstacleInfluence(current.Position);
 
                 current.Panic = UpdatePanic(current.Panic, panicTriggered);
-                float effectiveMaxSpeed = current.MaxSpeed * math.lerp(1f, math.max(1f, PanicSpeedMultiplier), current.Panic);
-                float panicMinSpeed = math.max(current.MinSpeed, current.MaxSpeed * math.max(0f, PanicMinSpeedRatio));
+                float movementMultiplier = math.max(1f, FocusMovementMultiplier);
+                float effectiveMaxSpeed = current.MaxSpeed * movementMultiplier * math.lerp(1f, math.max(1f, PanicSpeedMultiplier), current.Panic);
+                float panicMinSpeed = math.max(current.MinSpeed, current.MaxSpeed * movementMultiplier * math.max(0f, PanicMinSpeedRatio));
                 float effectiveMinSpeed = math.min(effectiveMaxSpeed, math.lerp(current.MinSpeed, panicMinSpeed, current.Panic));
+                float effectiveMaxSteerForce = current.MaxSteerForce * movementMultiplier;
+                float effectiveMaxTurnRate = current.MaxTurnRate * movementMultiplier;
 
                 float3 acceleration = float3.zero;
                 float3 headingSum = float3.zero;
@@ -1281,19 +1292,19 @@ namespace TestBoids.Boids
                 if (neighborCount > 0)
                 {
                     centerSum /= neighborCount;
-                    acceleration += SteerTowards(headingSum, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * AlignWeight;
-                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * CohesionWeight;
-                    acceleration += SteerTowards(avoidanceSum, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * current.SeparateWeight;
+                    acceleration += SteerTowards(headingSum, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce) * AlignWeight;
+                    acceleration += SteerTowards(centerSum - current.Position, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce) * CohesionWeight;
+                    acceleration += SteerTowards(avoidanceSum, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce) * current.SeparateWeight;
                 }
 
-                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * CenteringWeight;
-                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase, effectiveMaxSpeed, current.MaxSteerForce) * ToroidalFlowWeight;
-                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce);
+                acceleration += SphericalEnvelopeForce(current.Position, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce) * CenteringWeight;
+                acceleration += ToroidalFlowForce(current.Position, current.Velocity, currentFlowAxis, flowPhase, effectiveMaxSpeed, effectiveMaxSteerForce) * ToroidalFlowWeight;
+                acceleration += SphereObstacleSeparationForce(current.Position, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce);
 
                 if (headingForCollision)
                 {
                     float3 clearDirection = ObstacleRays(current.Position, forward, ref current);
-                    acceleration += SteerTowards(clearDirection, current.Velocity, effectiveMaxSpeed, current.MaxSteerForce) * AvoidCollisionWeight;
+                    acceleration += SteerTowards(clearDirection, current.Velocity, effectiveMaxSpeed, effectiveMaxSteerForce) * AvoidCollisionWeight;
                 }
                 else
                 {
@@ -1303,7 +1314,7 @@ namespace TestBoids.Boids
                 float3 desiredVelocity = current.Velocity + acceleration * Dt;
                 float speed = math.clamp(math.length(desiredVelocity), effectiveMinSpeed, effectiveMaxSpeed);
                 desiredVelocity = SafeNormalize(desiredVelocity) * speed;
-                float3 velocity = LimitTurn(current.Velocity, desiredVelocity, Dt, current.MaxTurnRate);
+                float3 velocity = LimitTurn(current.Velocity, desiredVelocity, Dt, effectiveMaxTurnRate);
                 float3 nextPosition = current.Position + velocity * Dt;
 
                 UpdateMotionState(ref current, velocity, Dt);
