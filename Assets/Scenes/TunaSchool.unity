@@ -39932,8 +39932,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.8549219, z: 0, w: 0.51875687}
-  m_LocalPosition: {x: 10.970591, y: -14.55134, z: 240.74399}
+  m_LocalRotation: {x: 0, y: 0.812117, z: 0, w: 0.58349466}
+  m_LocalPosition: {x: 9.91059, y: -14.55134, z: 240.74399}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73938,7 +73938,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  focusSpeedMultiplier: 5
+  focusSpeedMultiplier: 2
   disableModulatorUntilFocused: 1
   enableModulatorAfterFocused: 1
   enableKeyboardFocusTest: 1
@@ -122405,10 +122405,12 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8f30c6bcdd034a028e858ff5409c9b74, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.GameStateCameraPrioritySwitcher
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.CameraPrioritySwitcher
   stateManager: {fileID: 1006078978}
   introCamera: {fileID: 1322702484}
   thirdPersonAimCamera: {fileID: 1033788101}
+  tunaSchoolFocusCamera: {fileID: 1632201831}
+  eventBus: {fileID: 390895503}
   activePriority: 10
   inactivePriority: 0
 --- !u!114 &1006078981
@@ -122422,7 +122424,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a8c3d6b4f2e5470db4e99f6d64f714c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.GameStateSceneObjectController
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.FishFlockSwitcherToGameState
   stateManager: {fileID: 1006078978}
   baitBallManager: {fileID: 596421088}
   tunaSchoolManager: {fileID: 1718917401}
@@ -196275,8 +196277,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1632201827}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.8549219, z: 0, w: 0.51875687}
-  m_LocalPosition: {x: -1.9399996, y: 0, z: 1.0099945}
+  m_LocalRotation: {x: 0, y: 0.812117, z: 0, w: 0.58349466}
+  m_LocalPosition: {x: -3, y: 0, z: 1.0099945}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -196313,7 +196315,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 5, y: 5, z: 5}
     QuaternionDamping: 1
-  FollowOffset: {x: -1.94, y: 0, z: 1.01}
+  FollowOffset: {x: -3, y: 0, z: 1.01}
 --- !u!114 &1632201831
 MonoBehaviour:
   m_ObjectHideFlags: 0

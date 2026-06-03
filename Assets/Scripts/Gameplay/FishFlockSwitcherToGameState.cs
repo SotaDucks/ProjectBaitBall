@@ -4,7 +4,7 @@ using UnityEngine;
 namespace TestBoids.Gameplay
 {
     [DisallowMultipleComponent]
-    public sealed class GameStateSceneObjectController : MonoBehaviour
+    public sealed class FishFlockSwitcherToGameState : MonoBehaviour
     {
         [SerializeField] private GameStateManager stateManager;
 
