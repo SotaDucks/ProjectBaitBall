@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace TestBoids.Gameplay.UI
@@ -24,6 +25,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private RectTransform guideRoot;
         [SerializeField] private RectTransform guideImage;
         [SerializeField] private CanvasGroup guideCanvasGroup;
+        [SerializeField] private TMP_Text distanceGuide;
         [SerializeField] private GameStateManager stateManager;
 
         [Header("Direction")]
@@ -41,6 +43,9 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private bool hideWhenTargetOnScreen = true;
         [SerializeField, Range(0f, 0.5f)] private float screenPadding = 0.05f;
 
+        [Header("Distance")]
+        [SerializeField] private bool showDistance = true;
+
         [Header("Placement")]
         [SerializeField, Min(0f)] private float edgeInset;
         [SerializeField, Min(0f)] private float positionSmoothTime = 0.08f;
@@ -57,6 +62,7 @@ namespace TestBoids.Gameplay.UI
         {
             guideRoot = transform as RectTransform;
             guideCanvasGroup = GetComponentInChildren<CanvasGroup>();
+            distanceGuide = GetComponentInChildren<TMP_Text>(true);
             referenceCamera = Camera.main;
         }
 
@@ -82,6 +88,8 @@ namespace TestBoids.Gameplay.UI
             }
 
             Vector3 offset = target.position - source.position;
+            UpdateDistanceGuide(offset.magnitude);
+
             if (offset.sqrMagnitude <= minimumDistanceToShow * minimumDistanceToShow)
             {
                 SetAlpha(0f);
@@ -132,6 +140,11 @@ namespace TestBoids.Gameplay.UI
             if (!guideCanvasGroup && guideImage)
             {
                 guideCanvasGroup = guideImage.GetComponent<CanvasGroup>();
+            }
+
+            if (!distanceGuide)
+            {
+                distanceGuide = FindDistanceGuide();
             }
 
             if (!stateManager)
@@ -271,6 +284,34 @@ namespace TestBoids.Gameplay.UI
             return hideDuringIntro
                 && stateManager
                 && stateManager.CurrentState == GameState.Intro;
+        }
+
+        private TMP_Text FindDistanceGuide()
+        {
+            TMP_Text[] textComponents = GetComponentsInChildren<TMP_Text>(true);
+            foreach (TMP_Text textComponent in textComponents)
+            {
+                if (textComponent.name == "DistanceGuide")
+                {
+                    return textComponent;
+                }
+            }
+
+            return textComponents.Length > 0 ? textComponents[0] : null;
+        }
+
+        private void UpdateDistanceGuide(float distance)
+        {
+            if (!distanceGuide)
+            {
+                return;
+            }
+
+            distanceGuide.enabled = showDistance;
+            if (showDistance)
+            {
+                distanceGuide.text = $"{Mathf.RoundToInt(distance)}M";
+            }
         }
 
         private Vector2 GetEdgePosition(Vector2 direction)
