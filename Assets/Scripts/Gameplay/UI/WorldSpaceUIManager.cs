@@ -11,6 +11,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private Transform playerFishTarget;
         [SerializeField] private FishStaminaRingView staminaRingPrefab;
         [SerializeField] private TunaCameraSideSwitcher cameraSideSwitcher;
+        [SerializeField] private TunaMotor tunaMotor;
 
         [Header("Stamina Ring")]
         [SerializeField] private Vector3 staminaRingOffset = new(0f, 0.8f, 0f);
@@ -68,6 +69,9 @@ namespace TestBoids.Gameplay.UI
             {
                 mainCamera = Camera.main;
             }
+
+            ResolveTunaMotor();
+            staminaRingInstance.SetProgress(tunaMotor ? tunaMotor.StaminaPercent : 1f);
 
             Transform ringTransform = staminaRingInstance.transform;
             ringTransform.position = playerFishTarget.position
@@ -128,7 +132,8 @@ namespace TestBoids.Gameplay.UI
 
             staminaRingInstance.transform.SetParent(transform, false);
             staminaRingInstance.gameObject.SetActive(true);
-            staminaRingInstance.SetProgress(1f);
+            ResolveTunaMotor();
+            staminaRingInstance.SetProgress(tunaMotor ? tunaMotor.StaminaPercent : 1f);
         }
 
         private void HideStaminaRing()
@@ -153,6 +158,7 @@ namespace TestBoids.Gameplay.UI
 
             ResolvePlayerFishTarget();
             ResolveCameraSideSwitcher();
+            ResolveTunaMotor();
         }
 
         private void ResolvePlayerFishTarget()
@@ -168,6 +174,25 @@ namespace TestBoids.Gameplay.UI
             {
                 playerFishTarget = bridge.transform;
             }
+        }
+
+        private void ResolveTunaMotor()
+        {
+            if (tunaMotor)
+            {
+                return;
+            }
+
+            if (playerFishTarget)
+            {
+                tunaMotor = playerFishTarget.GetComponent<TunaMotor>();
+                if (tunaMotor)
+                {
+                    return;
+                }
+            }
+
+            tunaMotor = FindFirstObjectByType<TunaMotor>(FindObjectsInactive.Include);
         }
 
         private void ResolveCameraSideSwitcher()

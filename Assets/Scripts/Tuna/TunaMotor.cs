@@ -80,6 +80,11 @@ namespace TestBoids.Tuna
         [SerializeField, Min(0f)] private float sprintTier2Acceleration = 36f;
         [SerializeField, Min(0f)] private float sprintTier3Acceleration = 46f;
 
+        [Header("Stamina")]
+        [SerializeField, Min(0.01f)] private float maxStamina = 100f;
+        [SerializeField, Min(0f)] private float sprintStaminaDrainPerSecond = 35f;
+        [SerializeField, Min(0f)] private float staminaRecoveryPerSecond = 20f;
+
         [Header("Turning")]
         [SerializeField, Min(0f)] private float turnSpring = 42f;
         [SerializeField, Min(0f)] private float turnDamping = 9f;
@@ -110,6 +115,9 @@ namespace TestBoids.Tuna
         private float currentSprintAcceleration;
         private float sprintEndsAt;
         private float sprintCooldownEndsAt;
+        private float currentStamina;
+        private float staminaRecoveryStartsAt;
+        private const float StaminaRecoveryDelay = 1f;
 
         public Vector3 DesiredDirection => desiredDirection;
         public bool HasMoveInput => hasMoveInput;
@@ -117,6 +125,7 @@ namespace TestBoids.Tuna
         public bool IsScripted => controlMode == ControlMode.Scripted;
         public bool IsSprinting => currentSprintTier > 0 && Time.time < sprintEndsAt;
         public int CurrentSprintTier => IsSprinting ? currentSprintTier : 0;
+        public float StaminaPercent => maxStamina > 0f ? Mathf.Clamp01(currentStamina / maxStamina) : 0f;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
 
@@ -152,6 +161,7 @@ namespace TestBoids.Tuna
             }
 
             desiredDirection = transform.forward;
+            currentStamina = maxStamina;
 
             if (configureRigidbodyOnAwake)
             {
@@ -186,6 +196,9 @@ namespace TestBoids.Tuna
             sprintTier1MaxAverageClickInterval = Mathf.Max(0f, sprintTier1MaxAverageClickInterval);
             sprintTier2MaxAverageClickInterval = Mathf.Max(0f, sprintTier2MaxAverageClickInterval);
             sprintTier3MaxAverageClickInterval = Mathf.Max(0f, sprintTier3MaxAverageClickInterval);
+            maxStamina = Mathf.Max(0.01f, maxStamina);
+            sprintStaminaDrainPerSecond = Mathf.Max(0f, sprintStaminaDrainPerSecond);
+            staminaRecoveryPerSecond = Mathf.Max(0f, staminaRecoveryPerSecond);
         }
 
         private void FixedUpdate()
@@ -194,6 +207,8 @@ namespace TestBoids.Tuna
 
             if (locomotionState == LocomotionState.Airborne)
             {
+                UpdateSprintState();
+                UpdateStamina();
                 DiscardSprintClickInput();
                 ClearControlState();
                 UpdateAirborneMotion();
@@ -209,6 +224,7 @@ namespace TestBoids.Tuna
 
             UpdateSprintClickInput();
             UpdateSprintState();
+            UpdateStamina();
 
             if (hasThrustInput)
             {
@@ -388,12 +404,18 @@ namespace TestBoids.Tuna
 
         private void ClearSprintState()
         {
+            bool hadSprintState = currentSprintTier > 0;
             sprintClickTimes.Clear();
             currentSprintTier = 0;
             currentSprintMaxSpeed = 0f;
             currentSprintAcceleration = 0f;
             sprintEndsAt = 0f;
             sprintCooldownEndsAt = 0f;
+
+            if (hadSprintState)
+            {
+                staminaRecoveryStartsAt = Time.time + StaminaRecoveryDelay;
+            }
         }
 
         private Vector3 BuildDesiredDirection(float thrustInput)
@@ -443,11 +465,39 @@ namespace TestBoids.Tuna
         {
             if (currentSprintTier > 0 && Time.time >= sprintEndsAt)
             {
-                currentSprintTier = 0;
-                currentSprintMaxSpeed = 0f;
-                currentSprintAcceleration = 0f;
-                sprintCooldownEndsAt = Time.time + sprintCooldown;
+                EndSprintWithCooldown();
             }
+        }
+
+        private void UpdateStamina()
+        {
+            if (IsSprinting)
+            {
+                if (sprintStaminaDrainPerSecond > 0f)
+                {
+                    currentStamina = Mathf.Max(
+                        0f,
+                        currentStamina - sprintStaminaDrainPerSecond * Time.fixedDeltaTime);
+                }
+
+                staminaRecoveryStartsAt = Time.time + StaminaRecoveryDelay;
+
+                if (currentStamina <= 0f)
+                {
+                    EndSprintWithCooldown();
+                }
+
+                return;
+            }
+
+            if (currentStamina >= maxStamina || Time.time < staminaRecoveryStartsAt)
+            {
+                return;
+            }
+
+            currentStamina = Mathf.Min(
+                maxStamina,
+                currentStamina + staminaRecoveryPerSecond * Time.fixedDeltaTime);
         }
 
         private void UpdateSprintClickInput()
@@ -491,6 +541,11 @@ namespace TestBoids.Tuna
             }
 
             if (!IsSprinting && Time.time < sprintCooldownEndsAt)
+            {
+                return;
+            }
+
+            if (currentStamina <= 0f)
             {
                 return;
             }
@@ -558,6 +613,16 @@ namespace TestBoids.Tuna
             currentSprintMaxSpeed = GetSprintMaxSpeed(tier);
             currentSprintAcceleration = GetSprintAcceleration(tier);
             sprintEndsAt = Time.time + sprintDuration;
+        }
+
+        private void EndSprintWithCooldown()
+        {
+            currentSprintTier = 0;
+            currentSprintMaxSpeed = 0f;
+            currentSprintAcceleration = 0f;
+            sprintEndsAt = 0f;
+            sprintCooldownEndsAt = Time.time + sprintCooldown;
+            staminaRecoveryStartsAt = Time.time + StaminaRecoveryDelay;
         }
 
         private float GetSprintMaxSpeed(int tier)

@@ -12569,6 +12569,9 @@ MonoBehaviour:
   sprintTier1Acceleration: 28
   sprintTier2Acceleration: 36
   sprintTier3Acceleration: 46
+  maxStamina: 100
+  sprintStaminaDrainPerSecond: 20
+  staminaRecoveryPerSecond: 10
   turnSpring: 92.4
   turnDamping: 9
   maxAngularVelocity: 8
@@ -18229,6 +18232,7 @@ MonoBehaviour:
   playerFishTarget: {fileID: 109750647}
   staminaRingPrefab: {fileID: 6496774021577167641, guid: 256485a004b5e9343b67973f778a14a4, type: 3}
   cameraSideSwitcher: {fileID: 0}
+  tunaMotor: {fileID: 0}
   staminaRingOffset: {x: 0.7, y: -0.4, z: 0}
   billboardToCamera: 1
 --- !u!1 &164273397
@@ -37527,15 +37531,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.07043917
+      value: -0.22424607
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.7080668
+      value: -1.6281946
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3000003
+      value: 1.2108588
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -119606,7 +119610,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.07043917
+      value: -0.22424607
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -119614,7 +119618,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3000003
+      value: 1.2108588
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -157977,15 +157981,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.07043917
+      value: -0.22424607
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.7080668
+      value: -1.6281946
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.3000003
+      value: 1.2108588
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
