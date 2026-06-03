@@ -122,6 +122,86 @@ namespace TestBoids.Boids
 
         private bool HasFish => fish.IsCreated && fish.Length > 0;
 
+        [Serializable]
+        public struct FormationSettings
+        {
+            [Min(0.001f)] public float Radius;
+            [Min(0f)] public float CoreRatio;
+            [Min(0f)] public float CenteringWeight;
+            [Min(0f)] public float ToroidalFlowWeight;
+            [Min(0f)] public float ToroidalRollWeight;
+            [Min(0f)] public float ToroidalAxisSpeed;
+            [Min(0.1f)] public float WidthScale;
+            [Min(0.1f)] public float HeightScale;
+            [Range(0f, 1f)] public float BottomDrop;
+            [Range(0f, 0.9f)] public float BottomTaper;
+            [Range(0f, 0.45f)] public float ShapeAmount;
+            [Min(0f)] public float ShapeSpeed;
+            public bool MorphEnabled;
+            [Min(0.25f)] public float MorphInterval;
+            [Min(0f)] public float MorphResponse;
+            [Range(0f, 1f)] public float MorphAmount;
+            [Min(0f)] public float PerceptionRadius;
+            [Min(0f)] public float SeparationRadius;
+            [Min(0f)] public float AlignWeight;
+            [Min(0f)] public float CohesionWeight;
+
+            public static FormationSettings CreateDispersedDefault()
+            {
+                return new FormationSettings
+                {
+                    Radius = 8f,
+                    CoreRatio = 0.08f,
+                    CenteringWeight = 0.35f,
+                    ToroidalFlowWeight = 0.6f,
+                    ToroidalRollWeight = 0.18f,
+                    ToroidalAxisSpeed = 0.2f,
+                    WidthScale = 2.7f,
+                    HeightScale = 1.05f,
+                    BottomDrop = 0.12f,
+                    BottomTaper = 0.18f,
+                    ShapeAmount = 0.08f,
+                    ShapeSpeed = 0.03f,
+                    MorphEnabled = false,
+                    MorphInterval = 8f,
+                    MorphResponse = 0.45f,
+                    MorphAmount = 0f,
+                    PerceptionRadius = 4.2f,
+                    SeparationRadius = 1.6f,
+                    AlignWeight = 0.8f,
+                    CohesionWeight = 0.25f
+                };
+            }
+
+            public static FormationSettings Lerp(FormationSettings from, FormationSettings to, float t)
+            {
+                t = Mathf.Clamp01(t);
+                return new FormationSettings
+                {
+                    Radius = Mathf.Lerp(from.Radius, to.Radius, t),
+                    CoreRatio = Mathf.Lerp(from.CoreRatio, to.CoreRatio, t),
+                    CenteringWeight = Mathf.Lerp(from.CenteringWeight, to.CenteringWeight, t),
+                    ToroidalFlowWeight = Mathf.Lerp(from.ToroidalFlowWeight, to.ToroidalFlowWeight, t),
+                    ToroidalRollWeight = Mathf.Lerp(from.ToroidalRollWeight, to.ToroidalRollWeight, t),
+                    ToroidalAxisSpeed = Mathf.Lerp(from.ToroidalAxisSpeed, to.ToroidalAxisSpeed, t),
+                    WidthScale = Mathf.Lerp(from.WidthScale, to.WidthScale, t),
+                    HeightScale = Mathf.Lerp(from.HeightScale, to.HeightScale, t),
+                    BottomDrop = Mathf.Lerp(from.BottomDrop, to.BottomDrop, t),
+                    BottomTaper = Mathf.Lerp(from.BottomTaper, to.BottomTaper, t),
+                    ShapeAmount = Mathf.Lerp(from.ShapeAmount, to.ShapeAmount, t),
+                    ShapeSpeed = Mathf.Lerp(from.ShapeSpeed, to.ShapeSpeed, t),
+                    MorphEnabled = t >= 1f ? to.MorphEnabled : from.MorphEnabled,
+                    MorphInterval = Mathf.Lerp(from.MorphInterval, to.MorphInterval, t),
+                    MorphResponse = Mathf.Lerp(from.MorphResponse, to.MorphResponse, t),
+                    MorphAmount = Mathf.Lerp(from.MorphAmount, to.MorphAmount, t),
+                    PerceptionRadius = Mathf.Lerp(from.PerceptionRadius, to.PerceptionRadius, t),
+                    SeparationRadius = Mathf.Lerp(from.SeparationRadius, to.SeparationRadius, t),
+                    AlignWeight = Mathf.Lerp(from.AlignWeight, to.AlignWeight, t),
+                    CohesionWeight = Mathf.Lerp(from.CohesionWeight, to.CohesionWeight, t)
+                };
+            }
+        }
+
         [ContextMenu("Apply Three.js Bait Ball Defaults")]
         private void ApplyBaitBallDefaults()
         {
@@ -316,6 +396,64 @@ namespace TestBoids.Boids
             toroidalFlowWeight = Mathf.Max(0f, newToroidalFlowWeight);
             alignWeight = Mathf.Max(0f, newAlignWeight);
             cohesionWeight = Mathf.Max(0f, newCohesionWeight);
+        }
+
+        public FormationSettings GetFormationSettings()
+        {
+            return new FormationSettings
+            {
+                Radius = baitBallRadius,
+                CoreRatio = baitBallCoreRatio,
+                CenteringWeight = centeringWeight,
+                ToroidalFlowWeight = toroidalFlowWeight,
+                ToroidalRollWeight = toroidalRollWeight,
+                ToroidalAxisSpeed = toroidalAxisSpeed,
+                WidthScale = baitBallWidthScale,
+                HeightScale = baitBallHeightScale,
+                BottomDrop = baitBallBottomDrop,
+                BottomTaper = baitBallBottomTaper,
+                ShapeAmount = baitBallShapeAmount,
+                ShapeSpeed = baitBallShapeSpeed,
+                MorphEnabled = baitBallMorphEnabled,
+                MorphInterval = baitBallMorphInterval,
+                MorphResponse = baitBallMorphResponse,
+                MorphAmount = baitBallMorphAmount,
+                PerceptionRadius = perceptionRadius,
+                SeparationRadius = separationRadius,
+                AlignWeight = alignWeight,
+                CohesionWeight = cohesionWeight
+            };
+        }
+
+        public void ApplyFormationSettings(FormationSettings settings, bool resetMorph = false)
+        {
+            settings = SanitizeFormationSettings(settings);
+
+            baitBallRadius = settings.Radius;
+            baitBallCoreRatio = settings.CoreRatio;
+            centeringWeight = settings.CenteringWeight;
+            toroidalFlowWeight = settings.ToroidalFlowWeight;
+            toroidalRollWeight = settings.ToroidalRollWeight;
+            toroidalAxisSpeed = settings.ToroidalAxisSpeed;
+            baitBallWidthScale = settings.WidthScale;
+            baitBallHeightScale = settings.HeightScale;
+            baitBallBottomDrop = settings.BottomDrop;
+            baitBallBottomTaper = settings.BottomTaper;
+            baitBallShapeAmount = settings.ShapeAmount;
+            baitBallShapeSpeed = settings.ShapeSpeed;
+            baitBallMorphEnabled = settings.MorphEnabled;
+            baitBallMorphInterval = settings.MorphInterval;
+            baitBallMorphResponse = settings.MorphResponse;
+            baitBallMorphAmount = settings.MorphAmount;
+            perceptionRadius = settings.PerceptionRadius;
+            separationRadius = settings.SeparationRadius;
+            alignWeight = settings.AlignWeight;
+            cohesionWeight = settings.CohesionWeight;
+
+            if (resetMorph)
+            {
+                InitializeBaitBallMorph(seed);
+            }
         }
 
         private void UpdateSimulation(float dt)
@@ -913,6 +1051,30 @@ namespace TestBoids.Boids
         private static Vector2 OrderedRange(Vector2 range)
         {
             return OrderedRange(range.x, range.y);
+        }
+
+        private static FormationSettings SanitizeFormationSettings(FormationSettings settings)
+        {
+            settings.Radius = Mathf.Max(0.001f, settings.Radius);
+            settings.CoreRatio = Mathf.Max(0f, settings.CoreRatio);
+            settings.CenteringWeight = Mathf.Max(0f, settings.CenteringWeight);
+            settings.ToroidalFlowWeight = Mathf.Max(0f, settings.ToroidalFlowWeight);
+            settings.ToroidalRollWeight = Mathf.Max(0f, settings.ToroidalRollWeight);
+            settings.ToroidalAxisSpeed = Mathf.Max(0f, settings.ToroidalAxisSpeed);
+            settings.WidthScale = Mathf.Max(0.1f, settings.WidthScale);
+            settings.HeightScale = Mathf.Max(0.1f, settings.HeightScale);
+            settings.BottomDrop = Mathf.Clamp01(settings.BottomDrop);
+            settings.BottomTaper = Mathf.Clamp(settings.BottomTaper, 0f, 0.9f);
+            settings.ShapeAmount = Mathf.Clamp(settings.ShapeAmount, 0f, 0.45f);
+            settings.ShapeSpeed = Mathf.Max(0f, settings.ShapeSpeed);
+            settings.MorphInterval = Mathf.Max(0.25f, settings.MorphInterval);
+            settings.MorphResponse = Mathf.Max(0f, settings.MorphResponse);
+            settings.MorphAmount = Mathf.Clamp01(settings.MorphAmount);
+            settings.PerceptionRadius = Mathf.Max(0f, settings.PerceptionRadius);
+            settings.SeparationRadius = Mathf.Min(Mathf.Max(0f, settings.SeparationRadius), settings.PerceptionRadius);
+            settings.AlignWeight = Mathf.Max(0f, settings.AlignWeight);
+            settings.CohesionWeight = Mathf.Max(0f, settings.CohesionWeight);
+            return settings;
         }
 
         private static float3 SafeNormalize(float3 vector)
