@@ -121,6 +121,7 @@ namespace TestBoids.Boids
         private bool baitBallMorphInitialized;
 
         private bool HasFish => fish.IsCreated && fish.Length > 0;
+        public int CurrentFishCount => fish.IsCreated ? fish.Length : 0;
 
         [Serializable]
         public struct FormationSettings
@@ -382,6 +383,24 @@ namespace TestBoids.Boids
         public void SetCount(int count)
         {
             ResetSchool(count, seed);
+        }
+
+        public bool TryGetFishPose(int index, out Vector3 position, out Quaternion rotation, out Vector3 velocity)
+        {
+            position = Vector3.zero;
+            rotation = Quaternion.identity;
+            velocity = Vector3.zero;
+
+            if (!fish.IsCreated || index < 0 || index >= fish.Length)
+            {
+                return false;
+            }
+
+            FishState state = fish[index];
+            position = new Vector3(state.Position.x, state.Position.y, state.Position.z);
+            rotation = CreatePoseRotation(state.Velocity, state.Bank);
+            velocity = new Vector3(state.Velocity.x, state.Velocity.y, state.Velocity.z);
+            return true;
         }
 
         public void GetBehaviorWeights(out float currentToroidalFlowWeight, out float currentAlignWeight, out float currentCohesionWeight)
