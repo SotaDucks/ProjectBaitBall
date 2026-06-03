@@ -58,6 +58,10 @@ namespace TestBoids.Gameplay.UI
 
         private Vector2 positionVelocity;
 
+        public Transform Source => source;
+        public Transform Target => target;
+        public bool IsTargetInsideScreenBounds => IsTargetOnScreen();
+
         private void Reset()
         {
             guideRoot = transform as RectTransform;
