@@ -12737,7 +12737,7 @@ MonoBehaviour:
   mouth: {fileID: 938804944}
   baitBallManager: {fileID: 596421090}
   autoResolveReferences: 1
-  eatRadius: 0.75
+  eatRadius: 0.25
   eatAngleDegrees: 90
   minEatSpeed: 2.5
   eatCooldown: 0.12
