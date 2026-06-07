@@ -276,6 +276,16 @@ namespace TestBoids.Tuna
             ClearControlState();
         }
 
+        public void AddHunger(float amount)
+        {
+            if (amount <= 0f)
+            {
+                return;
+            }
+
+            currentHunger = Mathf.Min(maxHunger, currentHunger + amount);
+        }
+
         private Vector2 ReadControlMove()
         {
             if (controlMode == ControlMode.Scripted)

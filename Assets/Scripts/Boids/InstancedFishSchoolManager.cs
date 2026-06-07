@@ -404,6 +404,58 @@ namespace TestBoids.Boids
             return true;
         }
 
+        public bool TryConsumeFish(
+            Vector3 mouthPosition,
+            Vector3 mouthForward,
+            float radius,
+            float angleDegrees,
+            out Vector3 eatenPosition)
+        {
+            eatenPosition = Vector3.zero;
+            if (!fish.IsCreated || fish.Length == 0 || radius <= 0f)
+            {
+                return false;
+            }
+
+            Vector3 forward = mouthForward.sqrMagnitude > 0.000001f
+                ? mouthForward.normalized
+                : transform.forward;
+            float radiusSq = radius * radius;
+            float halfAngle = Mathf.Clamp(angleDegrees, 0f, 360f) * 0.5f;
+            float minForwardDot = halfAngle >= 180f ? -1f : Mathf.Cos(halfAngle * Mathf.Deg2Rad);
+            int bestIndex = -1;
+            float bestScore = float.PositiveInfinity;
+
+            for (int i = 0; i < fish.Length; i++)
+            {
+                Vector3 position = ToVector3(fish[i].Position);
+                Vector3 offset = position - mouthPosition;
+                float distanceSq = offset.sqrMagnitude;
+                if (distanceSq > radiusSq)
+                {
+                    continue;
+                }
+
+                float distance = Mathf.Sqrt(Mathf.Max(distanceSq, 0.000001f));
+                float forwardDot = Vector3.Dot(forward, offset / distance);
+                if (forwardDot < minForwardDot)
+                {
+                    continue;
+                }
+
+                float angularPenalty = 1f - forwardDot;
+                float score = distanceSq + angularPenalty * radiusSq * 0.35f;
+                if (score < bestScore)
+                {
+                    bestScore = score;
+                    bestIndex = i;
+                    eatenPosition = position;
+                }
+            }
+
+            return bestIndex >= 0 && RemoveFishAtIndex(bestIndex);
+        }
+
         internal void SetFocusMovementMultiplier(float multiplier)
         {
             focusMovementMultiplier = Mathf.Max(1f, multiplier);
@@ -727,6 +779,67 @@ namespace TestBoids.Boids
             nextPositions = new NativeArray<float3>(count, Allocator.Persistent);
         }
 
+        private bool RemoveFishAtIndex(int index)
+        {
+            if (!fish.IsCreated || index < 0 || index >= fish.Length)
+            {
+                return false;
+            }
+
+            int newCount = fish.Length - 1;
+            fishCount = newCount;
+            if (newCount <= 0)
+            {
+                DisposeFishArrays();
+                return true;
+            }
+
+            NativeArray<FishState> oldFish = fish;
+            NativeArray<FishState> oldNextFish = nextFish;
+            NativeArray<float3> oldNextVelocities = nextVelocities;
+            NativeArray<float3> oldNextPositions = nextPositions;
+            float[] oldAnimationPhaseOffsets = animationPhaseOffsets ?? Array.Empty<float>();
+
+            NativeArray<FishState> newFish = new(newCount, Allocator.Persistent);
+            NativeArray<FishState> newNextFish = new(newCount, Allocator.Persistent);
+            NativeArray<float3> newNextVelocities = new(newCount, Allocator.Persistent);
+            NativeArray<float3> newNextPositions = new(newCount, Allocator.Persistent);
+            float[] newAnimationPhaseOffsets = new float[newCount];
+            int writeIndex = 0;
+
+            for (int readIndex = 0; readIndex < oldFish.Length; readIndex++)
+            {
+                if (readIndex == index)
+                {
+                    continue;
+                }
+
+                FishState state = oldFish[readIndex];
+                newFish[writeIndex] = state;
+                newNextFish[writeIndex] = state;
+                if (readIndex < oldAnimationPhaseOffsets.Length)
+                {
+                    newAnimationPhaseOffsets[writeIndex] = oldAnimationPhaseOffsets[readIndex];
+                }
+
+                writeIndex++;
+            }
+
+            if (oldFish.IsCreated) oldFish.Dispose();
+            if (oldNextFish.IsCreated) oldNextFish.Dispose();
+            if (oldNextVelocities.IsCreated) oldNextVelocities.Dispose();
+            if (oldNextPositions.IsCreated) oldNextPositions.Dispose();
+
+            fish = newFish;
+            nextFish = newNextFish;
+            nextVelocities = newNextVelocities;
+            nextPositions = newNextPositions;
+            instanceMatrices = new Matrix4x4[newCount];
+            animationPhaseOffsets = newAnimationPhaseOffsets;
+            UpdateInstanceMatrices();
+            return true;
+        }
+
         private void UpdateInstanceMatrices()
         {
             if (!fish.IsCreated || instanceMatrices == null || instanceMatrices.Length != fish.Length)
@@ -952,6 +1065,11 @@ namespace TestBoids.Boids
         private static float3 ToFloat3(Vector3 value)
         {
             return new float3(value.x, value.y, value.z);
+        }
+
+        private static Vector3 ToVector3(float3 value)
+        {
+            return new Vector3(value.x, value.y, value.z);
         }
 
         private static quaternion ToQuaternion(Quaternion value)

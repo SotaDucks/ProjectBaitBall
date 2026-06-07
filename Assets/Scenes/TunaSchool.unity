@@ -12720,6 +12720,31 @@ MonoBehaviour:
   body: {fileID: 109750651}
   disableTunaMotor: 1
   restoreVelocityOnUnfreeze: 1
+--- !u!114 &109750657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5eb309a8b24b2ca0f6d58cf4df804d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaPredationSensor
+  tunaMotor: {fileID: 109750650}
+  tunaBody: {fileID: 109750651}
+  mouth: {fileID: 938804944}
+  baitBallManager: {fileID: 596421090}
+  autoResolveReferences: 1
+  eatRadius: 0.75
+  eatAngleDegrees: 90
+  minEatSpeed: 2.5
+  eatCooldown: 0.12
+  hungerPerFish: 2
+  stopEatingWhenFull: 1
+  eatEffectPrefab: {fileID: 0}
+  eatAudioSource: {fileID: 0}
 --- !u!1 &110830668
 GameObject:
   m_ObjectHideFlags: 0
@@ -185710,6 +185735,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 109750656}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750657}
   m_SourcePrefab: {fileID: 100100000, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
 --- !u!1 &1546432515
 GameObject:
