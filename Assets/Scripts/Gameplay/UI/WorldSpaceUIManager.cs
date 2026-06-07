@@ -10,14 +10,21 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private GameStateManager stateManager;
         [SerializeField] private Transform playerFishTarget;
         [SerializeField] private FishStaminaRingView staminaRingPrefab;
+        [SerializeField] private FishStaminaRingView hungerRingPrefab;
         [SerializeField] private TunaCameraSideSwitcher cameraSideSwitcher;
         [SerializeField] private TunaMotor tunaMotor;
 
         [Header("Stamina Ring")]
         [SerializeField] private Vector3 staminaRingOffset = new(0f, 0.8f, 0f);
+
+        [Header("Hunger Ring")]
+        [SerializeField] private Vector3 hungerRingOffset = new(0f, 0.6f, 0f);
+
+        [Header("Display")]
         [SerializeField] private bool billboardToCamera = true;
 
         private FishStaminaRingView staminaRingInstance;
+        private FishStaminaRingView hungerRingInstance;
         private Camera mainCamera;
         private bool subscribed;
 
@@ -45,12 +52,12 @@ namespace TestBoids.Gameplay.UI
             }
 
             subscribed = false;
-            HideStaminaRing();
+            HideProgressRings();
         }
 
         private void LateUpdate()
         {
-            if (!staminaRingInstance || !staminaRingInstance.gameObject.activeSelf)
+            if (!HasActiveRing())
             {
                 return;
             }
@@ -60,7 +67,7 @@ namespace TestBoids.Gameplay.UI
                 ResolvePlayerFishTarget();
                 if (!playerFishTarget)
                 {
-                    HideStaminaRing();
+                    HideProgressRings();
                     return;
                 }
             }
@@ -71,16 +78,8 @@ namespace TestBoids.Gameplay.UI
             }
 
             ResolveTunaMotor();
-            staminaRingInstance.SetProgress(tunaMotor ? tunaMotor.StaminaPercent : 1f);
-
-            Transform ringTransform = staminaRingInstance.transform;
-            ringTransform.position = playerFishTarget.position
-                + playerFishTarget.TransformDirection(GetCameraSideAdjustedOffset());
-
-            if (billboardToCamera && mainCamera)
-            {
-                ringTransform.rotation = mainCamera.transform.rotation;
-            }
+            UpdateRing(staminaRingInstance, tunaMotor ? tunaMotor.StaminaPercent : 1f, staminaRingOffset);
+            UpdateRing(hungerRingInstance, tunaMotor ? tunaMotor.HungerPercent : 0f, hungerRingOffset);
         }
 
         private void OnStateChanged(GameState previousState, GameState nextState)
@@ -110,37 +109,91 @@ namespace TestBoids.Gameplay.UI
         {
             if (state == GameState.PhaseBaitBall)
             {
-                ShowStaminaRing();
+                ShowProgressRings();
                 return;
             }
 
-            HideStaminaRing();
+            HideProgressRings();
         }
 
-        private void ShowStaminaRing()
+        private void ShowProgressRings()
         {
             ResolvePlayerFishTarget();
-            if (!playerFishTarget || !staminaRingPrefab)
+            if (!playerFishTarget)
             {
                 return;
             }
 
-            if (!staminaRingInstance)
-            {
-                staminaRingInstance = Instantiate(staminaRingPrefab, transform);
-            }
+            staminaRingInstance = ShowRing(staminaRingInstance, staminaRingPrefab);
+            hungerRingInstance = ShowRing(hungerRingInstance, hungerRingPrefab);
 
-            staminaRingInstance.transform.SetParent(transform, false);
-            staminaRingInstance.gameObject.SetActive(true);
             ResolveTunaMotor();
-            staminaRingInstance.SetProgress(tunaMotor ? tunaMotor.StaminaPercent : 1f);
+            UpdateRing(staminaRingInstance, tunaMotor ? tunaMotor.StaminaPercent : 1f, staminaRingOffset);
+            UpdateRing(hungerRingInstance, tunaMotor ? tunaMotor.HungerPercent : 0f, hungerRingOffset);
         }
 
-        private void HideStaminaRing()
+        private void HideProgressRings()
         {
-            if (staminaRingInstance)
+            HideRing(staminaRingInstance);
+            HideRing(hungerRingInstance);
+        }
+
+        private FishStaminaRingView ShowRing(
+            FishStaminaRingView instance,
+            FishStaminaRingView prefab)
+        {
+            if (!prefab)
             {
-                staminaRingInstance.gameObject.SetActive(false);
+                return instance;
+            }
+
+            if (!instance)
+            {
+                instance = Instantiate(prefab, transform);
+            }
+
+            instance.transform.SetParent(transform, false);
+            instance.gameObject.SetActive(true);
+            return instance;
+        }
+
+        private void HideRing(FishStaminaRingView ring)
+        {
+            if (ring)
+            {
+                ring.gameObject.SetActive(false);
+            }
+        }
+
+        private bool HasActiveRing()
+        {
+            return IsRingActive(staminaRingInstance) || IsRingActive(hungerRingInstance);
+        }
+
+        private bool IsRingActive(FishStaminaRingView ring)
+        {
+            return ring && ring.gameObject.activeSelf;
+        }
+
+        private void UpdateRing(
+            FishStaminaRingView ring,
+            float percent,
+            Vector3 offset)
+        {
+            if (!IsRingActive(ring) || !playerFishTarget)
+            {
+                return;
+            }
+
+            ring.SetProgress(percent);
+
+            Transform ringTransform = ring.transform;
+            ringTransform.position = playerFishTarget.position
+                + playerFishTarget.TransformDirection(GetCameraSideAdjustedOffset(offset));
+
+            if (billboardToCamera && mainCamera)
+            {
+                ringTransform.rotation = mainCamera.transform.rotation;
             }
         }
 
@@ -206,23 +259,23 @@ namespace TestBoids.Gameplay.UI
                 FindObjectsInactive.Include);
         }
 
-        private Vector3 GetCameraSideAdjustedOffset()
+        private Vector3 GetCameraSideAdjustedOffset(Vector3 offset)
         {
             if (!cameraSideSwitcher)
             {
                 ResolveCameraSideSwitcher();
                 if (!cameraSideSwitcher)
                 {
-                    return staminaRingOffset;
+                    return offset;
                 }
             }
 
             float side = cameraSideSwitcher.NormalizedCameraSide;
-            float mirroredX = -staminaRingOffset.x;
+            float mirroredX = -offset.x;
             return new Vector3(
-                Mathf.Lerp(staminaRingOffset.x, mirroredX, side),
-                staminaRingOffset.y,
-                staminaRingOffset.z);
+                Mathf.Lerp(offset.x, mirroredX, side),
+                offset.y,
+                offset.z);
         }
     }
 }

@@ -52,6 +52,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TunaSchool
       objectReference: {fileID: 0}
+    - target: {fileID: 3866415408107140048, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      propertyPath: 'm_BlendShapeWeights.Array.data[0]'
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

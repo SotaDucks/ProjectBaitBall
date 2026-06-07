@@ -12572,6 +12572,8 @@ MonoBehaviour:
   maxStamina: 100
   sprintStaminaDrainPerSecond: 20
   staminaRecoveryPerSecond: 10
+  maxHunger: 100
+  initialHunger: 10
   turnSpring: 92.4
   turnDamping: 9
   maxAngularVelocity: 8
@@ -18250,9 +18252,11 @@ MonoBehaviour:
   stateManager: {fileID: 1006078978}
   playerFishTarget: {fileID: 109750647}
   staminaRingPrefab: {fileID: 6496774021577167641, guid: 256485a004b5e9343b67973f778a14a4, type: 3}
+  hungerRingPrefab: {fileID: 6496774021577167641, guid: 46c9f2dd0555cfd45bf573c3b9974627, type: 3}
   cameraSideSwitcher: {fileID: 0}
   tunaMotor: {fileID: 0}
   staminaRingOffset: {x: 0.7, y: -0.4, z: 0}
+  hungerRingOffset: {x: 0.7, y: -0.4, z: 0}
   billboardToCamera: 1
 --- !u!1 &164273397
 GameObject:
@@ -37550,15 +37554,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.03746868
+      value: -0.03214133
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6557839
+      value: -1.736563
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2397377
+      value: 0.18422242
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -37591,6 +37595,10 @@ PrefabInstance:
     - target: {fileID: 6163677879209923326, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_Name
       value: Micro Bubbles (Movement Based)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6163677879209923326, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -40030,7 +40038,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-  CustomBlends: {fileID: 0}
+  CustomBlends: {fileID: 11400000, guid: e8e7ca7336512314b8205afb1cb36402, type: 2}
 --- !u!1 &330712546
 GameObject:
   m_ObjectHideFlags: 0
@@ -114575,7 +114583,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.BoidObstacle
   shape: 0
-  radius: 0.66
+  radius: 0.32
   size: {x: 1, y: 1, z: 1}
 --- !u!23 &938804942
 MeshRenderer:
@@ -119843,15 +119851,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.03746868
+      value: -0.03214133
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6557839
+      value: -0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2397377
+      value: 0.18422242
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -158351,15 +158359,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.03746868
+      value: -0.03214133
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6557839
+      value: -1.736563
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2397377
+      value: 0.18422242
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w

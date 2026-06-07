@@ -85,6 +85,10 @@ namespace TestBoids.Tuna
         [SerializeField, Min(0f)] private float sprintStaminaDrainPerSecond = 35f;
         [SerializeField, Min(0f)] private float staminaRecoveryPerSecond = 20f;
 
+        [Header("Hunger")]
+        [SerializeField, Min(0.01f)] private float maxHunger = 100f;
+        [SerializeField, Min(0f)] private float initialHunger = 0f;
+
         [Header("Turning")]
         [SerializeField, Min(0f)] private float turnSpring = 42f;
         [SerializeField, Min(0f)] private float turnDamping = 9f;
@@ -116,6 +120,7 @@ namespace TestBoids.Tuna
         private float sprintEndsAt;
         private float sprintCooldownEndsAt;
         private float currentStamina;
+        private float currentHunger;
         private float staminaRecoveryStartsAt;
         private const float StaminaRecoveryDelay = 1f;
 
@@ -125,6 +130,9 @@ namespace TestBoids.Tuna
         public bool IsScripted => controlMode == ControlMode.Scripted;
         public bool IsSprinting => currentSprintTier > 0 && Time.time < sprintEndsAt;
         public int CurrentSprintTier => IsSprinting ? currentSprintTier : 0;
+        public float MaxHunger => maxHunger;
+        public float CurrentHunger => currentHunger;
+        public float HungerPercent => maxHunger > 0f ? Mathf.Clamp01(currentHunger / maxHunger) : 0f;
         public float StaminaPercent => maxStamina > 0f ? Mathf.Clamp01(currentStamina / maxStamina) : 0f;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
@@ -162,6 +170,7 @@ namespace TestBoids.Tuna
 
             desiredDirection = transform.forward;
             currentStamina = maxStamina;
+            currentHunger = Mathf.Clamp(initialHunger, 0f, maxHunger);
 
             if (configureRigidbodyOnAwake)
             {
@@ -199,6 +208,8 @@ namespace TestBoids.Tuna
             maxStamina = Mathf.Max(0.01f, maxStamina);
             sprintStaminaDrainPerSecond = Mathf.Max(0f, sprintStaminaDrainPerSecond);
             staminaRecoveryPerSecond = Mathf.Max(0f, staminaRecoveryPerSecond);
+            maxHunger = Mathf.Max(0.01f, maxHunger);
+            initialHunger = Mathf.Clamp(initialHunger, 0f, maxHunger);
         }
 
         private void FixedUpdate()
