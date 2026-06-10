@@ -57,6 +57,16 @@ namespace TestBoids.Boids
         [SerializeField, Min(0f)] private float bankTurnScale = 0.18f;
         [SerializeField, Min(0f)] private float bankResponse = 8f;
 
+        [Header("Impact Physics")]
+        [SerializeField] private bool configureRigidbodiesForSchooling = true;
+        [SerializeField] private bool useGravityWhileImpacted;
+        [SerializeField, Min(0f)] private float impactedMinimumDuration = 0.25f;
+        [SerializeField, Min(0f)] private float impactedMaximumDuration = 2.5f;
+        [SerializeField, Min(0f)] private float impactedReturnSpeed = 0.35f;
+        [SerializeField, Min(0f)] private float impactedLinearDamping = 1.2f;
+        [SerializeField, Min(0f)] private float impactedAngularDamping = 1.2f;
+        [SerializeField, Min(0f)] private float impactedMaximumSpeed = 14f;
+
         [Header("Baked Initial State")]
         [SerializeField] private bool useBakedInitialState = true;
         [SerializeField, Min(0)] private int bakeWarmupFrames = 360;
@@ -67,6 +77,7 @@ namespace TestBoids.Boids
         private FishAgent[] agents = Array.Empty<FishAgent>();
         private FishState[] fish = Array.Empty<FishState>();
         private FishState[] nextFish = Array.Empty<FishState>();
+        private ImpactPhysicsState[] impactPhysics = Array.Empty<ImpactPhysicsState>();
         private int simulationFrame;
         private float simulationTime;
 
@@ -94,6 +105,8 @@ namespace TestBoids.Boids
             neighborScanLimit = Mathf.Max(0, neighborScanLimit);
             bakeWarmupFrames = Mathf.Max(0, bakeWarmupFrames);
             bakeTimeStep = Mathf.Max(0.001f, bakeTimeStep);
+            impactedMaximumDuration = Mathf.Max(impactedMinimumDuration, impactedMaximumDuration);
+            impactedMaximumSpeed = Mathf.Max(0f, impactedMaximumSpeed);
         }
 
         private void InitializeIndividualRandomRangesFromLegacyValues()
@@ -130,18 +143,22 @@ namespace TestBoids.Boids
             }
 
             UpdateSimulation(dt);
+            UpdateImpactPhysics(dt);
             ApplyAgentPoses();
             simulationFrame++;
         }
 
         private void OnDisable()
         {
+            RestoreImpactRigidbodies();
+
             if (destroySpawnedFishOnDisable)
             {
                 DestroySpawnedFish();
                 agents = Array.Empty<FishAgent>();
                 fish = Array.Empty<FishState>();
                 nextFish = Array.Empty<FishState>();
+                impactPhysics = Array.Empty<ImpactPhysicsState>();
             }
         }
 
@@ -162,6 +179,7 @@ namespace TestBoids.Boids
             simulationFrame = 0;
             simulationTime = 0f;
 
+            RestoreImpactRigidbodies();
             DestroySpawnedFish();
             FishAgent[] sceneAgents = CollectSceneAgents();
             if (sceneAgents.Length > 0)
@@ -188,6 +206,7 @@ namespace TestBoids.Boids
                 InitializeFishState(randomSeed);
             }
 
+            ConfigureImpactRigidbodiesForSchooling();
             ApplyAgentPoses();
         }
 
@@ -210,11 +229,22 @@ namespace TestBoids.Boids
                 return false;
             }
 
-            if (fish != null && index < fish.Length)
+            bool readImpactVelocity = false;
+            if (IsImpactPhysicsActive(index)
+                && impactPhysics[index].Body
+                && impactPhysics[index].Body.linearVelocity.sqrMagnitude > 0.000001f)
+            {
+                velocity = impactPhysics[index].Body.linearVelocity;
+                readImpactVelocity = true;
+            }
+
+            EndImpactPhysics(index, false);
+
+            if (!readImpactVelocity && fish != null && index < fish.Length)
             {
                 velocity = fish[index].Velocity;
             }
-            else if (agent.Velocity.sqrMagnitude > 0.000001f)
+            else if (!readImpactVelocity && agent.Velocity.sqrMagnitude > 0.000001f)
             {
                 velocity = agent.Velocity;
             }
@@ -222,7 +252,71 @@ namespace TestBoids.Boids
             agents = RemoveAt(agents, index);
             fish = RemoveAt(fish, index);
             nextFish = RemoveAt(nextFish, index);
+            impactPhysics = RemoveAt(impactPhysics, index);
             fishCount = agents.Length;
+            return true;
+        }
+
+        public bool TryBeginImpactPhysics(FishAgent agent, Vector3 impactVelocity, Vector3 impactPoint)
+        {
+            if (!agent || agents == null || fish == null)
+            {
+                return false;
+            }
+
+            int index = Array.IndexOf(agents, agent);
+            if (index < 0 || index >= fish.Length)
+            {
+                return false;
+            }
+
+            EnsureImpactPhysicsState(index);
+            if (impactPhysics == null || index >= impactPhysics.Length)
+            {
+                return false;
+            }
+
+            ImpactPhysicsState state = impactPhysics[index];
+            Rigidbody body = state.Body;
+            if (!body)
+            {
+                return false;
+            }
+
+            FishState fishState = fish[index];
+            Vector3 velocity = impactVelocity;
+            if (impactedMaximumSpeed > 0f)
+            {
+                velocity = Vector3.ClampMagnitude(velocity, impactedMaximumSpeed);
+            }
+
+            if (velocity.sqrMagnitude <= 0.000001f)
+            {
+                velocity = fishState.Velocity.sqrMagnitude > 0.000001f
+                    ? fishState.Velocity
+                    : agent.transform.forward;
+            }
+
+            body.isKinematic = false;
+            body.useGravity = useGravityWhileImpacted;
+            body.detectCollisions = true;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            body.linearDamping = impactedLinearDamping;
+            body.angularDamping = impactedAngularDamping;
+            body.position = fishState.Position;
+            body.rotation = agent.transform.rotation;
+            body.linearVelocity = velocity;
+            body.angularVelocity = Vector3.zero;
+
+            if (impactPoint != Vector3.zero && velocity.sqrMagnitude > 0.000001f)
+            {
+                body.AddForceAtPosition(velocity * 0.2f, impactPoint, ForceMode.VelocityChange);
+            }
+
+            state.Active = true;
+            state.Elapsed = 0f;
+            impactPhysics[index] = state;
             return true;
         }
 
@@ -430,6 +524,7 @@ namespace TestBoids.Boids
         {
             fish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
             nextFish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
+            impactPhysics = count > 0 ? new ImpactPhysicsState[count] : Array.Empty<ImpactPhysicsState>();
         }
 
         private void InitializeFishState(int randomSeed)
@@ -516,6 +611,8 @@ namespace TestBoids.Boids
 
         private void UpdateSimulation(float dt)
         {
+            SyncImpactPhysicsToFishState();
+
             float perceptionRadiusSq = perceptionRadius * perceptionRadius;
             float separationRadiusSq = separationRadius * separationRadius;
             Vector3 flowAxis = ReadFlowAxis(simulationTime);
@@ -524,6 +621,12 @@ namespace TestBoids.Boids
             for (int i = 0; i < fish.Length; i++)
             {
                 FishState current = fish[i];
+                if (IsImpactPhysicsActive(i))
+                {
+                    nextFish[i] = current;
+                    continue;
+                }
+
                 Vector3 acceleration = Vector3.zero;
                 Vector3 headingSum = Vector3.zero;
                 Vector3 centerSum = Vector3.zero;
@@ -829,6 +932,11 @@ namespace TestBoids.Boids
             int count = Mathf.Min(agents.Length, fish.Length);
             for (int i = 0; i < count; i++)
             {
+                if (IsImpactPhysicsActive(i))
+                {
+                    continue;
+                }
+
                 FishAgent agent = agents[i];
                 if (agent)
                 {
@@ -888,6 +996,241 @@ namespace TestBoids.Boids
             }
 
             return transform.forward.sqrMagnitude > 0.000001f ? transform.forward.normalized : Vector3.forward;
+        }
+
+        private void ConfigureImpactRigidbodiesForSchooling()
+        {
+            if (impactPhysics == null || agents == null)
+            {
+                return;
+            }
+
+            int count = Mathf.Min(impactPhysics.Length, agents.Length);
+            for (int i = 0; i < count; i++)
+            {
+                EnsureImpactPhysicsState(i);
+                Rigidbody body = impactPhysics[i].Body;
+                if (body && configureRigidbodiesForSchooling)
+                {
+                    ConfigureRigidbodyForSchooling(body);
+                }
+            }
+        }
+
+        private void EnsureImpactPhysicsState(int index)
+        {
+            if (impactPhysics == null || agents == null || index < 0 || index >= impactPhysics.Length || index >= agents.Length)
+            {
+                return;
+            }
+
+            ImpactPhysicsState state = impactPhysics[index];
+            if (!state.Body && agents[index])
+            {
+                state.Body = ResolveAgentRigidbody(agents[index]);
+            }
+
+            if (state.Body && !state.HasOriginalSettings)
+            {
+                CaptureOriginalRigidbodySettings(ref state, state.Body);
+            }
+
+            impactPhysics[index] = state;
+        }
+
+        private static Rigidbody ResolveAgentRigidbody(FishAgent agent)
+        {
+            if (!agent)
+            {
+                return null;
+            }
+
+            Rigidbody body = agent.GetComponent<Rigidbody>();
+            if (body)
+            {
+                return body;
+            }
+
+            body = agent.GetComponentInParent<Rigidbody>();
+            if (body)
+            {
+                return body;
+            }
+
+            return agent.GetComponentInChildren<Rigidbody>();
+        }
+
+        private static void CaptureOriginalRigidbodySettings(ref ImpactPhysicsState state, Rigidbody body)
+        {
+            state.HasOriginalSettings = true;
+            state.OriginalIsKinematic = body.isKinematic;
+            state.OriginalUseGravity = body.useGravity;
+            state.OriginalDetectCollisions = body.detectCollisions;
+            state.OriginalInterpolation = body.interpolation;
+            state.OriginalCollisionDetectionMode = body.collisionDetectionMode;
+            state.OriginalLinearDamping = body.linearDamping;
+            state.OriginalAngularDamping = body.angularDamping;
+        }
+
+        private static void ConfigureRigidbodyForSchooling(Rigidbody body)
+        {
+            body.isKinematic = true;
+            body.useGravity = false;
+            body.detectCollisions = true;
+            body.linearVelocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
+        }
+
+        private void SyncImpactPhysicsToFishState()
+        {
+            if (impactPhysics == null || fish == null)
+            {
+                return;
+            }
+
+            int count = Mathf.Min(impactPhysics.Length, fish.Length);
+            for (int i = 0; i < count; i++)
+            {
+                if (!impactPhysics[i].Active || !impactPhysics[i].Body)
+                {
+                    continue;
+                }
+
+                FishState state = fish[i];
+                Rigidbody body = impactPhysics[i].Body;
+                state.Position = body.position;
+                if (body.linearVelocity.sqrMagnitude > 0.000001f)
+                {
+                    state.Velocity = body.linearVelocity;
+                }
+
+                state.Bank = 0f;
+                fish[i] = state;
+                nextFish[i] = state;
+            }
+        }
+
+        private void UpdateImpactPhysics(float dt)
+        {
+            if (impactPhysics == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < impactPhysics.Length; i++)
+            {
+                ImpactPhysicsState state = impactPhysics[i];
+                if (!state.Active)
+                {
+                    continue;
+                }
+
+                state.Elapsed += dt;
+                impactPhysics[i] = state;
+
+                Rigidbody body = state.Body;
+                if (!body)
+                {
+                    EndImpactPhysics(i, true);
+                    continue;
+                }
+
+                float speed = body.linearVelocity.magnitude;
+                bool reachedMinimumTime = state.Elapsed >= impactedMinimumDuration;
+                bool isSlowEnough = speed <= impactedReturnSpeed;
+                bool reachedMaximumTime = impactedMaximumDuration > 0f && state.Elapsed >= impactedMaximumDuration;
+                if (reachedMinimumTime && (isSlowEnough || reachedMaximumTime))
+                {
+                    EndImpactPhysics(i, true);
+                }
+            }
+        }
+
+        private bool IsImpactPhysicsActive(int index)
+        {
+            return impactPhysics != null
+                && index >= 0
+                && index < impactPhysics.Length
+                && impactPhysics[index].Active;
+        }
+
+        private void EndImpactPhysics(int index, bool resumeSchooling)
+        {
+            if (impactPhysics == null || index < 0 || index >= impactPhysics.Length)
+            {
+                return;
+            }
+
+            ImpactPhysicsState state = impactPhysics[index];
+            if (!state.Active)
+            {
+                return;
+            }
+
+            Rigidbody body = state.Body;
+            if (body)
+            {
+                Vector3 position = body.position;
+                Vector3 velocity = body.linearVelocity;
+                if (resumeSchooling && fish != null && index < fish.Length)
+                {
+                    FishState fishState = fish[index];
+                    fishState.Position = position;
+                    if (velocity.sqrMagnitude <= 0.000001f)
+                    {
+                        velocity = fishState.Velocity.sqrMagnitude > 0.000001f
+                            ? fishState.Velocity
+                            : body.transform.forward;
+                    }
+
+                    fishState.Velocity = velocity;
+                    fishState.Bank = 0f;
+                    fish[index] = fishState;
+                    if (nextFish != null && index < nextFish.Length)
+                    {
+                        nextFish[index] = fishState;
+                    }
+                }
+
+                if (resumeSchooling && configureRigidbodiesForSchooling)
+                {
+                    ConfigureRigidbodyForSchooling(body);
+                }
+            }
+
+            state.Active = false;
+            state.Elapsed = 0f;
+            impactPhysics[index] = state;
+        }
+
+        private void RestoreImpactRigidbodies()
+        {
+            if (impactPhysics == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < impactPhysics.Length; i++)
+            {
+                ImpactPhysicsState state = impactPhysics[i];
+                Rigidbody body = state.Body;
+                state.Active = false;
+                state.Elapsed = 0f;
+                if (!body || !state.HasOriginalSettings)
+                {
+                    impactPhysics[i] = state;
+                    continue;
+                }
+
+                body.isKinematic = state.OriginalIsKinematic;
+                body.useGravity = state.OriginalUseGravity;
+                body.detectCollisions = state.OriginalDetectCollisions;
+                body.interpolation = state.OriginalInterpolation;
+                body.collisionDetectionMode = state.OriginalCollisionDetectionMode;
+                body.linearDamping = state.OriginalLinearDamping;
+                body.angularDamping = state.OriginalAngularDamping;
+                impactPhysics[i] = state;
+            }
         }
 
         private static float RandomRange(float min, float max, ref BoidRandom random)
@@ -987,6 +1330,21 @@ namespace TestBoids.Boids
             public float MinSpeed;
             public float MaxSpeed;
             public float Bank;
+        }
+
+        private struct ImpactPhysicsState
+        {
+            public Rigidbody Body;
+            public bool HasOriginalSettings;
+            public bool OriginalIsKinematic;
+            public bool OriginalUseGravity;
+            public bool OriginalDetectCollisions;
+            public RigidbodyInterpolation OriginalInterpolation;
+            public CollisionDetectionMode OriginalCollisionDetectionMode;
+            public float OriginalLinearDamping;
+            public float OriginalAngularDamping;
+            public bool Active;
+            public float Elapsed;
         }
 
         [Serializable]

@@ -2438,15 +2438,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.034217406
+      value: -0.035649203
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44020456
+      value: -0.73540765
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9228445
+      value: 2.2617905
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2554,6 +2554,14 @@ MonoBehaviour:
   maxBankAngleDegrees: 12
   bankTurnScale: 0.18
   bankResponse: 8
+  configureRigidbodiesForSchooling: 1
+  useGravityWhileImpacted: 0
+  impactedMinimumDuration: 0.25
+  impactedMaximumDuration: 2.5
+  impactedReturnSpeed: 0.35
+  impactedLinearDamping: 1.2
+  impactedAngularDamping: 1.2
+  impactedMaximumSpeed: 14
   useBakedInitialState: 1
   bakeWarmupFrames: 720
   bakeTimeStep: 0.03333334
@@ -10241,15 +10249,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.034217406
+      value: -0.035649203
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44020456
+      value: -0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9228445
+      value: 2.2617905
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -14447,15 +14455,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.034217406
+      value: -0.035649203
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44020456
+      value: -0.73540765
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9228445
+      value: 2.2617905
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -16664,6 +16672,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b5d5bfd9cc0e95243b9ea19ccfcc5fc2, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1787747172}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: b5d5bfd9cc0e95243b9ea19ccfcc5fc2, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1787747174}
   m_SourcePrefab: {fileID: 100100000, guid: b5d5bfd9cc0e95243b9ea19ccfcc5fc2, type: 3}
 --- !u!1 &1445612747
 GameObject:
@@ -19888,6 +19899,31 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1787747174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1787747168}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9d2a5c4f6e4c83a1d0b2e9f3c8a6d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Boids.FishImpactSource
+  schoolManager: {fileID: 317268523}
+  autoFindSchoolManager: 1
+  sourceRigidbody: {fileID: 1787747173}
+  fishLayerMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  reactToCollisions: 1
+  reactToTriggers: 1
+  fallbackImpactSpeed: 6
+  sourceVelocityScale: 1
+  minimumImpactSpeed: 2
+  maximumImpactSpeed: 16
+  repeatHitCooldown: 0.12
 --- !u!1 &1791722730
 GameObject:
   m_ObjectHideFlags: 0
