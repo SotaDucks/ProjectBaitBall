@@ -73888,7 +73888,7 @@ MonoBehaviour:
   shadowCasting: 1
   receiveShadows: 1
   layer: 0
-  fishCount: 15000
+  fishCount: 20000
   spawnOnStart: 1
   seed: 42
   baitBallRadius: 2
