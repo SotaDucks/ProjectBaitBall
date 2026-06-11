@@ -60,6 +60,7 @@ namespace TestBoids.Tuna
         private Quaternion lastOffset = Quaternion.identity;
         private bool forceLowSpeed;
         private FishAgent schoolAgent;
+        private const float RigidbodySpeedEpsilon = 0.01f;
 
         public bool ForceLowSpeed
         {
@@ -145,6 +146,15 @@ namespace TestBoids.Tuna
 
         private float GetSpeed()
         {
+            if (targetRigidbody)
+            {
+                float rigidbodySpeed = targetRigidbody.linearVelocity.magnitude;
+                if (rigidbodySpeed > RigidbodySpeedEpsilon)
+                {
+                    return rigidbodySpeed;
+                }
+            }
+
             if (schoolAgent)
             {
                 return 0f;
