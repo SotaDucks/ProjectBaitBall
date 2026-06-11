@@ -632,7 +632,7 @@ MonoBehaviour:
   targetBone: {fileID: 928764881}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 82751431}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -782,15 +782,15 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 86347216}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.13537359, y: 0.8182989, z: 0.21399193, w: 0.51601213}
-  m_LocalPosition: {x: 7.4594536, y: 1.5587606, z: 7.7966766}
-  m_LocalScale: {x: 0.7988288, y: 0.7988288, z: 0.7988288}
+  m_LocalRotation: {x: 0.04188215, y: 0.9955764, z: 0.02310653, w: -0.08086881}
+  m_LocalPosition: {x: 21.248405, y: 5.2414656, z: -5.821177}
+  m_LocalScale: {x: 0.9661508, y: 0.9661509, z: 0.9661509}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 267625994}
   - {fileID: 2080909092}
   - {fileID: 1215964176}
-  m_Father: {fileID: 317268524}
+  m_Father: {fileID: 1368413685}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &86347219
 MonoBehaviour:
@@ -872,7 +872,7 @@ MonoBehaviour:
   targetBone: {fileID: 762384752}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 86347222}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -1623,7 +1623,7 @@ MonoBehaviour:
   targetBone: {fileID: 1162406614}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 191486083}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -2323,7 +2323,7 @@ MonoBehaviour:
   targetBone: {fileID: 105154777}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 290733927}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -2889,7 +2889,6 @@ Transform:
   - {fileID: 1090047742}
   - {fileID: 2113203552}
   - {fileID: 1203207458}
-  - {fileID: 86347217}
   - {fileID: 1368413685}
   - {fileID: 2116944574}
   - {fileID: 1565455122}
@@ -4952,7 +4951,7 @@ MonoBehaviour:
   targetBone: {fileID: 851254607}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 549033124}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -5288,7 +5287,7 @@ MonoBehaviour:
   targetBone: {fileID: 2109721489}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 566670101}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -7837,7 +7836,7 @@ MonoBehaviour:
   targetBone: {fileID: 455348898}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 890733716}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -8883,7 +8882,7 @@ MonoBehaviour:
   targetBone: {fileID: 994894704}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1046674612}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -9798,7 +9797,7 @@ MonoBehaviour:
   targetBone: {fileID: 506204872}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1090047747}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -10043,7 +10042,7 @@ MonoBehaviour:
   targetBone: {fileID: 1074825998}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1126620553}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -10649,7 +10648,7 @@ MonoBehaviour:
   targetBone: {fileID: 1084518370}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1203207463}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -11204,7 +11203,7 @@ MonoBehaviour:
   targetBone: {fileID: 1304645880}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1265107062}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -11749,6 +11748,7 @@ Transform:
   - {fileID: 1170454226}
   - {fileID: 1311473338}
   - {fileID: 882545007}
+  - {fileID: 86347217}
   m_Father: {fileID: 317268524}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1368413687
@@ -12842,7 +12842,7 @@ MonoBehaviour:
   targetBone: {fileID: 661173911}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1565455127}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -13488,7 +13488,7 @@ MonoBehaviour:
   targetBone: {fileID: 1788245867}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1635465735}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -15116,7 +15116,7 @@ MonoBehaviour:
   targetBone: {fileID: 1449187508}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 1874667254}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -15991,7 +15991,7 @@ MonoBehaviour:
   targetBone: {fileID: 1137756470}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 2072654957}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -16358,7 +16358,7 @@ MonoBehaviour:
   targetBone: {fileID: 1851749456}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 2088070619}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -16743,7 +16743,7 @@ MonoBehaviour:
   targetBone: {fileID: 960027119}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 2113203557}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
@@ -16951,7 +16951,7 @@ MonoBehaviour:
   targetBone: {fileID: 82432741}
   rotateAxis: 2
   spaceMode: 0
-  targetRigidbody: {fileID: 0}
+  targetRigidbody: {fileID: 2116944579}
   autoFindRigidbody: 1
   lowSpeedMax: 2
   mediumSpeedMax: 15
