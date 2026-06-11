@@ -33,6 +33,11 @@ namespace TestBoids.Boids
         [SerializeField, Range(0f, 0.5f)] private float currentDirectionBlend = 0.08f;
         [SerializeField] private bool faceStrikeDirectionBeforeLaunch = true;
 
+        [Header("Strike Physics")]
+        [SerializeField] private bool useGravityDuringStrike;
+        [SerializeField, Min(0f)] private float strikeLinearDamping;
+        [SerializeField, Min(0f)] private float strikeAngularDamping;
+
         private readonly Dictionary<FishAgent, float> predatorCooldownEnds = new();
         private readonly List<ActiveStrike> activeStrikes = new();
         private readonly List<FishAgent> strikeCandidates = new();
@@ -59,7 +64,7 @@ namespace TestBoids.Boids
 
         private void OnDisable()
         {
-            activeStrikes.Clear();
+            EndAllActiveStrikes();
             predatorCooldownEnds.Clear();
             strikeCandidates.Clear();
         }
@@ -79,6 +84,8 @@ namespace TestBoids.Boids
             baitBallRadius = Mathf.Max(0f, baitBallRadius);
             exitOvershoot = Mathf.Max(0f, exitOvershoot);
             lateralAimRadius = Mathf.Max(0f, lateralAimRadius);
+            strikeLinearDamping = Mathf.Max(0f, strikeLinearDamping);
+            strikeAngularDamping = Mathf.Max(0f, strikeAngularDamping);
         }
 
         private void Update()
@@ -191,6 +198,12 @@ namespace TestBoids.Boids
 
         private bool TryStartStrike(FishAgent candidate)
         {
+            Rigidbody body = ResolveAgentRigidbody(candidate);
+            if (!body)
+            {
+                return false;
+            }
+
             Vector3 position = candidate.transform.position;
             Vector3 targetCenter = baitBallTarget.position;
             Vector3 toCenter = targetCenter - position;
@@ -210,12 +223,13 @@ namespace TestBoids.Boids
                 candidate.ApplyPose(position, strikeVelocity, 0f);
             }
 
-            if (!schoolManager.TryBeginImpactPhysics(candidate, strikeVelocity, position))
+            if (!schoolManager.TryBeginExternalControl(candidate))
             {
                 return false;
             }
 
-            BeginStrikeTracking(candidate);
+            ConfigureRigidbodyForStrike(body, position, candidate.transform.rotation, strikeVelocity);
+            BeginStrikeTracking(candidate, body);
             return true;
         }
 
@@ -263,11 +277,12 @@ namespace TestBoids.Boids
             return (basisA * Mathf.Cos(angle) + basisB * Mathf.Sin(angle)) * radius;
         }
 
-        private void BeginStrikeTracking(FishAgent candidate)
+        private void BeginStrikeTracking(FishAgent candidate, Rigidbody body)
         {
             activeStrikes.Add(new ActiveStrike
             {
                 Agent = candidate,
+                Body = body,
                 EndTime = Time.time + trackedStrikeDuration
             });
             predatorCooldownEnds[candidate] = Time.time + Random.Range(predatorCooldownRange.x, predatorCooldownRange.y);
@@ -280,9 +295,47 @@ namespace TestBoids.Boids
                 ActiveStrike strike = activeStrikes[i];
                 if (!strike.Agent || Time.time >= strike.EndTime)
                 {
+                    EndStrike(strike);
                     activeStrikes.RemoveAt(i);
                 }
             }
+        }
+
+        private void EndAllActiveStrikes()
+        {
+            for (int i = activeStrikes.Count - 1; i >= 0; i--)
+            {
+                EndStrike(activeStrikes[i]);
+            }
+
+            activeStrikes.Clear();
+        }
+
+        private void EndStrike(ActiveStrike strike)
+        {
+            if (!strike.Agent || !schoolManager)
+            {
+                return;
+            }
+
+            Vector3 position = strike.Body ? strike.Body.position : strike.Agent.transform.position;
+            Vector3 velocity = strike.Body ? strike.Body.linearVelocity : strike.Agent.Velocity;
+            schoolManager.TryEndExternalControl(strike.Agent, position, velocity, true);
+        }
+
+        private void ConfigureRigidbodyForStrike(Rigidbody body, Vector3 position, Quaternion rotation, Vector3 velocity)
+        {
+            body.isKinematic = false;
+            body.useGravity = useGravityDuringStrike;
+            body.detectCollisions = true;
+            body.interpolation = RigidbodyInterpolation.Interpolate;
+            body.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+            body.linearDamping = strikeLinearDamping;
+            body.angularDamping = strikeAngularDamping;
+            body.position = position;
+            body.rotation = rotation;
+            body.linearVelocity = velocity;
+            body.angularVelocity = Vector3.zero;
         }
 
         private void ScheduleNextStrike(Vector2 range)
@@ -317,6 +370,28 @@ namespace TestBoids.Boids
             }
         }
 
+        private static Rigidbody ResolveAgentRigidbody(FishAgent candidate)
+        {
+            if (!candidate)
+            {
+                return null;
+            }
+
+            Rigidbody body = candidate.GetComponent<Rigidbody>();
+            if (body)
+            {
+                return body;
+            }
+
+            body = candidate.GetComponentInParent<Rigidbody>();
+            if (body)
+            {
+                return body;
+            }
+
+            return candidate.GetComponentInChildren<Rigidbody>();
+        }
+
         private static Vector2 OrderedRange(Vector2 range)
         {
             return range.x <= range.y ? range : new Vector2(range.y, range.x);
@@ -325,6 +400,7 @@ namespace TestBoids.Boids
         private struct ActiveStrike
         {
             public FishAgent Agent;
+            public Rigidbody Body;
             public float EndTime;
         }
     }

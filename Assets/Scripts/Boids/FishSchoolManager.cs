@@ -78,6 +78,7 @@ namespace TestBoids.Boids
         private FishState[] fish = Array.Empty<FishState>();
         private FishState[] nextFish = Array.Empty<FishState>();
         private ImpactPhysicsState[] impactPhysics = Array.Empty<ImpactPhysicsState>();
+        private ExternalControlState[] externalControl = Array.Empty<ExternalControlState>();
         private int simulationFrame;
         private float simulationTime;
 
@@ -151,6 +152,7 @@ namespace TestBoids.Boids
         private void OnDisable()
         {
             RestoreImpactRigidbodies();
+            RestoreExternalControlRigidbodies();
 
             if (destroySpawnedFishOnDisable)
             {
@@ -159,6 +161,7 @@ namespace TestBoids.Boids
                 fish = Array.Empty<FishState>();
                 nextFish = Array.Empty<FishState>();
                 impactPhysics = Array.Empty<ImpactPhysicsState>();
+                externalControl = Array.Empty<ExternalControlState>();
             }
         }
 
@@ -180,6 +183,7 @@ namespace TestBoids.Boids
             simulationTime = 0f;
 
             RestoreImpactRigidbodies();
+            RestoreExternalControlRigidbodies();
             DestroySpawnedFish();
             FishAgent[] sceneAgents = CollectSceneAgents();
             if (sceneAgents.Length > 0)
@@ -253,7 +257,93 @@ namespace TestBoids.Boids
             fish = RemoveAt(fish, index);
             nextFish = RemoveAt(nextFish, index);
             impactPhysics = RemoveAt(impactPhysics, index);
+            externalControl = RemoveAt(externalControl, index);
             fishCount = agents.Length;
+            return true;
+        }
+
+        public bool TryBeginExternalControl(FishAgent agent)
+        {
+            if (!agent || agents == null || fish == null)
+            {
+                return false;
+            }
+
+            int index = Array.IndexOf(agents, agent);
+            if (index < 0 || index >= fish.Length)
+            {
+                return false;
+            }
+
+            EnsureExternalControlState(index);
+            if (externalControl == null || index >= externalControl.Length)
+            {
+                return false;
+            }
+
+            EndImpactPhysics(index, false);
+
+            ExternalControlState state = externalControl[index];
+            state.Active = true;
+            if (!state.Body)
+            {
+                state.Body = ResolveAgentRigidbody(agent);
+            }
+
+            externalControl[index] = state;
+            return true;
+        }
+
+        public bool TryEndExternalControl(FishAgent agent, Vector3 position, Vector3 velocity, bool resumeSchooling = true)
+        {
+            if (!agent || agents == null || externalControl == null)
+            {
+                return false;
+            }
+
+            int index = Array.IndexOf(agents, agent);
+            if (index < 0 || index >= externalControl.Length)
+            {
+                return false;
+            }
+
+            ExternalControlState state = externalControl[index];
+            if (!state.Active)
+            {
+                return false;
+            }
+
+            if (resumeSchooling && fish != null && index < fish.Length)
+            {
+                FishState fishState = fish[index];
+                fishState.Position = position;
+                if (velocity.sqrMagnitude <= 0.000001f)
+                {
+                    velocity = fishState.Velocity.sqrMagnitude > 0.000001f
+                        ? fishState.Velocity
+                        : agent.transform.forward;
+                }
+
+                fishState.Velocity = velocity;
+                fishState.Bank = 0f;
+                fish[index] = fishState;
+                if (nextFish != null && index < nextFish.Length)
+                {
+                    nextFish[index] = fishState;
+                }
+            }
+
+            if (resumeSchooling && configureRigidbodiesForSchooling)
+            {
+                Rigidbody body = state.Body ? state.Body : ResolveAgentRigidbody(agent);
+                if (body)
+                {
+                    ConfigureRigidbodyForSchooling(body);
+                }
+            }
+
+            state.Active = false;
+            externalControl[index] = state;
             return true;
         }
 
@@ -266,6 +356,11 @@ namespace TestBoids.Boids
 
             int index = Array.IndexOf(agents, agent);
             if (index < 0 || index >= fish.Length)
+            {
+                return false;
+            }
+
+            if (IsExternalControlActive(index))
             {
                 return false;
             }
@@ -524,6 +619,7 @@ namespace TestBoids.Boids
             fish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
             nextFish = count > 0 ? new FishState[count] : Array.Empty<FishState>();
             impactPhysics = count > 0 ? new ImpactPhysicsState[count] : Array.Empty<ImpactPhysicsState>();
+            externalControl = count > 0 ? new ExternalControlState[count] : Array.Empty<ExternalControlState>();
         }
 
         private void InitializeFishState(int randomSeed)
@@ -611,6 +707,7 @@ namespace TestBoids.Boids
         private void UpdateSimulation(float dt)
         {
             SyncImpactPhysicsToFishState();
+            SyncExternalControlToFishState();
 
             float perceptionRadiusSq = perceptionRadius * perceptionRadius;
             float separationRadiusSq = separationRadius * separationRadius;
@@ -620,7 +717,7 @@ namespace TestBoids.Boids
             for (int i = 0; i < fish.Length; i++)
             {
                 FishState current = fish[i];
-                if (IsImpactPhysicsActive(i))
+                if (IsImpactPhysicsActive(i) || IsExternalControlActive(i))
                 {
                     nextFish[i] = current;
                     continue;
@@ -931,7 +1028,7 @@ namespace TestBoids.Boids
             int count = Mathf.Min(agents.Length, fish.Length);
             for (int i = 0; i < count; i++)
             {
-                if (IsImpactPhysicsActive(i))
+                if (IsImpactPhysicsActive(i) || IsExternalControlActive(i))
                 {
                     continue;
                 }
@@ -1037,6 +1134,22 @@ namespace TestBoids.Boids
             impactPhysics[index] = state;
         }
 
+        private void EnsureExternalControlState(int index)
+        {
+            if (externalControl == null || agents == null || index < 0 || index >= externalControl.Length || index >= agents.Length)
+            {
+                return;
+            }
+
+            ExternalControlState state = externalControl[index];
+            if (!state.Body && agents[index])
+            {
+                state.Body = ResolveAgentRigidbody(agents[index]);
+            }
+
+            externalControl[index] = state;
+        }
+
         private static Rigidbody ResolveAgentRigidbody(FishAgent agent)
         {
             if (!agent)
@@ -1107,6 +1220,51 @@ namespace TestBoids.Boids
             }
         }
 
+        private void SyncExternalControlToFishState()
+        {
+            if (externalControl == null || fish == null)
+            {
+                return;
+            }
+
+            int count = Mathf.Min(externalControl.Length, fish.Length);
+            for (int i = 0; i < count; i++)
+            {
+                if (!externalControl[i].Active)
+                {
+                    continue;
+                }
+
+                FishState state = fish[i];
+                Rigidbody body = externalControl[i].Body;
+                FishAgent agent = agents != null && i < agents.Length ? agents[i] : null;
+                if (body)
+                {
+                    state.Position = body.position;
+                    if (body.linearVelocity.sqrMagnitude > 0.000001f)
+                    {
+                        state.Velocity = body.linearVelocity;
+                    }
+                }
+                else if (agent)
+                {
+                    state.Position = agent.transform.position;
+                    if (agent.Velocity.sqrMagnitude > 0.000001f)
+                    {
+                        state.Velocity = agent.Velocity;
+                    }
+                    else if (agent.transform.forward.sqrMagnitude > 0.000001f)
+                    {
+                        state.Velocity = agent.transform.forward.normalized * Mathf.Max(state.MinSpeed, 0.001f);
+                    }
+                }
+
+                state.Bank = 0f;
+                fish[i] = state;
+                nextFish[i] = state;
+            }
+        }
+
         private void UpdateImpactPhysics(float dt)
         {
             if (impactPhysics == null)
@@ -1149,6 +1307,14 @@ namespace TestBoids.Boids
                 && index >= 0
                 && index < impactPhysics.Length
                 && impactPhysics[index].Active;
+        }
+
+        private bool IsExternalControlActive(int index)
+        {
+            return externalControl != null
+                && index >= 0
+                && index < externalControl.Length
+                && externalControl[index].Active;
         }
 
         private void EndImpactPhysics(int index, bool resumeSchooling)
@@ -1226,6 +1392,26 @@ namespace TestBoids.Boids
                 body.linearDamping = state.OriginalLinearDamping;
                 body.angularDamping = state.OriginalAngularDamping;
                 impactPhysics[i] = state;
+            }
+        }
+
+        private void RestoreExternalControlRigidbodies()
+        {
+            if (externalControl == null)
+            {
+                return;
+            }
+
+            for (int i = 0; i < externalControl.Length; i++)
+            {
+                ExternalControlState state = externalControl[i];
+                if (state.Active && state.Body && configureRigidbodiesForSchooling)
+                {
+                    ConfigureRigidbodyForSchooling(state.Body);
+                }
+
+                state.Active = false;
+                externalControl[i] = state;
             }
         }
 
@@ -1340,6 +1526,12 @@ namespace TestBoids.Boids
             public float OriginalAngularDamping;
             public bool Active;
             public float Elapsed;
+        }
+
+        private struct ExternalControlState
+        {
+            public Rigidbody Body;
+            public bool Active;
         }
 
         [Serializable]
