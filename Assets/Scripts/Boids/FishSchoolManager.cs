@@ -297,7 +297,6 @@ namespace TestBoids.Boids
                     : agent.transform.forward;
             }
 
-            body.isKinematic = false;
             body.useGravity = useGravityWhileImpacted;
             body.detectCollisions = true;
             body.interpolation = RigidbodyInterpolation.Interpolate;
@@ -1063,7 +1062,6 @@ namespace TestBoids.Boids
         private static void CaptureOriginalRigidbodySettings(ref ImpactPhysicsState state, Rigidbody body)
         {
             state.HasOriginalSettings = true;
-            state.OriginalIsKinematic = body.isKinematic;
             state.OriginalUseGravity = body.useGravity;
             state.OriginalDetectCollisions = body.detectCollisions;
             state.OriginalInterpolation = body.interpolation;
@@ -1074,7 +1072,6 @@ namespace TestBoids.Boids
 
         private static void ConfigureRigidbodyForSchooling(Rigidbody body)
         {
-            body.isKinematic = true;
             body.useGravity = false;
             body.detectCollisions = true;
             body.linearVelocity = Vector3.zero;
@@ -1222,7 +1219,6 @@ namespace TestBoids.Boids
                     continue;
                 }
 
-                body.isKinematic = state.OriginalIsKinematic;
                 body.useGravity = state.OriginalUseGravity;
                 body.detectCollisions = state.OriginalDetectCollisions;
                 body.interpolation = state.OriginalInterpolation;
@@ -1336,7 +1332,6 @@ namespace TestBoids.Boids
         {
             public Rigidbody Body;
             public bool HasOriginalSettings;
-            public bool OriginalIsKinematic;
             public bool OriginalUseGravity;
             public bool OriginalDetectCollisions;
             public RigidbodyInterpolation OriginalInterpolation;
