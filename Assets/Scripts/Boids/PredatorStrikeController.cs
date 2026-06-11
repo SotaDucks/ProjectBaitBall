@@ -15,7 +15,6 @@ namespace TestBoids.Boids
         [SerializeField, Min(0f)] private float minimumDistanceFromBaitBall = 5f;
         [SerializeField, Min(0f)] private float maximumDistanceFromBaitBall = 26f;
         [SerializeField, Min(0)] private int maximumConcurrentStrikes = 2;
-        [SerializeField, Min(1)] private int strikesPerPulse = 1;
 
         [Header("Timing")]
         [SerializeField] private Vector2 initialDelayRange = new(0.5f, 2.5f);
@@ -77,7 +76,6 @@ namespace TestBoids.Boids
             minimumDistanceFromBaitBall = Mathf.Max(0f, minimumDistanceFromBaitBall);
             maximumDistanceFromBaitBall = Mathf.Max(0f, maximumDistanceFromBaitBall);
             maximumConcurrentStrikes = Mathf.Max(0, maximumConcurrentStrikes);
-            strikesPerPulse = Mathf.Max(1, strikesPerPulse);
             retryDelay = Mathf.Max(0f, retryDelay);
             trackedStrikeDuration = Mathf.Max(0.01f, trackedStrikeDuration);
             dashSpeed = Mathf.Max(0f, dashSpeed);
@@ -122,15 +120,14 @@ namespace TestBoids.Boids
 
             int availableSlots = maximumConcurrentStrikes > 0
                 ? maximumConcurrentStrikes - activeStrikes.Count
-                : strikesPerPulse;
+                : 1;
             if (availableSlots <= 0)
             {
                 return 0;
             }
 
-            int targetCount = Mathf.Min(strikesPerPulse, availableSlots);
             int startedCount = 0;
-            for (int i = 0; i < targetCount; i++)
+            for (int i = 0; i < availableSlots; i++)
             {
                 if (!TryPickCandidate(out FishAgent candidate))
                 {
