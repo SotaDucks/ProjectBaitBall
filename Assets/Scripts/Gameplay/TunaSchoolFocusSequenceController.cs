@@ -1,4 +1,5 @@
 using System.Collections;
+using TestBoids.Boids;
 using TestBoids.Tuna;
 using Unity.Cinemachine;
 using UnityEngine;
@@ -13,13 +14,16 @@ namespace TestBoids.Gameplay
         [SerializeField] private TunaFreezeController tunaFreezeController;
         [SerializeField] private CinemachineCamera thirdPersonAimCamera;
         [SerializeField] private CinemachineCamera tunaSchoolFocusCamera;
+        [SerializeField] private CinemachineCamera barracudaCamera;
+        [SerializeField] private CinemachineCamera gtCamera;
+        [SerializeField] private Transform barracudaSchool;
+        [SerializeField] private PredatorStrikeController barracudaPredatorStrikeController;
         [SerializeField] private AudioSource narrationSource;
         [SerializeField] private AudioClip narrationClip;
         [SerializeField] private bool autoResolveMissingReferences = true;
 
         [Header("Timing")]
         [SerializeField, Min(0f)] private float freezeDelayAfterFocusCamera;
-        [SerializeField, Min(0f)] private float narrationDelay = 5f;
         [SerializeField] private bool useUnscaledTime;
 
         [Header("Priority")]
@@ -29,6 +33,11 @@ namespace TestBoids.Gameplay
         [Header("Behavior")]
         [SerializeField] private bool triggerOnce = true;
         [SerializeField] private bool stopNarrationOnDisable = true;
+
+        [Header("Auto Resolve Names")]
+        [SerializeField] private string barracudaSchoolObjectName = "BarracudaSchoolManager";
+        [SerializeField] private string barracudaCameraObjectName = "BarracudaCamera";
+        [SerializeField] private string gtCameraObjectName = "GTCamera";
 
         private bool subscribed;
         private bool triggered;
@@ -58,7 +67,6 @@ namespace TestBoids.Gameplay
         private void OnValidate()
         {
             freezeDelayAfterFocusCamera = Mathf.Max(0f, freezeDelayAfterFocusCamera);
-            narrationDelay = Mathf.Max(0f, narrationDelay);
         }
 
         private void OnDisable()
@@ -82,6 +90,7 @@ namespace TestBoids.Gameplay
             triggered = true;
             ResolveReferences();
             ResolveTunaFreezeController(focusEvent);
+            PrepareBarracudaSchool(focusEvent.FishSchool);
             sequenceRoutine = StartCoroutine(RunSequence(focusEvent));
         }
 
@@ -89,7 +98,7 @@ namespace TestBoids.Gameplay
         {
             running = true;
 
-            SetFocusCameraActive(true);
+            SetActiveCamera(tunaSchoolFocusCamera);
             yield return null;
 
             if (freezeDelayAfterFocusCamera > 0f)
@@ -100,13 +109,37 @@ namespace TestBoids.Gameplay
             FreezeTuna();
             PlayNarration();
 
-            if (narrationDelay > 0f)
+            float sardineCameraDuration = GetFocusTransitionDuration();
+            if (sardineCameraDuration > 0f)
             {
-                yield return WaitForDuration(narrationDelay);
+                yield return WaitForDuration(sardineCameraDuration);
             }
 
+            if (barracudaCamera)
+            {
+                SetActiveCamera(barracudaCamera);
+            }
+
+            float barracudaCameraDuration = GetBarracudaCameraDuration();
+            if (barracudaCameraDuration > 0f)
+            {
+                yield return WaitForDuration(barracudaCameraDuration);
+            }
+
+            if (gtCamera)
+            {
+                SetActiveCamera(gtCamera);
+            }
+
+            float gtCameraDuration = GetGTCameraDuration();
+            if (gtCameraDuration > 0f)
+            {
+                yield return WaitForDuration(gtCameraDuration);
+            }
+
+            SetActiveCamera(thirdPersonAimCamera);
             UnfreezeTuna();
-            SetFocusCameraActive(false);
+            EnableBarracudaPredatorStrike();
             RaiseSardineSchoolGathered(focusEvent);
 
             running = false;
@@ -147,6 +180,9 @@ namespace TestBoids.Gameplay
                 eventBus = FindFirstObjectByType<GameplayEventBus>(FindObjectsInactive.Include);
             }
 
+            ResolveNamedCameras();
+            ResolveBarracudaSchool();
+            ResolveBarracudaPredatorStrikeController();
         }
 
         private void ResolveTunaFreezeController(TunaSchoolFocusEvent focusEvent)
@@ -208,10 +244,12 @@ namespace TestBoids.Gameplay
             narrationSource.Play();
         }
 
-        private void SetFocusCameraActive(bool active)
+        private void SetActiveCamera(CinemachineCamera activeCamera)
         {
-            SetPriority(tunaSchoolFocusCamera, active ? activePriority : inactivePriority);
-            SetPriority(thirdPersonAimCamera, active ? inactivePriority : activePriority);
+            SetPriority(thirdPersonAimCamera, thirdPersonAimCamera == activeCamera ? activePriority : inactivePriority);
+            SetPriority(tunaSchoolFocusCamera, tunaSchoolFocusCamera == activeCamera ? activePriority : inactivePriority);
+            SetPriority(barracudaCamera, barracudaCamera == activeCamera ? activePriority : inactivePriority);
+            SetPriority(gtCamera, gtCamera == activeCamera ? activePriority : inactivePriority);
         }
 
         private void RaiseSardineSchoolGathered(TunaSchoolFocusEvent focusEvent)
@@ -257,7 +295,7 @@ namespace TestBoids.Gameplay
             }
 
             UnfreezeTuna();
-            SetFocusCameraActive(false);
+            SetActiveCamera(thirdPersonAimCamera);
 
             if (stopNarrationOnDisable && narrationSource)
             {
@@ -273,6 +311,172 @@ namespace TestBoids.Gameplay
             {
                 camera.Priority = priority;
             }
+        }
+
+        private void PrepareBarracudaSchool(Transform baitBall)
+        {
+            ResolveReferences();
+            if (!barracudaSchool || !baitBall)
+            {
+                return;
+            }
+
+            DisableBarracudaPredatorStrike();
+            barracudaSchool.SetPositionAndRotation(baitBall.position, baitBall.rotation);
+            barracudaSchool.localScale = baitBall.localScale;
+
+            if (!barracudaSchool.gameObject.activeSelf)
+            {
+                barracudaSchool.gameObject.SetActive(true);
+            }
+        }
+
+        private void DisableBarracudaPredatorStrike()
+        {
+            ResolveBarracudaPredatorStrikeController();
+            if (barracudaPredatorStrikeController)
+            {
+                barracudaPredatorStrikeController.enabled = false;
+            }
+        }
+
+        private void EnableBarracudaPredatorStrike()
+        {
+            ResolveBarracudaPredatorStrikeController();
+            if (!barracudaPredatorStrikeController)
+            {
+                return;
+            }
+
+            if (barracudaSchool && !barracudaSchool.gameObject.activeSelf)
+            {
+                barracudaSchool.gameObject.SetActive(true);
+            }
+
+            if (!barracudaPredatorStrikeController.gameObject.activeInHierarchy)
+            {
+                barracudaPredatorStrikeController.gameObject.SetActive(true);
+            }
+
+            barracudaPredatorStrikeController.enabled = true;
+        }
+
+        private float GetFocusTransitionDuration()
+        {
+            ResolveReferences();
+            return eventBus ? eventBus.FocusTransitionDuration : 0f;
+        }
+
+        private float GetBarracudaCameraDuration()
+        {
+            ResolveReferences();
+            return eventBus ? eventBus.BarracudaCameraDuration : 0f;
+        }
+
+        private float GetGTCameraDuration()
+        {
+            ResolveReferences();
+            return eventBus ? eventBus.GTCameraDuration : 0f;
+        }
+
+        private void ResolveNamedCameras()
+        {
+            if (!barracudaCamera)
+            {
+                barracudaCamera = FindCinemachineCameraByName(barracudaCameraObjectName);
+            }
+
+            if (!gtCamera)
+            {
+                gtCamera = FindCinemachineCameraByName(gtCameraObjectName);
+            }
+        }
+
+        private void ResolveBarracudaSchool()
+        {
+            if (barracudaSchool)
+            {
+                return;
+            }
+
+            barracudaSchool = FindTransformByName(barracudaSchoolObjectName);
+            if (barracudaSchool)
+            {
+                return;
+            }
+
+            PredatorStrikeController strikeController = FindFirstObjectByType<PredatorStrikeController>(
+                FindObjectsInactive.Include);
+            if (strikeController)
+            {
+                barracudaSchool = strikeController.transform;
+            }
+        }
+
+        private void ResolveBarracudaPredatorStrikeController()
+        {
+            if (barracudaPredatorStrikeController)
+            {
+                return;
+            }
+
+            if (barracudaSchool)
+            {
+                barracudaPredatorStrikeController = barracudaSchool.GetComponent<PredatorStrikeController>();
+                if (!barracudaPredatorStrikeController)
+                {
+                    barracudaPredatorStrikeController =
+                        barracudaSchool.GetComponentInChildren<PredatorStrikeController>(true);
+                }
+            }
+
+            if (!barracudaPredatorStrikeController)
+            {
+                barracudaPredatorStrikeController = FindFirstObjectByType<PredatorStrikeController>(
+                    FindObjectsInactive.Include);
+            }
+        }
+
+        private static CinemachineCamera FindCinemachineCameraByName(string objectName)
+        {
+            if (string.IsNullOrWhiteSpace(objectName))
+            {
+                return null;
+            }
+
+            CinemachineCamera[] cameras = FindObjectsByType<CinemachineCamera>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            foreach (CinemachineCamera camera in cameras)
+            {
+                if (camera && camera.name == objectName)
+                {
+                    return camera;
+                }
+            }
+
+            return null;
+        }
+
+        private static Transform FindTransformByName(string objectName)
+        {
+            if (string.IsNullOrWhiteSpace(objectName))
+            {
+                return null;
+            }
+
+            Transform[] transforms = FindObjectsByType<Transform>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            foreach (Transform candidate in transforms)
+            {
+                if (candidate && candidate.name == objectName)
+                {
+                    return candidate;
+                }
+            }
+
+            return null;
         }
     }
 }

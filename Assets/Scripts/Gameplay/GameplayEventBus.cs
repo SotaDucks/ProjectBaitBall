@@ -6,10 +6,19 @@ namespace TestBoids.Gameplay
     [DisallowMultipleComponent]
     public sealed class GameplayEventBus : MonoBehaviour
     {
+        [Header("Tuna School Focus Sequence")]
+        [SerializeField, Min(0f)] private float focusTransitionDuration = 4f;
+        [SerializeField, Min(0f)] private float barracudaCameraDuration = 3f;
+        [SerializeField, Min(0f)] private float gtCameraDuration = 3f;
+
         public static GameplayEventBus Instance { get; private set; }
 
         public event Action<TunaSchoolFocusEvent> TunaSchoolFocusTriggered;
         public event Action<SardineSchoolGatheredEvent> SardineSchoolGathered;
+
+        public float FocusTransitionDuration => focusTransitionDuration;
+        public float BarracudaCameraDuration => barracudaCameraDuration;
+        public float GTCameraDuration => gtCameraDuration;
 
         private void Awake()
         {
@@ -27,6 +36,13 @@ namespace TestBoids.Gameplay
             {
                 Instance = null;
             }
+        }
+
+        private void OnValidate()
+        {
+            focusTransitionDuration = Mathf.Max(0f, focusTransitionDuration);
+            barracudaCameraDuration = Mathf.Max(0f, barracudaCameraDuration);
+            gtCameraDuration = Mathf.Max(0f, gtCameraDuration);
         }
 
         public void RaiseTunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)

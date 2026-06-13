@@ -16,7 +16,7 @@ namespace TestBoids.Boids
         [Header("Formation")]
         [SerializeField] private InstancedFishSchoolManager.FormationSettings dispersedSettings =
             InstancedFishSchoolManager.FormationSettings.CreateDispersedDefault();
-        [SerializeField, Min(0f)] private float focusTransitionDuration = 3f;
+        [SerializeField, HideInInspector, Min(0f)] private float focusTransitionDuration = 4f;
         [SerializeField] private AnimationCurve focusTransitionCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
         [Min(1f)] public float focusSpeedMultiplier = 1f;
 
@@ -64,6 +64,7 @@ namespace TestBoids.Boids
 
         private void OnValidate()
         {
+            focusTransitionDuration = Mathf.Max(0f, focusTransitionDuration);
             focusSpeedMultiplier = Mathf.Max(1f, focusSpeedMultiplier);
         }
 
@@ -93,14 +94,15 @@ namespace TestBoids.Boids
 
             ApplyFocusSpeedMultiplier();
 
-            if (focusTransitionDuration <= 0f)
+            float transitionDuration = GetFocusTransitionDuration();
+            if (transitionDuration <= 0f)
             {
                 CompleteFocusTransition();
                 return;
             }
 
             transitionElapsed += Time.deltaTime;
-            float linearT = Mathf.Clamp01(transitionElapsed / focusTransitionDuration);
+            float linearT = Mathf.Clamp01(transitionElapsed / transitionDuration);
             float shapedT = focusTransitionCurve != null
                 ? Mathf.Clamp01(focusTransitionCurve.Evaluate(linearT))
                 : linearT;
@@ -158,7 +160,7 @@ namespace TestBoids.Boids
             transitioning = true;
             ApplyFocusSpeedMultiplier();
 
-            if (focusTransitionDuration <= 0f)
+            if (GetFocusTransitionDuration() <= 0f)
             {
                 CompleteFocusTransition();
             }
@@ -284,6 +286,12 @@ namespace TestBoids.Boids
             {
                 target.SetFocusMovementMultiplier(1f);
             }
+        }
+
+        private float GetFocusTransitionDuration()
+        {
+            ResolveEventBus();
+            return eventBus ? eventBus.FocusTransitionDuration : focusTransitionDuration;
         }
     }
 }
