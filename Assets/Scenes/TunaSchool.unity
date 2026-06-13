@@ -48828,8 +48828,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.GameplayEventBus
   focusTransitionDuration: 4
-  barracudaCameraDuration: 2
-  gtCameraDuration: 2
+  barracudaCameraDuration: 2.5
+  gtCameraDuration: 2.5
 --- !u!4 &390895504
 Transform:
   m_ObjectHideFlags: 0
