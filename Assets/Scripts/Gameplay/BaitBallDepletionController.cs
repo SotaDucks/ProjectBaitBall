@@ -259,9 +259,7 @@ namespace TestBoids.Gameplay
                 return;
             }
 
-            float shapedProgress = formationTransitionCurve != null
-                ? Mathf.Clamp01(formationTransitionCurve.Evaluate(progress))
-                : progress;
+            float shapedProgress = EvaluateFormationProgress(progress);
             baitBallManager.ApplyFormationSettings(
                 InstancedFishSchoolManager.FormationSettings.Lerp(
                     startFormation,
@@ -296,6 +294,27 @@ namespace TestBoids.Gameplay
             source.AlignWeight = looseFormation.AlignWeight;
             source.CohesionWeight = looseFormation.CohesionWeight;
             return source;
+        }
+
+        private float EvaluateFormationProgress(float progress)
+        {
+            progress = Mathf.Clamp01(progress);
+            if (formationTransitionCurve == null)
+            {
+                return progress;
+            }
+
+            float startValue = formationTransitionCurve.Evaluate(0f);
+            float endValue = formationTransitionCurve.Evaluate(1f);
+            if (Mathf.Approximately(startValue, endValue))
+            {
+                return progress;
+            }
+
+            return Mathf.Clamp01(Mathf.InverseLerp(
+                startValue,
+                endValue,
+                formationTransitionCurve.Evaluate(progress)));
         }
 
         private void SubscribeToEventBus()
