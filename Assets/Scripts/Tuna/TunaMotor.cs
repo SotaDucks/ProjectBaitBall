@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -136,6 +137,8 @@ namespace TestBoids.Tuna
         public float StaminaPercent => maxStamina > 0f ? Mathf.Clamp01(currentStamina / maxStamina) : 0f;
         public float CurrentBankInput => bankAmount;
         public float CurrentTurnAmount { get; private set; }
+
+        public event Action<float, float> HungerChanged;
 
         private void Reset()
         {
@@ -283,7 +286,14 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            currentHunger = Mathf.Min(maxHunger, currentHunger + amount);
+            float nextHunger = Mathf.Min(maxHunger, currentHunger + amount);
+            if (Mathf.Approximately(nextHunger, currentHunger))
+            {
+                return;
+            }
+
+            currentHunger = nextHunger;
+            HungerChanged?.Invoke(currentHunger, maxHunger);
         }
 
         private Vector2 ReadControlMove()

@@ -12,6 +12,7 @@ namespace TestBoids.Gameplay
         [Header("References")]
         [SerializeField] private GameplayEventBus eventBus;
         [SerializeField] private TunaFreezeController tunaFreezeController;
+        [SerializeField] private TunaMotor tunaMotor;
         [SerializeField] private CinemachineCamera thirdPersonAimCamera;
         [SerializeField] private CinemachineCamera tunaSchoolFocusCamera;
         [SerializeField] private CinemachineCamera barracudaCamera;
@@ -34,6 +35,10 @@ namespace TestBoids.Gameplay
         [SerializeField] private bool triggerOnce = true;
         [SerializeField] private bool stopNarrationOnDisable = true;
 
+        [Header("Hunger Trigger")]
+        [Tooltip("Tuna hunger percentage required to start the Barracuda camera sequence.")]
+        [SerializeField, Range(0f, 1f)] private float barracudaTriggerHungerPercent = 0.8f;
+
         [Header("Auto Resolve Names")]
         [SerializeField] private string barracudaSchoolObjectName = "BarracudaSchoolManager";
         [SerializeField] private string barracudaCameraObjectName = "BarracudaCamera";
@@ -42,7 +47,10 @@ namespace TestBoids.Gameplay
         private bool subscribed;
         private bool triggered;
         private bool running;
+        private bool monitoringHunger;
+        private bool barracudaSequenceTriggered;
         private Coroutine sequenceRoutine;
+        private TunaSchoolFocusEvent pendingFocusEvent;
 
         private void Reset()
         {
@@ -67,6 +75,7 @@ namespace TestBoids.Gameplay
         private void OnValidate()
         {
             freezeDelayAfterFocusCamera = Mathf.Max(0f, freezeDelayAfterFocusCamera);
+            barracudaTriggerHungerPercent = Mathf.Clamp01(barracudaTriggerHungerPercent);
         }
 
         private void OnDisable()
@@ -77,6 +86,7 @@ namespace TestBoids.Gameplay
             }
 
             subscribed = false;
+            StopMonitoringHunger();
             StopRunningSequence();
         }
 
@@ -90,11 +100,11 @@ namespace TestBoids.Gameplay
             triggered = true;
             ResolveReferences();
             ResolveTunaFreezeController(focusEvent);
-            PrepareBarracudaSchool(focusEvent.FishSchool);
-            sequenceRoutine = StartCoroutine(RunSequence(focusEvent));
+            ResolveTunaMotor(focusEvent);
+            sequenceRoutine = StartCoroutine(RunSardineSequence(focusEvent));
         }
 
-        private IEnumerator RunSequence(TunaSchoolFocusEvent focusEvent)
+        private IEnumerator RunSardineSequence(TunaSchoolFocusEvent focusEvent)
         {
             running = true;
 
@@ -114,6 +124,22 @@ namespace TestBoids.Gameplay
             {
                 yield return WaitForDuration(sardineCameraDuration);
             }
+
+            SetActiveCamera(thirdPersonAimCamera);
+            UnfreezeTuna();
+            RaiseSardineSchoolGathered(focusEvent);
+
+            running = false;
+            sequenceRoutine = null;
+            BeginMonitoringHunger(focusEvent);
+        }
+
+        private IEnumerator RunBarracudaSequence(TunaSchoolFocusEvent focusEvent)
+        {
+            running = true;
+
+            FreezeTuna();
+            PrepareBarracudaSchool(focusEvent.FishSchool);
 
             if (barracudaCamera)
             {
@@ -140,7 +166,6 @@ namespace TestBoids.Gameplay
             SetActiveCamera(thirdPersonAimCamera);
             UnfreezeTuna();
             EnableBarracudaPredatorStrike();
-            RaiseSardineSchoolGathered(focusEvent);
 
             running = false;
             sequenceRoutine = null;
@@ -183,6 +208,33 @@ namespace TestBoids.Gameplay
             ResolveNamedCameras();
             ResolveBarracudaSchool();
             ResolveBarracudaPredatorStrikeController();
+        }
+
+        private void ResolveTunaMotor(TunaSchoolFocusEvent focusEvent)
+        {
+            if (!autoResolveMissingReferences || tunaMotor)
+            {
+                return;
+            }
+
+            if (focusEvent.Tuna)
+            {
+                tunaMotor = focusEvent.Tuna.GetComponent<TunaMotor>();
+                if (!tunaMotor)
+                {
+                    tunaMotor = focusEvent.Tuna.GetComponentInChildren<TunaMotor>(true);
+                }
+
+                if (!tunaMotor)
+                {
+                    tunaMotor = focusEvent.Tuna.GetComponentInParent<TunaMotor>(true);
+                }
+            }
+
+            if (!tunaMotor)
+            {
+                tunaMotor = FindFirstObjectByType<TunaMotor>(FindObjectsInactive.Include);
+            }
         }
 
         private void ResolveTunaFreezeController(TunaSchoolFocusEvent focusEvent)
@@ -303,6 +355,56 @@ namespace TestBoids.Gameplay
             }
 
             running = false;
+        }
+
+        private void BeginMonitoringHunger(TunaSchoolFocusEvent focusEvent)
+        {
+            pendingFocusEvent = focusEvent;
+            ResolveTunaMotor(focusEvent);
+            if (!tunaMotor || barracudaSequenceTriggered)
+            {
+                return;
+            }
+
+            if (!monitoringHunger)
+            {
+                tunaMotor.HungerChanged += OnTunaHungerChanged;
+                monitoringHunger = true;
+            }
+
+            TryStartBarracudaSequence();
+        }
+
+        private void StopMonitoringHunger()
+        {
+            if (tunaMotor && monitoringHunger)
+            {
+                tunaMotor.HungerChanged -= OnTunaHungerChanged;
+            }
+
+            monitoringHunger = false;
+        }
+
+        private void OnTunaHungerChanged(float currentHunger, float maxHunger)
+        {
+            TryStartBarracudaSequence();
+        }
+
+        private void TryStartBarracudaSequence()
+        {
+            if (!monitoringHunger || !tunaMotor || running || barracudaSequenceTriggered)
+            {
+                return;
+            }
+
+            if (tunaMotor.HungerPercent < barracudaTriggerHungerPercent)
+            {
+                return;
+            }
+
+            barracudaSequenceTriggered = true;
+            StopMonitoringHunger();
+            sequenceRoutine = StartCoroutine(RunBarracudaSequence(pendingFocusEvent));
         }
 
         private static void SetPriority(CinemachineCamera camera, int priority)

@@ -46,10 +46,10 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
-  - From: SardineCamera
+  - From: TunaCamera
     To: BarracudaCamera
     Blend:
-      Style: 1
+      Style: 6
       Time: 1
       CustomCurve:
         serializedVersion: 2
@@ -60,7 +60,7 @@ MonoBehaviour:
   - From: BarracudaCamera
     To: GTCamera
     Blend:
-      Style: 1
+      Style: 6
       Time: 1
       CustomCurve:
         serializedVersion: 2

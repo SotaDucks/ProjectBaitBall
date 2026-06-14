@@ -48828,8 +48828,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.GameplayEventBus
   focusTransitionDuration: 4
-  barracudaCameraDuration: 2.5
-  gtCameraDuration: 2.5
+  barracudaCameraDuration: 4
+  gtCameraDuration: 3
 --- !u!4 &390895504
 Transform:
   m_ObjectHideFlags: 0
@@ -48859,6 +48859,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.TunaSchoolFocusSequenceController
   eventBus: {fileID: 390895503}
   tunaFreezeController: {fileID: 109750656}
+  tunaMotor: {fileID: 0}
   thirdPersonAimCamera: {fileID: 1033788101}
   tunaSchoolFocusCamera: {fileID: 1632201831}
   barracudaCamera: {fileID: 2020551942}
@@ -48874,6 +48875,7 @@ MonoBehaviour:
   inactivePriority: 0
   triggerOnce: 1
   stopNarrationOnDisable: 1
+  barracudaTriggerHungerPercent: 0.3
   barracudaSchoolObjectName: BarracudaSchoolManager
   barracudaCameraObjectName: BarracudaCamera
   gtCameraObjectName: GTCamera
@@ -163477,7 +163479,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1260921576
 MonoBehaviour:
   m_ObjectHideFlags: 0
