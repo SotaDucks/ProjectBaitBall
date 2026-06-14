@@ -39454,15 +39454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0624224
+      value: 0.19379285
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.0089707
+      value: -0.44075957
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9574603
+      value: 2.2215986
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -77527,6 +77527,7 @@ GameObject:
   - component: {fileID: 596421090}
   - component: {fileID: 596421089}
   - component: {fileID: 596421092}
+  - component: {fileID: 874360210987654321}
   m_Layer: 0
   m_Name: BaitBallManager
   m_TagString: Untagged
@@ -127042,15 +127043,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0624224
+      value: 0.19379285
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6666667
+      value: -0.44075957
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9574603
+      value: 2.2215986
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -167831,15 +167832,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0624224
+      value: 0.19379285
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.0089707
+      value: -0.44075957
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.9574603
+      value: 2.2215986
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -278804,6 +278805,70 @@ Transform:
   - {fileID: 1999766844}
   m_Father: {fileID: 790907572}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &874360210987654321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 596421088}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c83b5886ccb47c0954676e7355a8102, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.BaitBallDepletionController
+  eventBus: {fileID: 390895503}
+  tunaMotor: {fileID: 109750650}
+  baitBallManager: {fileID: 596421090}
+  behaviorModulator: {fileID: 596421089}
+  autoResolveMissingReferences: 1
+  stages:
+  - HungerThreshold: 0.25
+    ElapsedTimeThreshold: 30
+    TargetFishCount: 18000
+    DepletionDuration: 1.5
+  - HungerThreshold: 0.4
+    ElapsedTimeThreshold: 60
+    TargetFishCount: 12000
+    DepletionDuration: 2
+  - HungerThreshold: 0.7
+    ElapsedTimeThreshold: 90
+    TargetFishCount: 5000
+    DepletionDuration: 3
+  transitionFinalStageToLooseFormation: 1
+  disableBehaviorModulatorOnFinalStage: 1
+  finalLooseFormation:
+    Radius: 10
+    CenteringWeight: 0.15
+    ToroidalFlowWeight: 0.1
+    SeparationRadius: 3
+    AlignWeight: 0.15
+    CohesionWeight: 0.1
+  finalFormationTransitionCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  useUnscaledTime: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

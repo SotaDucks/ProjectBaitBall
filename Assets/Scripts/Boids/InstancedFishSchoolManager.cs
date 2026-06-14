@@ -456,6 +456,85 @@ namespace TestBoids.Boids
             return bestIndex >= 0 && RemoveFishAtIndex(bestIndex);
         }
 
+        public int RemoveRandomFish(int count)
+        {
+            if (!fish.IsCreated || fish.Length == 0 || count <= 0)
+            {
+                return 0;
+            }
+
+            int oldCount = fish.Length;
+            int removeCount = Mathf.Min(count, oldCount);
+            int newCount = oldCount - removeCount;
+            fishCount = newCount;
+            if (newCount <= 0)
+            {
+                DisposeFishArrays();
+                return removeCount;
+            }
+
+            int[] shuffledIndices = new int[oldCount];
+            bool[] removedIndices = new bool[oldCount];
+            for (int i = 0; i < oldCount; i++)
+            {
+                shuffledIndices[i] = i;
+            }
+
+            for (int i = 0; i < removeCount; i++)
+            {
+                int swapIndex = UnityEngine.Random.Range(i, oldCount);
+                int removedIndex = shuffledIndices[swapIndex];
+                shuffledIndices[swapIndex] = shuffledIndices[i];
+                shuffledIndices[i] = removedIndex;
+                removedIndices[removedIndex] = true;
+            }
+
+            NativeArray<FishState> oldFish = fish;
+            NativeArray<FishState> oldNextFish = nextFish;
+            NativeArray<float3> oldNextVelocities = nextVelocities;
+            NativeArray<float3> oldNextPositions = nextPositions;
+            float[] oldAnimationPhaseOffsets = animationPhaseOffsets ?? Array.Empty<float>();
+
+            NativeArray<FishState> newFish = new(newCount, Allocator.Persistent);
+            NativeArray<FishState> newNextFish = new(newCount, Allocator.Persistent);
+            NativeArray<float3> newNextVelocities = new(newCount, Allocator.Persistent);
+            NativeArray<float3> newNextPositions = new(newCount, Allocator.Persistent);
+            float[] newAnimationPhaseOffsets = new float[newCount];
+            int writeIndex = 0;
+
+            for (int readIndex = 0; readIndex < oldCount; readIndex++)
+            {
+                if (removedIndices[readIndex])
+                {
+                    continue;
+                }
+
+                FishState state = oldFish[readIndex];
+                newFish[writeIndex] = state;
+                newNextFish[writeIndex] = state;
+                if (readIndex < oldAnimationPhaseOffsets.Length)
+                {
+                    newAnimationPhaseOffsets[writeIndex] = oldAnimationPhaseOffsets[readIndex];
+                }
+
+                writeIndex++;
+            }
+
+            if (oldFish.IsCreated) oldFish.Dispose();
+            if (oldNextFish.IsCreated) oldNextFish.Dispose();
+            if (oldNextVelocities.IsCreated) oldNextVelocities.Dispose();
+            if (oldNextPositions.IsCreated) oldNextPositions.Dispose();
+
+            fish = newFish;
+            nextFish = newNextFish;
+            nextVelocities = newNextVelocities;
+            nextPositions = newNextPositions;
+            instanceMatrices = new Matrix4x4[newCount];
+            animationPhaseOffsets = newAnimationPhaseOffsets;
+            UpdateInstanceMatrices();
+            return removeCount;
+        }
+
         internal void SetFocusMovementMultiplier(float multiplier)
         {
             focusMovementMultiplier = Mathf.Max(1f, multiplier);

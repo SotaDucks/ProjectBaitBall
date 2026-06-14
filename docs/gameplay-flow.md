@@ -24,6 +24,13 @@ flowchart TD
     O --> P["切换 GTCamera"]
     P --> Q["切回 TunaCamera，恢复 Tuna 控制"]
     Q --> R["启用 PredatorStrikeController"]
+    K --> S["开始累计 Baitball 消耗流程时间"]
+    S --> T{"当前消耗阶段的饥饿值或累计时间达到阈值？"}
+    T -- "否" --> T
+    T -- "是" --> U["在阶段持续时间内随机逐条减少 Sardine"]
+    U --> V{"是否为最后阶段？"}
+    V -- "否" --> T
+    V -- "是" --> W["同步过渡为松散残群形态"]
 ```
 
 ## 第一部分：Intro 与 Tuna 脱离鱼群
@@ -293,6 +300,39 @@ TunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)
 
 `baitBallTarget` 未手动指定时，`ResolveReferences()` 会查找场景中的 `BaitBallFormationController`，并使用其 Transform。
 
+## 第六部分：Baitball 分阶段减少与松散残群
+
+控制脚本：
+
+- `Assets/Scripts/Gameplay/BaitBallDepletionController.cs`
+
+流程从 `SardineSchoolGathered` 广播时开始，与 Tuna 饥饿值监听使用同一起点。控制器使用同一个累计计时器依次处理三个减少阶段：
+
+1. 当前阶段的 `HungerThreshold` 或 `ElapsedTimeThreshold` 满足任意一个条件后，开始该阶段。
+2. 在 `DepletionDuration` 内随机逐条移除 Sardine，直到达到 `TargetFishCount`。
+3. Tuna 捕食可同时减少数量；若数量提前达到目标，控制器停止额外移除。
+4. 当前阶段完成后检查下一阶段；累计时间不会重置。
+5. Tuna 冻结和 Barracuda 镜头演出不会停止计时或正在执行的减少过程。
+6. 最后阶段在减少 Sardine 的同时，将鱼群平滑过渡为松散残群形态。
+
+最后阶段只修改以下形态参数：
+
+- `Radius`
+- `CenteringWeight`
+- `ToroidalFlowWeight`
+- `SeparationRadius`
+- `AlignWeight`
+- `CohesionWeight`
+
+其他 `FormationSettings` 保持最后阶段触发前的值。默认会在最后阶段开始时禁用 `BaitBallBehaviorModulator`，避免它继续覆盖松散残群的目标权重。
+
+随机移除接口位于：
+
+- `Assets/Scripts/Boids/InstancedFishSchoolManager.cs`
+- `RemoveRandomFish(int count)`
+
+该接口随机选择指定数量的鱼并一次性调整底层数组，保留其余实例的位置与运动状态，不会像 `SetCount()` 一样重新生成整个鱼群。阶段控制器每帧根据当前进度调用一次，使大量 Sardine 仍能在阶段持续时间内逐步消失，同时避免逐条重建数组。
+
 ## TunaSchoolFocusSequenceController 关键方法
 
 | 方法 | 职责 |
@@ -351,6 +391,15 @@ TunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)
 - 初始延迟、攻击间隔、个体冷却时间。
 - 攻击速度、Baitball 半径、穿出距离和横向瞄准范围。
 
+### BaitBallDepletionController
+
+- `Stages`：按顺序配置每阶段的饥饿值阈值、累计时间阈值、目标剩余数量和减少持续时间。
+- `Transition Final Stage To Loose Formation`
+- `Disable Behavior Modulator On Final Stage`
+- `Final Loose Formation`：配置最后阶段的六个精选形态参数。
+- `Final Formation Transition Curve`
+- `Use Unscaled Time`
+
 ## 自动查找使用的场景对象名
 
 `TunaSchoolFocusSequenceController` 默认按以下名称自动查找：
@@ -371,4 +420,3 @@ TunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)
 4. 恢复 Tuna 控制。
 5. 切回 TunaCamera。
 6. 根据配置停止旁白。
-
