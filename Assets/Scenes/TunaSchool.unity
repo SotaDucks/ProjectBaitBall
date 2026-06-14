@@ -48876,7 +48876,7 @@ MonoBehaviour:
   triggerOnce: 1
   stopNarrationOnDisable: 1
   barracudaRetirementZ: 250
-  barracudaDeactivationDelay: 5
+  barracudaDeactivationDelay: 8
   barracudaTriggerHungerPercent: 0.3
   barracudaSchoolObjectName: BarracudaSchoolManager
   barracudaCameraObjectName: BarracudaCamera
