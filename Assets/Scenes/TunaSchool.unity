@@ -48876,7 +48876,7 @@ MonoBehaviour:
   triggerOnce: 1
   stopNarrationOnDisable: 1
   barracudaRetirementZ: 250
-  barracudaDeactivationDelay: 8
+  barracudaDeactivationDelay: 15
   barracudaTriggerHungerPercent: 0.3
   barracudaSchoolObjectName: BarracudaSchoolManager
   barracudaCameraObjectName: BarracudaCamera
@@ -278828,8 +278828,8 @@ MonoBehaviour:
   depletion:
     HungerThreshold: 0.5
     ElapsedTimeThreshold: 90
-    TargetFishCount: 1000
-    DepletionDuration: 8
+    TargetFishCount: 50
+    DepletionDuration: 20
   transitionToLooseFormation: 1
   disableBehaviorModulatorOnDepletion: 1
   looseFormation:
@@ -278843,8 +278843,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 0
+      time: 0.006668091
+      value: 0.99905396
       inSlope: 0
       outSlope: 0
       tangentMode: 0
