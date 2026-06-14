@@ -35,6 +35,10 @@ namespace TestBoids.Gameplay
         [SerializeField] private bool triggerOnce = true;
         [SerializeField] private bool stopNarrationOnDisable = true;
 
+        [Header("Barracuda Retirement")]
+        [SerializeField] private float barracudaRetirementZ = 250f;
+        [SerializeField, Min(0f)] private float barracudaDeactivationDelay = 5f;
+
         [Header("Hunger Trigger")]
         [Tooltip("Tuna hunger percentage required to start the Barracuda camera sequence.")]
         [SerializeField, Range(0f, 1f)] private float barracudaTriggerHungerPercent = 0.8f;
@@ -50,6 +54,7 @@ namespace TestBoids.Gameplay
         private bool monitoringHunger;
         private bool barracudaSequenceTriggered;
         private Coroutine sequenceRoutine;
+        private Coroutine barracudaRetirementRoutine;
         private TunaSchoolFocusEvent pendingFocusEvent;
 
         private void Reset()
@@ -75,6 +80,7 @@ namespace TestBoids.Gameplay
         private void OnValidate()
         {
             freezeDelayAfterFocusCamera = Mathf.Max(0f, freezeDelayAfterFocusCamera);
+            barracudaDeactivationDelay = Mathf.Max(0f, barracudaDeactivationDelay);
             barracudaTriggerHungerPercent = Mathf.Clamp01(barracudaTriggerHungerPercent);
         }
 
@@ -88,6 +94,30 @@ namespace TestBoids.Gameplay
             subscribed = false;
             StopMonitoringHunger();
             StopRunningSequence();
+            StopBarracudaRetirement();
+        }
+
+        public void RetireBarracudaSchool()
+        {
+            ResolveReferences();
+            if (!barracudaSchool)
+            {
+                return;
+            }
+
+            StopBarracudaRetirement();
+
+            Vector3 position = barracudaSchool.position;
+            position.z = barracudaRetirementZ;
+            barracudaSchool.position = position;
+
+            if (barracudaDeactivationDelay <= 0f)
+            {
+                barracudaSchool.gameObject.SetActive(false);
+                return;
+            }
+
+            barracudaRetirementRoutine = StartCoroutine(DeactivateBarracudaSchoolAfterDelay());
         }
 
         private void OnTunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)
@@ -169,6 +199,18 @@ namespace TestBoids.Gameplay
 
             running = false;
             sequenceRoutine = null;
+        }
+
+        private IEnumerator DeactivateBarracudaSchoolAfterDelay()
+        {
+            yield return WaitForDuration(barracudaDeactivationDelay);
+
+            if (barracudaSchool)
+            {
+                barracudaSchool.gameObject.SetActive(false);
+            }
+
+            barracudaRetirementRoutine = null;
         }
 
         private void SubscribeToEventBus()
@@ -355,6 +397,17 @@ namespace TestBoids.Gameplay
             }
 
             running = false;
+        }
+
+        private void StopBarracudaRetirement()
+        {
+            if (barracudaRetirementRoutine == null)
+            {
+                return;
+            }
+
+            StopCoroutine(barracudaRetirementRoutine);
+            barracudaRetirementRoutine = null;
         }
 
         private void BeginMonitoringHunger(TunaSchoolFocusEvent focusEvent)

@@ -9,14 +9,14 @@ namespace TestBoids.Gameplay
     public sealed class BaitBallDepletionController : MonoBehaviour
     {
         [Serializable]
-        private struct DepletionStage
+        private struct DepletionSettings
         {
             [Range(0f, 1f)] public float HungerThreshold;
             [Min(0f)] public float ElapsedTimeThreshold;
             [Min(0)] public int TargetFishCount;
             [Min(0f)] public float DepletionDuration;
 
-            public DepletionStage(
+            public DepletionSettings(
                 float hungerThreshold,
                 float elapsedTimeThreshold,
                 int targetFishCount,
@@ -61,23 +61,19 @@ namespace TestBoids.Gameplay
         [SerializeField] private TunaMotor tunaMotor;
         [SerializeField] private InstancedFishSchoolManager baitBallManager;
         [SerializeField] private BaitBallBehaviorModulator behaviorModulator;
+        [SerializeField] private TunaSchoolFocusSequenceController focusSequenceController;
         [SerializeField] private bool autoResolveMissingReferences = true;
 
-        [Header("Depletion Stages")]
-        [Tooltip("Stages run in array order. A stage starts when either its hunger or cumulative time threshold is reached.")]
-        [SerializeField] private DepletionStage[] stages =
-        {
-            new(0.25f, 30f, 50, 1.5f),
-            new(0.5f, 60f, 30, 2f),
-            new(0.75f, 90f, 12, 3f)
-        };
+        [Header("Depletion")]
+        [Tooltip("Depletion starts when either the hunger or cumulative time threshold is reached.")]
+        [SerializeField] private DepletionSettings depletion = new(0.7f, 90f, 5000, 3f);
 
-        [Header("Final Loose Formation")]
-        [SerializeField] private bool transitionFinalStageToLooseFormation = true;
-        [SerializeField] private bool disableBehaviorModulatorOnFinalStage = true;
-        [SerializeField] private LooseFormationSettings finalLooseFormation =
+        [Header("Loose Formation")]
+        [SerializeField] private bool transitionToLooseFormation = true;
+        [SerializeField] private bool disableBehaviorModulatorOnDepletion = true;
+        [SerializeField] private LooseFormationSettings looseFormation =
             new(10f, 0.15f, 0.1f, 3f, 0.15f, 0.1f);
-        [SerializeField] private AnimationCurve finalFormationTransitionCurve =
+        [SerializeField] private AnimationCurve formationTransitionCurve =
             AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
         [Header("Timing")]
@@ -87,16 +83,14 @@ namespace TestBoids.Gameplay
         private bool subscribed;
         private bool started;
         private bool monitoring;
-        private bool stageRunning;
-        private int activeStageIndex;
-        private int stageStartFishCount;
-        private int stageTargetFishCount;
+        private bool depletionRunning;
+        private int depletionTargetFishCount;
         private int plannedControllerRemovals;
         private int completedControllerRemovals;
         private float elapsedTime;
-        private float stageElapsed;
-        private InstancedFishSchoolManager.FormationSettings stageStartFormation;
-        private InstancedFishSchoolManager.FormationSettings stageTargetFormation;
+        private float depletionElapsed;
+        private InstancedFishSchoolManager.FormationSettings startFormation;
+        private InstancedFishSchoolManager.FormationSettings targetFormation;
 
         private void Reset()
         {
@@ -120,25 +114,17 @@ namespace TestBoids.Gameplay
 
         private void OnValidate()
         {
-            if (stages != null)
-            {
-                for (int i = 0; i < stages.Length; i++)
-                {
-                    DepletionStage stage = stages[i];
-                    stage.HungerThreshold = Mathf.Clamp01(stage.HungerThreshold);
-                    stage.ElapsedTimeThreshold = Mathf.Max(0f, stage.ElapsedTimeThreshold);
-                    stage.TargetFishCount = Mathf.Max(0, stage.TargetFishCount);
-                    stage.DepletionDuration = Mathf.Max(0f, stage.DepletionDuration);
-                    stages[i] = stage;
-                }
-            }
+            depletion.HungerThreshold = Mathf.Clamp01(depletion.HungerThreshold);
+            depletion.ElapsedTimeThreshold = Mathf.Max(0f, depletion.ElapsedTimeThreshold);
+            depletion.TargetFishCount = Mathf.Max(0, depletion.TargetFishCount);
+            depletion.DepletionDuration = Mathf.Max(0f, depletion.DepletionDuration);
 
-            finalLooseFormation.Radius = Mathf.Max(0.001f, finalLooseFormation.Radius);
-            finalLooseFormation.CenteringWeight = Mathf.Max(0f, finalLooseFormation.CenteringWeight);
-            finalLooseFormation.ToroidalFlowWeight = Mathf.Max(0f, finalLooseFormation.ToroidalFlowWeight);
-            finalLooseFormation.SeparationRadius = Mathf.Max(0f, finalLooseFormation.SeparationRadius);
-            finalLooseFormation.AlignWeight = Mathf.Max(0f, finalLooseFormation.AlignWeight);
-            finalLooseFormation.CohesionWeight = Mathf.Max(0f, finalLooseFormation.CohesionWeight);
+            looseFormation.Radius = Mathf.Max(0.001f, looseFormation.Radius);
+            looseFormation.CenteringWeight = Mathf.Max(0f, looseFormation.CenteringWeight);
+            looseFormation.ToroidalFlowWeight = Mathf.Max(0f, looseFormation.ToroidalFlowWeight);
+            looseFormation.SeparationRadius = Mathf.Max(0f, looseFormation.SeparationRadius);
+            looseFormation.AlignWeight = Mathf.Max(0f, looseFormation.AlignWeight);
+            looseFormation.CohesionWeight = Mathf.Max(0f, looseFormation.CohesionWeight);
         }
 
         private void OnDisable()
@@ -150,7 +136,7 @@ namespace TestBoids.Gameplay
 
             subscribed = false;
             monitoring = false;
-            stageRunning = false;
+            depletionRunning = false;
         }
 
         private void Update()
@@ -163,13 +149,13 @@ namespace TestBoids.Gameplay
             float deltaTime = useUnscaledTime ? Time.unscaledDeltaTime : Time.deltaTime;
             elapsedTime += deltaTime;
 
-            if (stageRunning)
+            if (depletionRunning)
             {
-                UpdateActiveStage(deltaTime);
+                UpdateDepletion(deltaTime);
                 return;
             }
 
-            TryStartNextStage();
+            TryStartDepletion();
         }
 
         private void OnSardineSchoolGathered(SardineSchoolGatheredEvent gatheredEvent)
@@ -187,36 +173,28 @@ namespace TestBoids.Gameplay
 
             started = true;
             monitoring = true;
-            activeStageIndex = 0;
             elapsedTime = 0f;
-            TryStartNextStage();
+            TryStartDepletion();
         }
 
-        private void TryStartNextStage()
+        private void TryStartDepletion()
         {
-            if (!monitoring || stageRunning)
+            if (!monitoring || depletionRunning)
             {
                 return;
             }
 
-            if (stages == null || activeStageIndex >= stages.Length)
-            {
-                monitoring = false;
-                return;
-            }
-
-            DepletionStage stage = stages[activeStageIndex];
-            bool hungerReached = tunaMotor && tunaMotor.HungerPercent >= stage.HungerThreshold;
-            bool timeReached = elapsedTime >= stage.ElapsedTimeThreshold;
+            bool hungerReached = tunaMotor && tunaMotor.HungerPercent >= depletion.HungerThreshold;
+            bool timeReached = elapsedTime >= depletion.ElapsedTimeThreshold;
             if (!hungerReached && !timeReached)
             {
                 return;
             }
 
-            BeginStage(stage);
+            BeginDepletion();
         }
 
-        private void BeginStage(DepletionStage stage)
+        private void BeginDepletion()
         {
             if (!baitBallManager)
             {
@@ -224,112 +202,99 @@ namespace TestBoids.Gameplay
                 return;
             }
 
-            stageRunning = true;
-            stageElapsed = 0f;
-            stageStartFishCount = baitBallManager.CurrentFishCount;
-            stageTargetFishCount = Mathf.Max(0, stage.TargetFishCount);
-            plannedControllerRemovals = Mathf.Max(0, stageStartFishCount - stageTargetFishCount);
+            depletionRunning = true;
+            depletionElapsed = 0f;
+            depletionTargetFishCount = Mathf.Max(0, depletion.TargetFishCount);
+            plannedControllerRemovals = Mathf.Max(0, baitBallManager.CurrentFishCount - depletionTargetFishCount);
             completedControllerRemovals = 0;
 
-            if (ShouldTransitionFormation())
+            if (transitionToLooseFormation)
             {
                 DisableBehaviorModulatorIfNeeded();
-                stageStartFormation = baitBallManager.GetFormationSettings();
-                stageTargetFormation = BuildLooseFormationTarget(stageStartFormation);
+                startFormation = baitBallManager.GetFormationSettings();
+                targetFormation = BuildLooseFormationTarget(startFormation);
             }
 
-            if (stage.DepletionDuration <= 0f)
+            if (depletion.DepletionDuration <= 0f)
             {
-                ApplyStageProgress(1f);
-                CompleteActiveStage();
-                return;
-            }
-
-            if (baitBallManager.CurrentFishCount <= stageTargetFishCount && !ShouldTransitionFormation())
-            {
-                CompleteActiveStage();
+                ApplyDepletionProgress(1f);
+                CompleteDepletion();
             }
         }
 
-        private void UpdateActiveStage(float deltaTime)
+        private void UpdateDepletion(float deltaTime)
         {
-            if (!baitBallManager || stages == null || activeStageIndex >= stages.Length)
+            if (!baitBallManager)
             {
                 monitoring = false;
-                stageRunning = false;
+                depletionRunning = false;
                 return;
             }
 
-            DepletionStage stage = stages[activeStageIndex];
-            stageElapsed += deltaTime;
-            float progress = Mathf.Clamp01(stageElapsed / stage.DepletionDuration);
-            ApplyStageProgress(progress);
-
-            bool reachedTargetEarly = baitBallManager.CurrentFishCount <= stageTargetFishCount;
-            if (progress >= 1f || (reachedTargetEarly && !ShouldTransitionFormation()))
+            depletionElapsed += deltaTime;
+            float progress = Mathf.Clamp01(depletionElapsed / depletion.DepletionDuration);
+            ApplyDepletionProgress(progress);
+            if (progress >= 1f)
             {
-                CompleteActiveStage();
+                CompleteDepletion();
             }
         }
 
-        private void ApplyStageProgress(float progress)
+        private void ApplyDepletionProgress(float progress)
         {
             int desiredControllerRemovals = progress >= 1f
                 ? plannedControllerRemovals
                 : Mathf.FloorToInt(plannedControllerRemovals * progress);
 
             int remainingControllerRemovals = desiredControllerRemovals - completedControllerRemovals;
-            int removableFishCount = baitBallManager.CurrentFishCount - stageTargetFishCount;
+            int removableFishCount = baitBallManager.CurrentFishCount - depletionTargetFishCount;
             if (remainingControllerRemovals > 0 && removableFishCount > 0)
             {
                 int removeCount = Mathf.Min(remainingControllerRemovals, removableFishCount);
                 completedControllerRemovals += baitBallManager.RemoveRandomFish(removeCount);
             }
 
-            if (!ShouldTransitionFormation())
+            if (!transitionToLooseFormation)
             {
                 return;
             }
 
-            float shapedProgress = finalFormationTransitionCurve != null
-                ? Mathf.Clamp01(finalFormationTransitionCurve.Evaluate(progress))
+            float shapedProgress = formationTransitionCurve != null
+                ? Mathf.Clamp01(formationTransitionCurve.Evaluate(progress))
                 : progress;
             baitBallManager.ApplyFormationSettings(
                 InstancedFishSchoolManager.FormationSettings.Lerp(
-                    stageStartFormation,
-                    stageTargetFormation,
+                    startFormation,
+                    targetFormation,
                     shapedProgress));
         }
 
-        private void CompleteActiveStage()
+        private void CompleteDepletion()
         {
-            if (ShouldTransitionFormation() && baitBallManager)
+            if (transitionToLooseFormation && baitBallManager)
             {
-                baitBallManager.ApplyFormationSettings(stageTargetFormation);
+                baitBallManager.ApplyFormationSettings(targetFormation);
             }
 
-            stageRunning = false;
-            activeStageIndex++;
-            TryStartNextStage();
-        }
+            depletionRunning = false;
+            monitoring = false;
 
-        private bool ShouldTransitionFormation()
-        {
-            return transitionFinalStageToLooseFormation
-                && stages != null
-                && stages.Length > 0
-                && activeStageIndex == stages.Length - 1;
+            ResolveReferences();
+            if (focusSequenceController)
+            {
+                focusSequenceController.RetireBarracudaSchool();
+            }
         }
 
         private InstancedFishSchoolManager.FormationSettings BuildLooseFormationTarget(
             InstancedFishSchoolManager.FormationSettings source)
         {
-            source.Radius = finalLooseFormation.Radius;
-            source.CenteringWeight = finalLooseFormation.CenteringWeight;
-            source.ToroidalFlowWeight = finalLooseFormation.ToroidalFlowWeight;
-            source.SeparationRadius = finalLooseFormation.SeparationRadius;
-            source.AlignWeight = finalLooseFormation.AlignWeight;
-            source.CohesionWeight = finalLooseFormation.CohesionWeight;
+            source.Radius = looseFormation.Radius;
+            source.CenteringWeight = looseFormation.CenteringWeight;
+            source.ToroidalFlowWeight = looseFormation.ToroidalFlowWeight;
+            source.SeparationRadius = looseFormation.SeparationRadius;
+            source.AlignWeight = looseFormation.AlignWeight;
+            source.CohesionWeight = looseFormation.CohesionWeight;
             return source;
         }
 
@@ -381,6 +346,12 @@ namespace TestBoids.Gameplay
             {
                 behaviorModulator = baitBallManager.GetComponent<BaitBallBehaviorModulator>();
             }
+
+            if (!focusSequenceController)
+            {
+                focusSequenceController = FindFirstObjectByType<TunaSchoolFocusSequenceController>(
+                    FindObjectsInactive.Include);
+            }
         }
 
         private void ResolveReferences(SardineSchoolGatheredEvent gatheredEvent)
@@ -426,7 +397,7 @@ namespace TestBoids.Gameplay
 
         private void DisableBehaviorModulatorIfNeeded()
         {
-            if (!disableBehaviorModulatorOnFinalStage)
+            if (!disableBehaviorModulatorOnDepletion)
             {
                 return;
             }

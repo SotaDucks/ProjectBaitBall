@@ -39454,15 +39454,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19379285
+      value: 0.194617
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44075957
+      value: -0.44086644
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2215986
+      value: 2.2208707
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -48875,6 +48875,8 @@ MonoBehaviour:
   inactivePriority: 0
   triggerOnce: 1
   stopNarrationOnDisable: 1
+  barracudaRetirementZ: 250
+  barracudaDeactivationDelay: 5
   barracudaTriggerHungerPercent: 0.3
   barracudaSchoolObjectName: BarracudaSchoolManager
   barracudaCameraObjectName: BarracudaCamera
@@ -127043,15 +127045,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19379285
+      value: 0.194617
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44075957
+      value: -0.44086644
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2215986
+      value: 2.2208707
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -167832,15 +167834,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.19379285
+      value: 0.194617
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44075957
+      value: -0.44086644
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2215986
+      value: 2.2208707
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -278821,30 +278823,23 @@ MonoBehaviour:
   tunaMotor: {fileID: 109750650}
   baitBallManager: {fileID: 596421090}
   behaviorModulator: {fileID: 596421089}
+  focusSequenceController: {fileID: 0}
   autoResolveMissingReferences: 1
-  stages:
-  - HungerThreshold: 0.25
-    ElapsedTimeThreshold: 30
-    TargetFishCount: 18000
-    DepletionDuration: 1.5
-  - HungerThreshold: 0.4
-    ElapsedTimeThreshold: 60
-    TargetFishCount: 12000
-    DepletionDuration: 2
-  - HungerThreshold: 0.7
+  depletion:
+    HungerThreshold: 0.5
     ElapsedTimeThreshold: 90
-    TargetFishCount: 5000
-    DepletionDuration: 3
-  transitionFinalStageToLooseFormation: 1
-  disableBehaviorModulatorOnFinalStage: 1
-  finalLooseFormation:
-    Radius: 10
+    TargetFishCount: 1000
+    DepletionDuration: 8
+  transitionToLooseFormation: 1
+  disableBehaviorModulatorOnDepletion: 1
+  looseFormation:
+    Radius: 12
     CenteringWeight: 0.15
     ToroidalFlowWeight: 0.1
     SeparationRadius: 3
     AlignWeight: 0.15
     CohesionWeight: 0.1
-  finalFormationTransitionCurve:
+  formationTransitionCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
