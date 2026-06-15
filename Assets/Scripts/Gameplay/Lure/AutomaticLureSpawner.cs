@@ -35,7 +35,6 @@ namespace TestBoids.Gameplay.Lure
 
         [Header("Pass By Tuna")]
         [SerializeField, Min(0f)] private float horizontalPassRadius = 2f;
-        [SerializeField, Min(0f)] private float verticalPassRange = 1f;
 
         private readonly List<AutomaticLureMotor> activeLures = new();
         private float nextSpawnAt;
@@ -69,7 +68,6 @@ namespace TestBoids.Gameplay.Lure
             minimumSubmersionDepth = Mathf.Max(0f, minimumSubmersionDepth);
             obstacleClearanceRadius = Mathf.Max(0f, obstacleClearanceRadius);
             horizontalPassRadius = Mathf.Max(0f, horizontalPassRadius);
-            verticalPassRange = Mathf.Max(0f, verticalPassRange);
         }
 
         private void Update()
@@ -106,7 +104,7 @@ namespace TestBoids.Gameplay.Lure
                 : Quaternion.identity;
 
             AutomaticLureMotor lure = Instantiate(lurePrefab, spawnPosition, spawnRotation, spawnParent);
-            lure.ConfigurePass(tuna, passPoint);
+            lure.ConfigurePass(tuna, passPoint, waterSurfaceHeight);
             activeLures.Add(lure);
             return lure;
         }
@@ -146,9 +144,7 @@ namespace TestBoids.Gameplay.Lure
         private Vector3 BuildPassPoint()
         {
             Vector2 circle = Random.insideUnitCircle * horizontalPassRadius;
-            Vector3 passPoint = tuna.position
-                + new Vector3(circle.x, Random.Range(-verticalPassRange, verticalPassRange), circle.y);
-            return KeepBelowWaterSurface(passPoint);
+            return tuna.position + new Vector3(circle.x, 0f, circle.y);
         }
 
         private bool IsOutsideCameraView(Vector3 worldPosition)

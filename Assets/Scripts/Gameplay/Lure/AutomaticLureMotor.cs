@@ -9,13 +9,8 @@ namespace TestBoids.Gameplay.Lure
         private enum TravelStage
         {
             ApproachingTuna,
-            Departing
-        }
-
-        private enum MotionPhase
-        {
-            Retrieve,
-            Jerk
+            Departing,
+            Surfacing
         }
 
         [Header("References")]
@@ -26,38 +21,33 @@ namespace TestBoids.Gameplay.Lure
         [SerializeField, Min(0.1f)] private float retrieveSpeed = 5f;
         [SerializeField, Min(0.1f)] private float acceleration = 8f;
         [SerializeField, Min(0.1f)] private float rotationSpeed = 8f;
+        [SerializeField, Range(0f, 15f)] private float retrieveUpwardAngle = 1.5f;
         [SerializeField, Min(0f)] private float retrieveSwayAmplitude = 18f;
         [SerializeField, Min(0.1f)] private float retrieveSwayFrequency = 5f;
-
-        [Header("Jerk")]
-        [SerializeField] private Vector2 jerkIntervalRange = new(0.8f, 1.8f);
-        [SerializeField, Min(0.05f)] private float jerkDuration = 0.25f;
-        [SerializeField, Min(0.1f)] private float jerkSpeed = 10f;
-        [SerializeField, Range(0f, 90f)] private float jerkAngleRange = 28f;
-        [SerializeField, Min(0f)] private float jerkSwayAmplitude = 55f;
-        [SerializeField, Min(0.1f)] private float jerkSwayFrequency = 14f;
 
         [Header("Pass And Departure")]
         [SerializeField, Min(0.1f)] private float passArrivalDistance = 1.2f;
         [SerializeField, Min(0.1f)] private float departureDistance = 18f;
         [SerializeField, Min(0.1f)] private float maximumLifetime = 20f;
 
+        [Header("Surface Exit")]
+        [SerializeField, Range(30f, 89f)] private float surfaceExitAngle = 65f;
+        [SerializeField, Min(0.1f)] private float surfaceExitSpeed = 12f;
+        [SerializeField, Min(0f)] private float surfaceExitHeightOffset = 0.1f;
+
         private Rigidbody body;
         private Transform tuna;
         private Vector3 horizontalPassOffset;
-        private float passWorldY;
         private Vector3 departureDirection;
         private Vector3 departureStartPosition;
+        private Vector3 surfaceExitDirection;
         private Quaternion visualBaseLocalRotation;
         private TravelStage travelStage;
-        private MotionPhase motionPhase;
-        private Vector3 jerkDirection;
-        private float phaseEndsAt;
-        private float nextJerkAt;
+        private float waterSurfaceHeight;
         private float spawnedAt;
         private bool configured;
 
-        public bool HasPassedTuna => configured && travelStage == TravelStage.Departing;
+        public bool HasPassedTuna => configured && travelStage != TravelStage.ApproachingTuna;
 
         private void Reset()
         {
@@ -68,7 +58,7 @@ namespace TestBoids.Gameplay.Lure
         private void Awake()
         {
             body = GetComponent<Rigidbody>();
-            if (visualRoot)
+            if (HasIndependentVisualRoot())
             {
                 visualBaseLocalRotation = visualRoot.localRotation;
             }
@@ -80,13 +70,11 @@ namespace TestBoids.Gameplay.Lure
         private void OnEnable()
         {
             spawnedAt = Time.time;
-            motionPhase = MotionPhase.Retrieve;
-            ScheduleNextJerk();
         }
 
         private void OnDisable()
         {
-            if (visualRoot)
+            if (HasIndependentVisualRoot())
             {
                 visualRoot.localRotation = visualBaseLocalRotation;
             }
@@ -97,34 +85,30 @@ namespace TestBoids.Gameplay.Lure
             retrieveSpeed = Mathf.Max(0.1f, retrieveSpeed);
             acceleration = Mathf.Max(0.1f, acceleration);
             rotationSpeed = Mathf.Max(0.1f, rotationSpeed);
+            retrieveUpwardAngle = Mathf.Clamp(retrieveUpwardAngle, 0f, 15f);
             retrieveSwayAmplitude = Mathf.Max(0f, retrieveSwayAmplitude);
             retrieveSwayFrequency = Mathf.Max(0.1f, retrieveSwayFrequency);
-            jerkIntervalRange.x = Mathf.Max(0.05f, jerkIntervalRange.x);
-            jerkIntervalRange.y = Mathf.Max(jerkIntervalRange.x, jerkIntervalRange.y);
-            jerkDuration = Mathf.Max(0.05f, jerkDuration);
-            jerkSpeed = Mathf.Max(retrieveSpeed, jerkSpeed);
-            jerkSwayAmplitude = Mathf.Max(0f, jerkSwayAmplitude);
-            jerkSwayFrequency = Mathf.Max(0.1f, jerkSwayFrequency);
             passArrivalDistance = Mathf.Max(0.1f, passArrivalDistance);
             departureDistance = Mathf.Max(0.1f, departureDistance);
             maximumLifetime = Mathf.Max(0.1f, maximumLifetime);
+            surfaceExitAngle = Mathf.Clamp(surfaceExitAngle, 30f, 89f);
+            surfaceExitSpeed = Mathf.Max(0.1f, surfaceExitSpeed);
+            surfaceExitHeightOffset = Mathf.Max(0f, surfaceExitHeightOffset);
         }
 
-        public void ConfigurePass(Transform tunaTarget, Vector3 worldPassPoint)
+        public void ConfigurePass(Transform tunaTarget, Vector3 worldPassPoint, float worldWaterSurfaceHeight)
         {
             tuna = tunaTarget;
             if (tuna)
             {
                 horizontalPassOffset = worldPassPoint - tuna.position;
                 horizontalPassOffset.y = 0f;
-                passWorldY = worldPassPoint.y;
             }
 
+            waterSurfaceHeight = worldWaterSurfaceHeight;
             travelStage = TravelStage.ApproachingTuna;
             configured = tuna;
             spawnedAt = Time.time;
-            motionPhase = MotionPhase.Retrieve;
-            ScheduleNextJerk();
 
             if (!configured)
             {
@@ -146,35 +130,43 @@ namespace TestBoids.Gameplay.Lure
                 return;
             }
 
-            if (Time.time - spawnedAt >= maximumLifetime)
+            if (travelStage != TravelStage.Surfacing
+                && Time.time - spawnedAt >= maximumLifetime)
             {
-                Destroy(gameObject);
-                return;
+                BeginSurfaceExit();
             }
 
             UpdateTravelStage();
-            UpdateMotionPhase();
             ApplyMovement();
         }
 
         private void LateUpdate()
         {
-            if (!visualRoot)
+            if (!HasIndependentVisualRoot())
             {
                 return;
             }
 
-            float amplitude = motionPhase == MotionPhase.Jerk ? jerkSwayAmplitude : retrieveSwayAmplitude;
-            float frequency = motionPhase == MotionPhase.Jerk ? jerkSwayFrequency : retrieveSwayFrequency;
-            float swayAngle = Mathf.Sin(Time.time * frequency * Mathf.PI * 2f) * amplitude;
-            visualRoot.localRotation = visualBaseLocalRotation * Quaternion.AngleAxis(swayAngle, Vector3.up);
+            if (travelStage == TravelStage.Surfacing)
+            {
+                visualRoot.localRotation = visualBaseLocalRotation;
+                return;
+            }
+
+            visualRoot.localRotation = visualBaseLocalRotation
+                * Quaternion.AngleAxis(GetRetrieveSwayAngle(), Vector3.up);
+        }
+
+        private bool HasIndependentVisualRoot()
+        {
+            return visualRoot && visualRoot != transform;
         }
 
         private void UpdateTravelStage()
         {
-            if (travelStage == TravelStage.Departing)
+            if (travelStage == TravelStage.Surfacing)
             {
-                if (Vector3.Distance(transform.position, departureStartPosition) >= departureDistance)
+                if (transform.position.y >= waterSurfaceHeight + surfaceExitHeightOffset)
                 {
                     Destroy(gameObject);
                 }
@@ -182,56 +174,42 @@ namespace TestBoids.Gameplay.Lure
                 return;
             }
 
-            Vector3 passPoint = GetPassPoint();
-            if (Vector3.Distance(transform.position, passPoint) > passArrivalDistance)
+            if (travelStage == TravelStage.Departing)
+            {
+                Vector3 departureTravel = Vector3.ProjectOnPlane(
+                    transform.position - departureStartPosition,
+                    Vector3.up);
+                if (departureTravel.magnitude >= departureDistance)
+                {
+                    BeginSurfaceExit();
+                }
+
+                return;
+            }
+
+            Vector3 horizontalToPassPoint = Vector3.ProjectOnPlane(
+                GetPassPoint() - transform.position,
+                Vector3.up);
+            if (horizontalToPassPoint.magnitude > passArrivalDistance)
             {
                 return;
             }
 
             travelStage = TravelStage.Departing;
             departureStartPosition = transform.position;
-            departureDirection = body.linearVelocity.sqrMagnitude > 0.000001f
-                ? body.linearVelocity.normalized
-                : transform.forward;
-        }
-
-        private void UpdateMotionPhase()
-        {
-            if (motionPhase == MotionPhase.Jerk)
-            {
-                if (Time.time >= phaseEndsAt)
-                {
-                    motionPhase = MotionPhase.Retrieve;
-                    ScheduleNextJerk();
-                }
-
-                return;
-            }
-
-            if (Time.time < nextJerkAt)
-            {
-                return;
-            }
-
-            motionPhase = MotionPhase.Jerk;
-            phaseEndsAt = Time.time + jerkDuration;
-            Vector3 baseDirection = GetTravelDirection();
-            jerkDirection = Quaternion.AngleAxis(
-                Random.Range(-jerkAngleRange, jerkAngleRange),
-                Random.onUnitSphere) * baseDirection;
-            jerkDirection.Normalize();
+            departureDirection = GetHorizontalDirection(body.linearVelocity, transform.forward);
         }
 
         private void ApplyMovement()
         {
-            Vector3 direction = motionPhase == MotionPhase.Jerk ? jerkDirection : GetTravelDirection();
+            Vector3 direction = GetTravelDirection();
             if (direction.sqrMagnitude <= 0.000001f)
             {
                 return;
             }
 
             direction.Normalize();
-            float targetSpeed = motionPhase == MotionPhase.Jerk ? jerkSpeed : retrieveSpeed;
+            float targetSpeed = travelStage == TravelStage.Surfacing ? surfaceExitSpeed : retrieveSpeed;
             Vector3 targetVelocity = direction * targetSpeed;
             float velocityBlend = 1f - Mathf.Exp(-acceleration * Time.fixedDeltaTime);
             body.linearVelocity = Vector3.Lerp(body.linearVelocity, targetVelocity, velocityBlend);
@@ -242,33 +220,81 @@ namespace TestBoids.Gameplay.Lure
             }
 
             Quaternion targetRotation = Quaternion.LookRotation(body.linearVelocity.normalized);
+            if (travelStage != TravelStage.Surfacing && !HasIndependentVisualRoot())
+            {
+                targetRotation *= Quaternion.AngleAxis(GetRetrieveSwayAngle(), Vector3.up);
+            }
+
             float rotationBlend = 1f - Mathf.Exp(-rotationSpeed * Time.fixedDeltaTime);
             body.MoveRotation(Quaternion.Slerp(body.rotation, targetRotation, rotationBlend));
         }
 
         private Vector3 GetTravelDirection()
         {
-            return travelStage == TravelStage.Departing
+            if (travelStage == TravelStage.Surfacing)
+            {
+                return surfaceExitDirection;
+            }
+
+            Vector3 horizontalDirection = travelStage == TravelStage.Departing
                 ? departureDirection
-                : GetApproachDirection();
+                : GetApproachHorizontalDirection();
+            return ApplyUpwardAngle(horizontalDirection, retrieveUpwardAngle);
         }
 
         private Vector3 GetApproachDirection()
         {
-            Vector3 passPoint = GetPassPoint();
-            return (passPoint - transform.position).normalized;
+            return ApplyUpwardAngle(GetApproachHorizontalDirection(), retrieveUpwardAngle);
+        }
+
+        private Vector3 GetApproachHorizontalDirection()
+        {
+            return GetHorizontalDirection(GetPassPoint() - transform.position, transform.forward);
         }
 
         private Vector3 GetPassPoint()
         {
             Vector3 passPoint = tuna.position + horizontalPassOffset;
-            passPoint.y = passWorldY;
             return passPoint;
         }
 
-        private void ScheduleNextJerk()
+        private void BeginSurfaceExit()
         {
-            nextJerkAt = Time.time + Random.Range(jerkIntervalRange.x, jerkIntervalRange.y);
+            if (travelStage == TravelStage.Surfacing)
+            {
+                return;
+            }
+
+            Vector3 horizontalDirection = GetHorizontalDirection(body.linearVelocity, transform.forward);
+            surfaceExitDirection = ApplyUpwardAngle(horizontalDirection, surfaceExitAngle);
+            travelStage = TravelStage.Surfacing;
+
+            body.linearVelocity = surfaceExitDirection * surfaceExitSpeed;
+            body.rotation = Quaternion.LookRotation(surfaceExitDirection);
+        }
+
+        private float GetRetrieveSwayAngle()
+        {
+            return Mathf.Sin(Time.time * retrieveSwayFrequency * Mathf.PI * 2f)
+                * retrieveSwayAmplitude;
+        }
+
+        private static Vector3 ApplyUpwardAngle(Vector3 horizontalDirection, float angleDegrees)
+        {
+            float angleRadians = angleDegrees * Mathf.Deg2Rad;
+            return horizontalDirection.normalized * Mathf.Cos(angleRadians)
+                + Vector3.up * Mathf.Sin(angleRadians);
+        }
+
+        private static Vector3 GetHorizontalDirection(Vector3 direction, Vector3 fallback)
+        {
+            Vector3 horizontal = Vector3.ProjectOnPlane(direction, Vector3.up);
+            if (horizontal.sqrMagnitude <= 0.000001f)
+            {
+                horizontal = Vector3.ProjectOnPlane(fallback, Vector3.up);
+            }
+
+            return horizontal.sqrMagnitude > 0.000001f ? horizontal.normalized : Vector3.forward;
         }
     }
 }

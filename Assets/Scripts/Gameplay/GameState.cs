@@ -4,6 +4,7 @@ namespace TestBoids.Gameplay
     {
         Intro,
         PhaseBaitBall,
-        PhaseBaitBallTransition
+        PhaseBaitBallTransition,
+        OnHook
     }
 }

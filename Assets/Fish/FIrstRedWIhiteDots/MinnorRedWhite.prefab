@@ -401,17 +401,15 @@ MonoBehaviour:
   retrieveSpeed: 5
   acceleration: 8
   rotationSpeed: 8
+  retrieveUpwardAngle: 1.5
   retrieveSwayAmplitude: 18
   retrieveSwayFrequency: 5
-  jerkIntervalRange: {x: 0.8, y: 1.8}
-  jerkDuration: 0.75
-  jerkSpeed: 10
-  jerkAngleRange: 6.3
-  jerkSwayAmplitude: 18
-  jerkSwayFrequency: 5
   passArrivalDistance: 1.2
   departureDistance: 18
   maximumLifetime: 30
+  surfaceExitAngle: 70
+  surfaceExitSpeed: 18
+  surfaceExitHeightOffset: 0.1
 --- !u!1001 &8283374191996964555
 PrefabInstance:
   m_ObjectHideFlags: 0

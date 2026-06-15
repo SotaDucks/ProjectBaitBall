@@ -12,11 +12,14 @@ namespace TestBoids.Gameplay
         [SerializeField] private GameState initialState = GameState.Intro;
         [SerializeField] private bool transitionToPhaseBaitBallWithSpace = true;
         [SerializeField] private KeyCode phaseBaitBallTestKey = KeyCode.Space;
+        [SerializeField] private GameplayEventBus eventBus;
 
         public static GameStateManager Instance { get; private set; }
         public GameState CurrentState { get; private set; }
 
         public event Action<GameState, GameState> StateChanged;
+
+        private bool subscribedToEventBus;
 
         private void Awake()
         {
@@ -27,6 +30,27 @@ namespace TestBoids.Gameplay
 
             Instance = this;
             CurrentState = initialState;
+            ResolveEventBus();
+        }
+
+        private void OnEnable()
+        {
+            SubscribeToEventBus();
+        }
+
+        private void Start()
+        {
+            SubscribeToEventBus();
+        }
+
+        private void OnDisable()
+        {
+            if (eventBus && subscribedToEventBus)
+            {
+                eventBus.LureBitten -= OnLureBitten;
+            }
+
+            subscribedToEventBus = false;
         }
 
         private void OnDestroy()
@@ -57,6 +81,46 @@ namespace TestBoids.Gameplay
             GameState previousState = CurrentState;
             CurrentState = nextState;
             StateChanged?.Invoke(previousState, nextState);
+
+            if (nextState == GameState.OnHook)
+            {
+                Debug.Log("GameState entered OnHook.", this);
+            }
+        }
+
+        private void OnLureBitten(LureBittenEvent bittenEvent)
+        {
+            SetState(GameState.OnHook);
+        }
+
+        private void SubscribeToEventBus()
+        {
+            if (subscribedToEventBus)
+            {
+                return;
+            }
+
+            ResolveEventBus();
+            if (!eventBus)
+            {
+                return;
+            }
+
+            eventBus.LureBitten += OnLureBitten;
+            subscribedToEventBus = true;
+        }
+
+        private void ResolveEventBus()
+        {
+            if (!eventBus)
+            {
+                eventBus = GameplayEventBus.Instance;
+            }
+
+            if (!eventBus)
+            {
+                eventBus = FindFirstObjectByType<GameplayEventBus>(FindObjectsInactive.Include);
+            }
         }
 
         private bool WasPhaseBaitBallTestKeyPressed()

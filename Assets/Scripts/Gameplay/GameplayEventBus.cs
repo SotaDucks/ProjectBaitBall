@@ -15,6 +15,7 @@ namespace TestBoids.Gameplay
 
         public event Action<TunaSchoolFocusEvent> TunaSchoolFocusTriggered;
         public event Action<SardineSchoolGatheredEvent> SardineSchoolGathered;
+        public event Action<LureBittenEvent> LureBitten;
 
         public float FocusTransitionDuration => focusTransitionDuration;
         public float BarracudaCameraDuration => barracudaCameraDuration;
@@ -54,6 +55,11 @@ namespace TestBoids.Gameplay
         {
             SardineSchoolGathered?.Invoke(gatheredEvent);
         }
+
+        public void RaiseLureBitten(LureBittenEvent bittenEvent)
+        {
+            LureBitten?.Invoke(bittenEvent);
+        }
     }
 
     public readonly struct TunaSchoolFocusEvent
@@ -82,5 +88,17 @@ namespace TestBoids.Gameplay
         public Transform Tuna { get; }
         public Transform FishSchool { get; }
         public float TriggerDistance { get; }
+    }
+
+    public readonly struct LureBittenEvent
+    {
+        public LureBittenEvent(Transform tuna, Transform lure)
+        {
+            Tuna = tuna;
+            Lure = lure;
+        }
+
+        public Transform Tuna { get; }
+        public Transform Lure { get; }
     }
 }
