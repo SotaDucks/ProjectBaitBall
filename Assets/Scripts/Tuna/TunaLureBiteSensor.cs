@@ -32,7 +32,7 @@ namespace TestBoids.Tuna
             ResolveReferences();
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
             if (hasBittenLure)
             {

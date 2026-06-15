@@ -57,11 +57,11 @@ namespace TestBoids.Tuna
                 return connectedLureBody == lureBody;
             }
 
-            lure.enabled = false;
+            lure.transform.position = mouthMount.position;
+            lure.transform.rotation = mouthMount.rotation;
+
             lureBody.linearVelocity = Vector3.zero;
             lureBody.angularVelocity = Vector3.zero;
-            lureBody.position = mouthMount.position;
-            lureBody.rotation = mouthMount.rotation;
 
             activeJoint = tunaBody.gameObject.AddComponent<FixedJoint>();
             activeJoint.connectedBody = lureBody;
@@ -69,6 +69,7 @@ namespace TestBoids.Tuna
             activeJoint.breakForce = breakForce;
             activeJoint.breakTorque = breakTorque;
             connectedLureBody = lureBody;
+            lure.enabled = false;
             return true;
         }
 
