@@ -7,7 +7,8 @@ namespace TestBoids.Gameplay.Lure
     public sealed class AutomaticLureSpawner : MonoBehaviour
     {
         [Header("References")]
-        [SerializeField] private AutomaticLureMotor lurePrefab;
+        [SerializeField, Tooltip("Collection root prefab containing an AutomaticLureMotor in its hierarchy.")]
+        private GameObject lurePrefab;
         [SerializeField] private Transform tuna;
         [SerializeField] private Camera referenceCamera;
         [SerializeField] private Transform spawnParent;
@@ -36,8 +37,20 @@ namespace TestBoids.Gameplay.Lure
         [Header("Pass By Tuna")]
         [SerializeField, Min(0f)] private float horizontalPassRadius = 2f;
 
-        private readonly List<AutomaticLureMotor> activeLures = new();
+        private readonly List<ActiveLure> activeLures = new();
         private float nextSpawnAt;
+
+        private sealed class ActiveLure
+        {
+            public ActiveLure(GameObject root, AutomaticLureMotor motor)
+            {
+                Root = root;
+                Motor = motor;
+            }
+
+            public GameObject Root { get; }
+            public AutomaticLureMotor Motor { get; }
+        }
 
         private void Reset()
         {
@@ -72,12 +85,13 @@ namespace TestBoids.Gameplay.Lure
 
         private void Update()
         {
+            RemoveDestroyedLures();
+
             if (!spawnAutomatically || Time.time < nextSpawnAt)
             {
                 return;
             }
 
-            RemoveDestroyedLures();
             if (activeLures.Count < maximumActiveLures)
             {
                 SpawnNow();
@@ -103,9 +117,19 @@ namespace TestBoids.Gameplay.Lure
                 ? Quaternion.LookRotation(approachDirection.normalized)
                 : Quaternion.identity;
 
-            AutomaticLureMotor lure = Instantiate(lurePrefab, spawnPosition, spawnRotation, spawnParent);
+            GameObject lureRoot = Instantiate(lurePrefab, spawnPosition, spawnRotation, spawnParent);
+            AutomaticLureMotor lure = lureRoot.GetComponentInChildren<AutomaticLureMotor>();
+            if (!lure)
+            {
+                Debug.LogError(
+                    $"The lure prefab '{lurePrefab.name}' does not contain an active {nameof(AutomaticLureMotor)}.",
+                    lurePrefab);
+                Destroy(lureRoot);
+                return null;
+            }
+
             lure.ConfigurePass(tuna, passPoint, waterSurfaceHeight);
-            activeLures.Add(lure);
+            activeLures.Add(new ActiveLure(lureRoot, lure));
             return lure;
         }
 
@@ -177,10 +201,18 @@ namespace TestBoids.Gameplay.Lure
         {
             for (int index = activeLures.Count - 1; index >= 0; index--)
             {
-                if (!activeLures[index])
+                ActiveLure activeLure = activeLures[index];
+                if (activeLure.Motor)
                 {
-                    activeLures.RemoveAt(index);
+                    continue;
                 }
+
+                if (activeLure.Root)
+                {
+                    Destroy(activeLure.Root);
+                }
+
+                activeLures.RemoveAt(index);
             }
         }
 

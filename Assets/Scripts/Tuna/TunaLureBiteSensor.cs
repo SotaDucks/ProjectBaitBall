@@ -5,12 +5,14 @@ using UnityEngine;
 namespace TestBoids.Tuna
 {
     [DisallowMultipleComponent]
+    [RequireComponent(typeof(TunaLureHookConnector))]
     public sealed class TunaLureBiteSensor : MonoBehaviour
     {
         private const string DefaultMouthName = "DangerSphere";
 
         [Header("References")]
         [SerializeField] private Transform mouth;
+        [SerializeField] private TunaLureHookConnector hookConnector;
         [SerializeField] private GameplayEventBus eventBus;
         [SerializeField] private bool autoResolveReferences = true;
 
@@ -52,6 +54,11 @@ namespace TestBoids.Tuna
                     continue;
                 }
 
+                if (!hookConnector || !hookConnector.TryConnectLure(lure))
+                {
+                    continue;
+                }
+
                 hasBittenLure = true;
                 eventBus.RaiseLureBitten(new LureBittenEvent(transform, lure.transform));
                 return;
@@ -88,6 +95,11 @@ namespace TestBoids.Tuna
             if (!mouth)
             {
                 mouth = FindChildByName(transform, DefaultMouthName);
+            }
+
+            if (!hookConnector)
+            {
+                hookConnector = GetComponent<TunaLureHookConnector>();
             }
 
             if (!eventBus)
