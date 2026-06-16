@@ -57,8 +57,9 @@ namespace TestBoids.Tuna
                 return connectedLureBody == lureBody;
             }
 
-            lure.transform.position = mouthMount.position;
-            lure.transform.rotation = mouthMount.rotation;
+            Transform lureTransform = lure.transform;
+            Transform lureTeleportRoot = lureTransform.parent ? lureTransform.parent : lureTransform;
+            AlignTeleportRootToMouth(lureTeleportRoot, lureTransform);
 
             lureBody.linearVelocity = Vector3.zero;
             lureBody.angularVelocity = Vector3.zero;
@@ -71,6 +72,26 @@ namespace TestBoids.Tuna
             connectedLureBody = lureBody;
             lure.enabled = false;
             return true;
+        }
+
+        private void AlignTeleportRootToMouth(Transform teleportRoot, Transform lureTransform)
+        {
+            if (!teleportRoot || !lureTransform || !mouthMount)
+            {
+                return;
+            }
+
+            if (teleportRoot == lureTransform)
+            {
+                lureTransform.SetPositionAndRotation(mouthMount.position, mouthMount.rotation);
+                return;
+            }
+
+            Quaternion lureRotationRelativeToRoot = Quaternion.Inverse(teleportRoot.rotation) * lureTransform.rotation;
+            Quaternion targetRootRotation = mouthMount.rotation * Quaternion.Inverse(lureRotationRelativeToRoot);
+
+            teleportRoot.rotation = targetRootRotation;
+            teleportRoot.position += mouthMount.position - lureTransform.position;
         }
 
         private void ResolveReferences()
