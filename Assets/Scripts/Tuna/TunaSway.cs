@@ -20,6 +20,13 @@ namespace TestBoids.Tuna
             World
         }
 
+        public enum SpeedOverrideMode
+        {
+            Auto,
+            Low,
+            High
+        }
+
         [System.Serializable]
         public struct SwaySettings
         {
@@ -43,6 +50,9 @@ namespace TestBoids.Tuna
         [SerializeField] private SwaySettings mediumSpeed = new() { amplitude = 9f, frequency = 2.2f };
         [SerializeField] private SwaySettings highSpeed = new() { amplitude = 16f, frequency = 3.6f };
 
+        [Header("Speed Override")]
+        [SerializeField] private SpeedOverrideMode speedOverrideMode = SpeedOverrideMode.Auto;
+
         [Header("Dynamic Bone Damping")]
         public DynamicBone dynamicBone;
         [Range(0f, 1f)] public float lowSpeedDamping = 0.1f;
@@ -58,14 +68,29 @@ namespace TestBoids.Tuna
         private float currentDynamicBoneDamping;
         private float phase;
         private Quaternion lastOffset = Quaternion.identity;
-        private bool forceLowSpeed;
         private FishAgent schoolAgent;
         private const float RigidbodySpeedEpsilon = 0.01f;
 
+        public SpeedOverrideMode OverrideMode
+        {
+            get => speedOverrideMode;
+            set => speedOverrideMode = value;
+        }
+
         public bool ForceLowSpeed
         {
-            get => forceLowSpeed;
-            set => forceLowSpeed = value;
+            get => speedOverrideMode == SpeedOverrideMode.Low;
+            set
+            {
+                if (value)
+                {
+                    speedOverrideMode = SpeedOverrideMode.Low;
+                }
+                else if (speedOverrideMode == SpeedOverrideMode.Low)
+                {
+                    speedOverrideMode = SpeedOverrideMode.Auto;
+                }
+            }
         }
 
         private void Reset()
@@ -95,9 +120,10 @@ namespace TestBoids.Tuna
             schoolAgent = GetComponentInParent<FishAgent>();
 
             NormalizeSpeedBands();
-            float speed = GetSpeed();
-            SelectSettings(speed, out currentAmplitude, out currentFrequency);
-            currentDynamicBoneDamping = SelectDynamicBoneDamping(speed);
+            SelectOverrideAwareSettings(
+                out currentAmplitude,
+                out currentFrequency,
+                out currentDynamicBoneDamping);
             ApplyDynamicBoneDamping(currentDynamicBoneDamping);
         }
 
@@ -118,14 +144,16 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            float speed = forceLowSpeed ? 0f : GetSpeed();
-            SelectSettings(speed, out float targetAmplitude, out float targetFrequency);
+            SelectOverrideAwareSettings(
+                out float targetAmplitude,
+                out float targetFrequency,
+                out float targetDynamicBoneDamping);
             float blend = 1f - Mathf.Exp(-response * Time.deltaTime);
             currentAmplitude = Mathf.Lerp(currentAmplitude, targetAmplitude, blend);
             currentFrequency = Mathf.Lerp(currentFrequency, targetFrequency, blend);
             currentDynamicBoneDamping = Mathf.Lerp(
                 currentDynamicBoneDamping,
-                SelectDynamicBoneDamping(speed),
+                targetDynamicBoneDamping,
                 blend);
             ApplyDynamicBoneDamping(currentDynamicBoneDamping);
 
@@ -163,6 +191,31 @@ namespace TestBoids.Tuna
             return targetRigidbody ? targetRigidbody.linearVelocity.magnitude : 0f;
         }
 
+        private void SelectOverrideAwareSettings(
+            out float amplitude,
+            out float frequency,
+            out float dynamicBoneDamping)
+        {
+            switch (speedOverrideMode)
+            {
+                case SpeedOverrideMode.Low:
+                    SelectSettings(lowSpeed, out amplitude, out frequency);
+                    dynamicBoneDamping = Mathf.Clamp01(lowSpeedDamping);
+                    return;
+
+                case SpeedOverrideMode.High:
+                    SelectSettings(highSpeed, out amplitude, out frequency);
+                    dynamicBoneDamping = Mathf.Clamp01(mediumHighSpeedDamping);
+                    return;
+
+                default:
+                    float speed = GetSpeed();
+                    SelectSettings(speed, out amplitude, out frequency);
+                    dynamicBoneDamping = SelectDynamicBoneDamping(speed);
+                    return;
+            }
+        }
+
         private void SelectSettings(float speed, out float amplitude, out float frequency)
         {
             SwaySettings settings;
@@ -179,6 +232,12 @@ namespace TestBoids.Tuna
                 settings = highSpeed;
             }
 
+            amplitude = Mathf.Max(0f, settings.amplitude);
+            frequency = Mathf.Max(0f, settings.frequency);
+        }
+
+        private static void SelectSettings(SwaySettings settings, out float amplitude, out float frequency)
+        {
             amplitude = Mathf.Max(0f, settings.amplitude);
             frequency = Mathf.Max(0f, settings.frequency);
         }

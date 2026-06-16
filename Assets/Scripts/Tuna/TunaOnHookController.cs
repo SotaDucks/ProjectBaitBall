@@ -24,6 +24,7 @@ namespace TestBoids.Tuna
         [SerializeField] private GameStateManager stateManager;
         [SerializeField] private TunaMotor tunaMotor;
         [SerializeField] private TunaInputReader input;
+        [SerializeField] private TunaSway sway;
 
         [Header("Dragged")]
         [SerializeField, Min(0f)] private float pullAcceleration = 8f;
@@ -139,6 +140,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
+            ApplySwayOverrideForCurrentState();
             RecordMouseClickInput();
 
             if (!pullTarget)
@@ -179,6 +181,7 @@ namespace TestBoids.Tuna
                 return;
             }
 
+            ApplySwayOverrideForCurrentState();
             if (!pullTarget)
             {
                 if (tunaMotor)
@@ -259,6 +262,7 @@ namespace TestBoids.Tuna
             draggedPitchOffset = 0f;
             escapeYawOffset = 0f;
             escapePitchOffset = 0f;
+            SetSwayOverride(TunaSway.SpeedOverrideMode.Auto);
 
             if (tunaMotor && tunaMotor.IsExternallyControlled)
             {
@@ -274,6 +278,7 @@ namespace TestBoids.Tuna
             escapeYawOffset = 0f;
             escapePitchOffset = 0f;
             pendingClickSprint = false;
+            SetSwayOverride(TunaSway.SpeedOverrideMode.Low);
 
             if (tunaMotor)
             {
@@ -287,6 +292,7 @@ namespace TestBoids.Tuna
             escapeYawOffset = 0f;
             escapePitchOffset = 0f;
             turnaroundCanCompleteAt = Time.time + turnaroundMinimumDuration;
+            SetSwayOverride(TunaSway.SpeedOverrideMode.Low);
 
             if (tunaMotor)
             {
@@ -298,6 +304,7 @@ namespace TestBoids.Tuna
         {
             controlState = HookControlState.Escaping;
             escapeCanEndAt = Time.time + escapeMinimumDuration;
+            SetSwayOverride(TunaSway.SpeedOverrideMode.High);
             UpdateEscapeSteering();
             UpdateEscaping();
 
@@ -307,6 +314,21 @@ namespace TestBoids.Tuna
             }
 
             pendingClickSprint = false;
+        }
+
+        private void ApplySwayOverrideForCurrentState()
+        {
+            SetSwayOverride(controlState == HookControlState.Escaping
+                ? TunaSway.SpeedOverrideMode.High
+                : TunaSway.SpeedOverrideMode.Low);
+        }
+
+        private void SetSwayOverride(TunaSway.SpeedOverrideMode mode)
+        {
+            if (sway)
+            {
+                sway.OverrideMode = mode;
+            }
         }
 
         private void UpdateDragged(Vector3 pullDirection)
@@ -688,6 +710,11 @@ namespace TestBoids.Tuna
             if (!input)
             {
                 input = GetComponent<TunaInputReader>();
+            }
+
+            if (!sway)
+            {
+                sway = GetComponentInChildren<TunaSway>();
             }
 
             ResolveStateManager();
