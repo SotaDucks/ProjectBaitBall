@@ -31,8 +31,15 @@ namespace TestBoids.Tuna
         [SerializeField, Min(0f)] private float draggedSpeedLimitDamping = 4f;
         [SerializeField, Min(0f)] private float draggedVelocityDamping = 0.35f;
         [SerializeField, Min(0f)] private float draggedRotationSpeed = 540f;
-        [SerializeField] private float draggedRollAngle = 0f;
+        public Vector2 draggedRollAngleRange = new Vector2(-45f, 45f);
+        [Min(0f)] public float draggedRollCycleSpeed = 8f;
         [SerializeField, Min(0f)] private float angularVelocityDamping = 8f;
+        [SerializeField, Range(0f, 45f)] private float draggedSteerLimitAngle = 10f;
+        [SerializeField, Min(0f)] private float draggedMouseDegreesPerUnit = 0.04f;
+        [SerializeField, Min(0f)] private float draggedSteerReturnSpeed = 30f;
+
+        [Header("Player Steering")]
+        [Min(0f)] public float playerSteeringSpeedMultiplier = 0.3f;
 
         [Header("Escape Trigger")]
         [SerializeField, Range(0f, 1f)] private float escapeMoveThreshold = 0.25f;
@@ -64,7 +71,10 @@ namespace TestBoids.Tuna
         private float clickEscapeEndsAt;
         private float turnaroundCanCompleteAt;
         private float escapeCanEndAt;
+        private float draggedYawOffset;
+        private float draggedPitchOffset;
         private float escapeYawOffset;
+        private float escapePitchOffset;
 
         private void Reset()
         {
@@ -105,7 +115,11 @@ namespace TestBoids.Tuna
             draggedSpeedLimitDamping = Mathf.Max(0f, draggedSpeedLimitDamping);
             draggedVelocityDamping = Mathf.Max(0f, draggedVelocityDamping);
             draggedRotationSpeed = Mathf.Max(0f, draggedRotationSpeed);
+            draggedRollCycleSpeed = Mathf.Max(0f, draggedRollCycleSpeed);
             angularVelocityDamping = Mathf.Max(0f, angularVelocityDamping);
+            draggedMouseDegreesPerUnit = Mathf.Max(0f, draggedMouseDegreesPerUnit);
+            draggedSteerReturnSpeed = Mathf.Max(0f, draggedSteerReturnSpeed);
+            playerSteeringSpeedMultiplier = Mathf.Max(0f, playerSteeringSpeedMultiplier);
             escapeRequiredClicks = Mathf.Max(2, escapeRequiredClicks);
             escapeClickWindow = Mathf.Max(0.01f, escapeClickWindow);
             escapeMaxAverageClickInterval = Mathf.Max(0.01f, escapeMaxAverageClickInterval);
@@ -137,6 +151,7 @@ namespace TestBoids.Tuna
             switch (controlState)
             {
                 case HookControlState.Dragged:
+                    UpdateDraggedSteering();
                     if (escapeInputActive)
                     {
                         BeginTurnaround();
@@ -168,7 +183,7 @@ namespace TestBoids.Tuna
             {
                 if (tunaMotor)
                 {
-                    tunaMotor.SetExternalControl(transform.forward, 0f, 0f, false);
+                    tunaMotor.SetExternalControl(transform.forward, 0f, 0f, false, true, true);
                 }
 
                 return;
@@ -240,7 +255,10 @@ namespace TestBoids.Tuna
             recentMouseClicks.Clear();
             clickEscapeEndsAt = 0f;
             pendingClickSprint = false;
+            draggedYawOffset = 0f;
+            draggedPitchOffset = 0f;
             escapeYawOffset = 0f;
+            escapePitchOffset = 0f;
 
             if (tunaMotor && tunaMotor.IsExternallyControlled)
             {
@@ -251,12 +269,15 @@ namespace TestBoids.Tuna
         private void BeginDragged()
         {
             controlState = HookControlState.Dragged;
+            draggedYawOffset = 0f;
+            draggedPitchOffset = 0f;
             escapeYawOffset = 0f;
+            escapePitchOffset = 0f;
             pendingClickSprint = false;
 
             if (tunaMotor)
             {
-                tunaMotor.SetExternalControl(GetInitialControlDirection(), 0f, 0f, false);
+                tunaMotor.SetExternalControl(GetInitialControlDirection(), 0f, 0f, false, true, true);
             }
         }
 
@@ -264,11 +285,12 @@ namespace TestBoids.Tuna
         {
             controlState = HookControlState.Turnaround;
             escapeYawOffset = 0f;
+            escapePitchOffset = 0f;
             turnaroundCanCompleteAt = Time.time + turnaroundMinimumDuration;
 
             if (tunaMotor)
             {
-                tunaMotor.SetExternalControl(GetEscapeDirection(), 0f, 0f, false);
+                tunaMotor.SetExternalControl(GetEscapeDirection(), 0f, 0f, false, true, true);
             }
         }
 
@@ -279,7 +301,7 @@ namespace TestBoids.Tuna
             UpdateEscapeSteering();
             UpdateEscaping();
 
-            if (pendingClickSprint && tunaMotor)
+            if ((pendingClickSprint || IsForwardInputHeld()) && tunaMotor)
             {
                 tunaMotor.TriggerExternalSprint(1);
             }
@@ -289,15 +311,20 @@ namespace TestBoids.Tuna
 
         private void UpdateDragged(Vector3 pullDirection)
         {
+            Vector3 draggedDirection = BuildSteeredDraggedDirection(pullDirection);
+            float turnInput = draggedSteerLimitAngle > 0f
+                ? Mathf.Clamp(draggedYawOffset / draggedSteerLimitAngle, -1f, 1f)
+                : 0f;
+
             if (tunaMotor)
             {
-                tunaMotor.SetExternalControl(pullDirection, 0f, 0f, false);
+                tunaMotor.SetExternalControl(draggedDirection, 0f, turnInput, false, true, true);
             }
 
             body.AddForce(pullDirection * pullAcceleration, ForceMode.Acceleration);
             body.AddForce(-body.linearVelocity * draggedVelocityDamping, ForceMode.Acceleration);
             ApplySpeedLimit(draggedMaxSpeed);
-            RotateToward(pullDirection, draggedRotationSpeed, draggedRollAngle);
+            RotateToward(draggedDirection, draggedRotationSpeed, GetDraggedRollAngle());
             DampAngularVelocity();
         }
 
@@ -306,7 +333,7 @@ namespace TestBoids.Tuna
             Vector3 escapeDirection = GetEscapeDirection();
             if (tunaMotor)
             {
-                tunaMotor.SetExternalControl(escapeDirection, 0f, 0f, false);
+                tunaMotor.SetExternalControl(escapeDirection, 0f, 0f, false, true, true);
             }
 
             if (turnaroundPullScale > 0f)
@@ -341,29 +368,94 @@ namespace TestBoids.Tuna
 
         private void UpdateEscapeSteering()
         {
-            Vector2 look = input ? input.Look : Vector2.zero;
-            if (Mathf.Abs(look.x) > 0.0001f)
-            {
-                escapeYawOffset += look.x * escapeMouseDegreesPerUnit;
-            }
-            else if (escapeSteerReturnSpeed > 0f)
-            {
-                escapeYawOffset = Mathf.MoveTowards(
-                    escapeYawOffset,
-                    0f,
-                    escapeSteerReturnSpeed * Time.deltaTime);
-            }
-
-            escapeYawOffset = Mathf.Clamp(
-                escapeYawOffset,
-                -escapeSteerLimitAngle,
+            UpdateSteeringOffsets(
+                ref escapeYawOffset,
+                ref escapePitchOffset,
+                escapeMouseDegreesPerUnit,
+                escapeSteerReturnSpeed,
                 escapeSteerLimitAngle);
+        }
+
+        private void UpdateDraggedSteering()
+        {
+            UpdateSteeringOffsets(
+                ref draggedYawOffset,
+                ref draggedPitchOffset,
+                draggedMouseDegreesPerUnit,
+                draggedSteerReturnSpeed,
+                draggedSteerLimitAngle);
         }
 
         private Vector3 BuildSteeredEscapeDirection()
         {
             Vector3 escapeDirection = GetEscapeDirection();
-            return Quaternion.AngleAxis(escapeYawOffset, Vector3.up) * escapeDirection;
+            return BuildSteeredDirection(escapeDirection, escapeYawOffset, escapePitchOffset);
+        }
+
+        private Vector3 BuildSteeredDraggedDirection(Vector3 pullDirection)
+        {
+            return BuildSteeredDirection(pullDirection, draggedYawOffset, draggedPitchOffset);
+        }
+
+        private void UpdateSteeringOffsets(
+            ref float yawOffset,
+            ref float pitchOffset,
+            float mouseDegreesPerUnit,
+            float returnSpeed,
+            float limitAngle)
+        {
+            Vector2 look = input ? input.Look : Vector2.zero;
+            if (look.sqrMagnitude > 0.000001f)
+            {
+                float scaledMouseDegreesPerUnit = mouseDegreesPerUnit * playerSteeringSpeedMultiplier;
+                yawOffset += look.x * scaledMouseDegreesPerUnit;
+                pitchOffset -= look.y * scaledMouseDegreesPerUnit;
+            }
+            else if (returnSpeed > 0f)
+            {
+                float returnDelta = returnSpeed * Time.deltaTime;
+                yawOffset = Mathf.MoveTowards(yawOffset, 0f, returnDelta);
+                pitchOffset = Mathf.MoveTowards(pitchOffset, 0f, returnDelta);
+            }
+
+            Vector2 clampedOffsets = Vector2.ClampMagnitude(
+                new Vector2(yawOffset, pitchOffset),
+                limitAngle);
+            yawOffset = clampedOffsets.x;
+            pitchOffset = clampedOffsets.y;
+        }
+
+        private static Vector3 BuildSteeredDirection(Vector3 baseDirection, float yawOffset, float pitchOffset)
+        {
+            if (baseDirection.sqrMagnitude <= 0.000001f)
+            {
+                return Vector3.forward;
+            }
+
+            Vector3 direction = baseDirection.normalized;
+            direction = Quaternion.AngleAxis(yawOffset, Vector3.up) * direction;
+
+            Vector3 pitchAxis = Vector3.Cross(Vector3.up, direction);
+            if (pitchAxis.sqrMagnitude <= 0.000001f)
+            {
+                pitchAxis = Vector3.right;
+            }
+
+            direction = Quaternion.AngleAxis(pitchOffset, pitchAxis.normalized) * direction;
+            return direction.sqrMagnitude > 0.000001f ? direction.normalized : baseDirection.normalized;
+        }
+
+        private float GetDraggedRollAngle()
+        {
+            float minAngle = Mathf.Min(draggedRollAngleRange.x, draggedRollAngleRange.y);
+            float maxAngle = Mathf.Max(draggedRollAngleRange.x, draggedRollAngleRange.y);
+            float span = maxAngle - minAngle;
+            if (span <= 0.0001f || draggedRollCycleSpeed <= 0f)
+            {
+                return minAngle;
+            }
+
+            return minAngle + Mathf.PingPong(Time.time * draggedRollCycleSpeed, span);
         }
 
         private Vector3 GetInitialControlDirection()
@@ -384,7 +476,16 @@ namespace TestBoids.Tuna
 
         private Vector3 GetEscapeDirection()
         {
-            return -GetPullDirection();
+            Vector3 horizontalPullDirection = Vector3.ProjectOnPlane(GetPullDirection(), Vector3.up);
+            if (horizontalPullDirection.sqrMagnitude > 0.000001f)
+            {
+                return -horizontalPullDirection.normalized;
+            }
+
+            Vector3 horizontalForward = Vector3.ProjectOnPlane(transform.forward, Vector3.up);
+            return horizontalForward.sqrMagnitude > 0.000001f
+                ? -horizontalForward.normalized
+                : -Vector3.forward;
         }
 
         private void RotateToward(Vector3 forward, float rotationSpeed, float rollAngle)

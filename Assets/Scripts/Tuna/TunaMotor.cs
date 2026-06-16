@@ -120,6 +120,7 @@ namespace TestBoids.Tuna
         private float externalTurnInput;
         private bool externalAllowSprintClicks;
         private bool externalSuppressMinimumSwimSpeed = true;
+        private bool externalSuppressTurning;
         private readonly Queue<float> sprintClickTimes = new Queue<float>();
         private int currentSprintTier;
         private float currentSprintMaxSpeed;
@@ -267,7 +268,11 @@ namespace TestBoids.Tuna
             ApplyWaterDrag();
             ApplySpeedLimit();
             ApplyMinimumSwimSpeed();
-            ApplyTurn();
+            if (!ShouldSuppressTurn())
+            {
+                ApplyTurn();
+            }
+
             UpdateTurnAmount();
         }
 
@@ -305,6 +310,7 @@ namespace TestBoids.Tuna
             externalTurnInput = 0f;
             externalAllowSprintClicks = false;
             externalSuppressMinimumSwimSpeed = true;
+            externalSuppressTurning = false;
             ClearSprintState();
             ClearControlState();
         }
@@ -314,7 +320,8 @@ namespace TestBoids.Tuna
             float thrustInput,
             float turnInput,
             bool allowSprintClicks,
-            bool suppressMinimumSwimSpeed = true)
+            bool suppressMinimumSwimSpeed = true,
+            bool suppressTurning = false)
         {
             if (controlMode != ControlMode.External)
             {
@@ -326,6 +333,7 @@ namespace TestBoids.Tuna
             externalTurnInput = Mathf.Clamp(turnInput, -1f, 1f);
             externalAllowSprintClicks = allowSprintClicks;
             externalSuppressMinimumSwimSpeed = suppressMinimumSwimSpeed;
+            externalSuppressTurning = suppressTurning;
             if (!externalAllowSprintClicks && currentSprintTier > 0)
             {
                 ClearSprintState();
@@ -344,6 +352,7 @@ namespace TestBoids.Tuna
             externalTurnInput = 0f;
             externalAllowSprintClicks = false;
             externalSuppressMinimumSwimSpeed = true;
+            externalSuppressTurning = false;
             ClearSprintState();
             ClearControlState();
         }
@@ -526,6 +535,11 @@ namespace TestBoids.Tuna
         private bool IsFullySubmerged()
         {
             return transform.position.y <= waterSurfaceHeight - fullySubmergedDepth;
+        }
+
+        private bool ShouldSuppressTurn()
+        {
+            return controlMode == ControlMode.External && externalSuppressTurning;
         }
 
         private void ClearControlState()
