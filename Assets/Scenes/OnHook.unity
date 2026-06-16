@@ -744,6 +744,43 @@ MonoBehaviour:
   autoConfigureConnectedAnchor: 1
   breakForce: Infinity
   breakTorque: Infinity
+--- !u!114 &109750662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff0fbe8b5414f18a6c5b2a7dc5f7a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaOnHookController
+  pullTarget: {fileID: 83647967}
+  stateManager: {fileID: 845879617}
+  tunaMotor: {fileID: 109750650}
+  input: {fileID: 109750652}
+  pullAcceleration: 8
+  draggedMaxSpeed: 7
+  draggedSpeedLimitDamping: 4
+  draggedVelocityDamping: 0.35
+  draggedRotationSpeed: 540
+  draggedRollAngle: 0
+  angularVelocityDamping: 8
+  escapeMoveThreshold: 0.25
+  escapeRequiredClicks: 3
+  escapeClickWindow: 0.75
+  escapeMaxAverageClickInterval: 0.25
+  clickEscapeDuration: 0.6
+  turnaroundRotationSpeed: 720
+  turnaroundMinimumDuration: 0.18
+  turnaroundCompleteAngle: 8
+  turnaroundPullScale: 0.35
+  turnaroundVelocityDamping: 1.4
+  escapeSteerLimitAngle: 28
+  escapeMouseDegreesPerUnit: 0.12
+  escapeSteerReturnSpeed: 45
+  escapeMinimumDuration: 0.3
 --- !u!1001 &111145189
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1002,15 +1039,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1505764
+      value: 0.10842261
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6969025
+      value: -1.7662894
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17549443
+      value: -0.11945576
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2060,7 +2097,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1505764
+      value: 0.10842261
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2068,7 +2105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17549443
+      value: -0.11945576
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2527,15 +2564,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 1.1505764
+      value: 0.10842261
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6969025
+      value: -1.7662894
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.17549443
+      value: -0.11945576
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2896,6 +2933,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 109750661}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750662}
   m_SourcePrefab: {fileID: 100100000, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
 --- !u!1 &1622222679 stripped
 GameObject:

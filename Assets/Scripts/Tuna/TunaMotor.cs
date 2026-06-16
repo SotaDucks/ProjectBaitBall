@@ -16,7 +16,8 @@ namespace TestBoids.Tuna
         private enum ControlMode
         {
             Manual,
-            Scripted
+            Scripted,
+            External
         }
 
         [SerializeField] private TunaInputReader input;
@@ -114,6 +115,11 @@ namespace TestBoids.Tuna
         private Vector3 scriptedDirection = Vector3.forward;
         private float scriptedTurnInput;
         private float scriptedTurnSpeedScale = 1f;
+        private Vector3 externalDirection = Vector3.forward;
+        private float externalThrustInput;
+        private float externalTurnInput;
+        private bool externalAllowSprintClicks;
+        private bool externalSuppressMinimumSwimSpeed = true;
         private readonly Queue<float> sprintClickTimes = new Queue<float>();
         private int currentSprintTier;
         private float currentSprintMaxSpeed;
@@ -129,6 +135,7 @@ namespace TestBoids.Tuna
         public bool HasMoveInput => hasMoveInput;
         public bool IsAirborne => locomotionState == LocomotionState.Airborne;
         public bool IsScripted => controlMode == ControlMode.Scripted;
+        public bool IsExternallyControlled => controlMode == ControlMode.External;
         public bool IsSprinting => currentSprintTier > 0 && Time.time < sprintEndsAt;
         public int CurrentSprintTier => IsSprinting ? currentSprintTier : 0;
         public float MaxHunger => maxHunger;
@@ -231,14 +238,25 @@ namespace TestBoids.Tuna
             }
 
             Vector2 move = ReadControlMove();
-            hasMoveInput = move.sqrMagnitude > inputDeadZone * inputDeadZone;
-            hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
-            turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
-            desiredDirection = BuildDesiredDirection(hasThrustInput ? move.y : 1f);
+            if (controlMode == ControlMode.External)
+            {
+                ApplyExternalControlInput(move);
+            }
+            else
+            {
+                hasMoveInput = move.sqrMagnitude > inputDeadZone * inputDeadZone;
+                hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
+                turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
+                desiredDirection = BuildDesiredDirection(hasThrustInput ? move.y : 1f);
+            }
 
             UpdateSprintClickInput();
             UpdateSprintState();
             UpdateStamina();
+            if (controlMode == ControlMode.External && IsSprinting)
+            {
+                hasMoveInput = true;
+            }
 
             if (hasThrustInput)
             {
@@ -279,6 +297,78 @@ namespace TestBoids.Tuna
             ClearControlState();
         }
 
+        public void BeginExternalControl(Vector3 initialWorldDirection)
+        {
+            controlMode = ControlMode.External;
+            externalDirection = ResolveScriptedDirection(initialWorldDirection);
+            externalThrustInput = 0f;
+            externalTurnInput = 0f;
+            externalAllowSprintClicks = false;
+            externalSuppressMinimumSwimSpeed = true;
+            ClearSprintState();
+            ClearControlState();
+        }
+
+        public void SetExternalControl(
+            Vector3 worldDirection,
+            float thrustInput,
+            float turnInput,
+            bool allowSprintClicks,
+            bool suppressMinimumSwimSpeed = true)
+        {
+            if (controlMode != ControlMode.External)
+            {
+                BeginExternalControl(worldDirection);
+            }
+
+            externalDirection = ResolveScriptedDirection(worldDirection);
+            externalThrustInput = Mathf.Clamp(thrustInput, -1f, 1f);
+            externalTurnInput = Mathf.Clamp(turnInput, -1f, 1f);
+            externalAllowSprintClicks = allowSprintClicks;
+            externalSuppressMinimumSwimSpeed = suppressMinimumSwimSpeed;
+            if (!externalAllowSprintClicks && currentSprintTier > 0)
+            {
+                ClearSprintState();
+            }
+        }
+
+        public void EndExternalControl()
+        {
+            if (controlMode != ControlMode.External)
+            {
+                return;
+            }
+
+            controlMode = ControlMode.Manual;
+            externalThrustInput = 0f;
+            externalTurnInput = 0f;
+            externalAllowSprintClicks = false;
+            externalSuppressMinimumSwimSpeed = true;
+            ClearSprintState();
+            ClearControlState();
+        }
+
+        public void TriggerExternalSprint(int tier)
+        {
+            if (controlMode != ControlMode.External)
+            {
+                return;
+            }
+
+            tier = Mathf.Clamp(tier, 1, 3);
+            if (currentStamina <= 0f)
+            {
+                return;
+            }
+
+            if (!IsSprinting && Time.time < sprintCooldownEndsAt)
+            {
+                return;
+            }
+
+            RefreshSprint(tier);
+        }
+
         public void AddHunger(float amount)
         {
             if (amount <= 0f)
@@ -303,7 +393,20 @@ namespace TestBoids.Tuna
                 return new Vector2(scriptedTurnInput, 0f);
             }
 
+            if (controlMode == ControlMode.External)
+            {
+                return new Vector2(externalTurnInput, externalThrustInput);
+            }
+
             return input ? input.Move : Vector2.zero;
+        }
+
+        private void ApplyExternalControlInput(Vector2 move)
+        {
+            hasThrustInput = Mathf.Abs(move.y) > inputDeadZone;
+            turnInput = Mathf.Abs(move.x) > inputDeadZone ? Mathf.Clamp(move.x, -1f, 1f) : 0f;
+            hasMoveInput = hasThrustInput || Mathf.Abs(turnInput) > 0f || IsSprinting;
+            desiredDirection = ResolveScriptedDirection(externalDirection);
         }
 
         private void UpdateLocomotionState()
@@ -538,7 +641,9 @@ namespace TestBoids.Tuna
                 return;
             }
 
-            if (!enableClickSprint || controlMode != ControlMode.Manual)
+            bool acceptsSprintClicks = controlMode == ControlMode.Manual
+                || (controlMode == ControlMode.External && externalAllowSprintClicks);
+            if (!enableClickSprint || !acceptsSprintClicks)
             {
                 DiscardSprintClickInput();
                 return;
@@ -727,6 +832,11 @@ namespace TestBoids.Tuna
         private void ApplyMinimumSwimSpeed()
         {
             if (minimumSwimSpeed <= 0f)
+            {
+                return;
+            }
+
+            if (controlMode == ControlMode.External && externalSuppressMinimumSwimSpeed)
             {
                 return;
             }
