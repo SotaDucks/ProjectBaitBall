@@ -98,7 +98,7 @@ namespace TestBoids.Gameplay.Lure
         private AutomaticLureMotor GetHookedLure()
         {
             ResolveStateManager();
-            if (!stateManager || stateManager.CurrentState != GameState.OnHook)
+            if (!stateManager || !IsFishingLineState(stateManager.CurrentState))
             {
                 return null;
             }
@@ -136,10 +136,15 @@ namespace TestBoids.Gameplay.Lure
 
         private void OnStateChanged(GameState previousState, GameState nextState)
         {
-            if (nextState != GameState.OnHook)
+            if (!IsFishingLineState(nextState))
             {
                 ClearLines();
             }
+        }
+
+        private static bool IsFishingLineState(GameState state)
+        {
+            return state == GameState.OnHook || state == GameState.TunaHanging;
         }
 
         private void SubscribeToStateManager()

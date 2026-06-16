@@ -7,12 +7,15 @@ namespace TestBoids.Gameplay
     public sealed class CameraPrioritySwitcher : MonoBehaviour
     {
         private const string DefaultTunaOnHookCameraObjectName = "TunaOnHookCamera";
+        private const string DefaultTunaHangingCameraObjectName = "TunaHangingCamera";
 
         [SerializeField] private GameStateManager stateManager;
         [SerializeField] private CinemachineCamera introCamera;
         [SerializeField] private CinemachineCamera thirdPersonAimCamera;
         [SerializeField] private CinemachineCamera tunaOnHookCamera;
+        [SerializeField] private CinemachineCamera tunaHangingCamera;
         [SerializeField] private string tunaOnHookCameraObjectName = DefaultTunaOnHookCameraObjectName;
+        [SerializeField] private string tunaHangingCameraObjectName = DefaultTunaHangingCameraObjectName;
 
         [Header("Priority")]
         [SerializeField] private int activePriority = 10;
@@ -31,6 +34,11 @@ namespace TestBoids.Gameplay
             if (string.IsNullOrWhiteSpace(tunaOnHookCameraObjectName))
             {
                 tunaOnHookCameraObjectName = DefaultTunaOnHookCameraObjectName;
+            }
+
+            if (string.IsNullOrWhiteSpace(tunaHangingCameraObjectName))
+            {
+                tunaHangingCameraObjectName = DefaultTunaHangingCameraObjectName;
             }
         }
 
@@ -98,6 +106,7 @@ namespace TestBoids.Gameplay
             SetPriority(introCamera, introCamera == activeCamera ? activePriority : inactivePriority);
             SetPriority(thirdPersonAimCamera, thirdPersonAimCamera == activeCamera ? activePriority : inactivePriority);
             SetPriority(tunaOnHookCamera, tunaOnHookCamera == activeCamera ? activePriority : inactivePriority);
+            SetPriority(tunaHangingCamera, tunaHangingCamera == activeCamera ? activePriority : inactivePriority);
         }
 
         private CinemachineCamera GetActiveCamera(GameState state)
@@ -108,6 +117,14 @@ namespace TestBoids.Gameplay
                     return introCamera;
 
                 case GameState.OnHook:
+                    return tunaOnHookCamera ? tunaOnHookCamera : thirdPersonAimCamera;
+
+                case GameState.TunaHanging:
+                    if (tunaHangingCamera)
+                    {
+                        return tunaHangingCamera;
+                    }
+
                     return tunaOnHookCamera ? tunaOnHookCamera : thirdPersonAimCamera;
 
                 case GameState.PhaseBaitBallTransition:
@@ -122,6 +139,11 @@ namespace TestBoids.Gameplay
             if (!tunaOnHookCamera)
             {
                 tunaOnHookCamera = FindCinemachineCameraByName(tunaOnHookCameraObjectName);
+            }
+
+            if (!tunaHangingCamera)
+            {
+                tunaHangingCamera = FindCinemachineCameraByName(tunaHangingCameraObjectName);
             }
         }
 

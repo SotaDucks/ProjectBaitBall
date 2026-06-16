@@ -42,6 +42,10 @@ namespace TestBoids.Tuna
         [Header("Player Steering")]
         [Min(0f)] public float playerSteeringSpeedMultiplier = 0.3f;
 
+        [Header("Tuna Hanging Trigger")]
+        [SerializeField] private bool enableTunaHangingTrigger = true;
+        [SerializeField, Min(0f)] private float tunaHangingTriggerDistance = 4f;
+
         [Header("Escape Trigger")]
         [SerializeField, Range(0f, 1f)] private float escapeMoveThreshold = 0.25f;
         [SerializeField, Min(2)] private int escapeRequiredClicks = 3;
@@ -68,6 +72,7 @@ namespace TestBoids.Tuna
         private bool isActive;
         private bool subscribedToStateManager;
         private bool warnedMissingPullTarget;
+        private bool hasTriggeredTunaHanging;
         private bool pendingClickSprint;
         private float clickEscapeEndsAt;
         private float turnaroundCanCompleteAt;
@@ -121,6 +126,7 @@ namespace TestBoids.Tuna
             draggedMouseDegreesPerUnit = Mathf.Max(0f, draggedMouseDegreesPerUnit);
             draggedSteerReturnSpeed = Mathf.Max(0f, draggedSteerReturnSpeed);
             playerSteeringSpeedMultiplier = Mathf.Max(0f, playerSteeringSpeedMultiplier);
+            tunaHangingTriggerDistance = Mathf.Max(0f, tunaHangingTriggerDistance);
             escapeRequiredClicks = Mathf.Max(2, escapeRequiredClicks);
             escapeClickWindow = Mathf.Max(0.01f, escapeClickWindow);
             escapeMaxAverageClickInterval = Mathf.Max(0.01f, escapeMaxAverageClickInterval);
@@ -146,6 +152,11 @@ namespace TestBoids.Tuna
             if (!pullTarget)
             {
                 WarnMissingPullTarget();
+                return;
+            }
+
+            if (TryEnterTunaHanging())
+            {
                 return;
             }
 
@@ -237,6 +248,7 @@ namespace TestBoids.Tuna
             recentMouseClicks.Clear();
             clickEscapeEndsAt = 0f;
             pendingClickSprint = false;
+            hasTriggeredTunaHanging = false;
             ResolveReferences();
 
             if (tunaMotor)
@@ -268,6 +280,28 @@ namespace TestBoids.Tuna
             {
                 tunaMotor.EndExternalControl();
             }
+        }
+
+        private bool TryEnterTunaHanging()
+        {
+            if (!enableTunaHangingTrigger
+                || hasTriggeredTunaHanging
+                || !stateManager
+                || stateManager.CurrentState != GameState.OnHook
+                || !pullTarget)
+            {
+                return false;
+            }
+
+            float triggerDistanceSqr = tunaHangingTriggerDistance * tunaHangingTriggerDistance;
+            if ((pullTarget.position - transform.position).sqrMagnitude > triggerDistanceSqr)
+            {
+                return false;
+            }
+
+            hasTriggeredTunaHanging = true;
+            stateManager.SetState(GameState.TunaHanging);
+            return true;
         }
 
         private void BeginDragged()

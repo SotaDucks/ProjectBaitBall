@@ -84,7 +84,7 @@ namespace TestBoids.Gameplay
             }
 
             GameState previousState = CurrentState;
-            if (nextState != GameState.OnHook)
+            if (nextState != GameState.OnHook && nextState != GameState.TunaHanging)
             {
                 ClearHookedLure();
             }
@@ -96,11 +96,15 @@ namespace TestBoids.Gameplay
             {
                 Debug.Log("GameState entered OnHook.", this);
             }
+            else if (nextState == GameState.TunaHanging)
+            {
+                Debug.Log("GameState entered TunaHanging.", this);
+            }
         }
 
         private void OnLureBitten(LureBittenEvent bittenEvent)
         {
-            if (CurrentState == GameState.OnHook)
+            if (CurrentState == GameState.OnHook || CurrentState == GameState.TunaHanging)
             {
                 return;
             }

@@ -5,6 +5,7 @@ namespace TestBoids.Gameplay
         Intro,
         PhaseBaitBall,
         PhaseBaitBallTransition,
-        OnHook
+        OnHook,
+        TunaHanging
     }
 }
