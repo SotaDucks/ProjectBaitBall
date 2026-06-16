@@ -54,13 +54,14 @@ namespace TestBoids.Tuna
                     continue;
                 }
 
+                Vector3 lureForward = lure.transform.forward;
                 if (!hookConnector || !hookConnector.TryConnectLure(lure))
                 {
                     continue;
                 }
 
                 hasBittenLure = true;
-                eventBus.RaiseLureBitten(new LureBittenEvent(transform, lure.transform));
+                eventBus.RaiseLureBitten(new LureBittenEvent(transform, lure.transform, lureForward));
                 return;
             }
         }

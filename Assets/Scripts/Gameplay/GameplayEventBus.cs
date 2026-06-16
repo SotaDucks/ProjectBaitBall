@@ -92,13 +92,15 @@ namespace TestBoids.Gameplay
 
     public readonly struct LureBittenEvent
     {
-        public LureBittenEvent(Transform tuna, Transform lure)
+        public LureBittenEvent(Transform tuna, Transform lure, Vector3 lureForward = default)
         {
             Tuna = tuna;
             Lure = lure;
+            LureForward = lureForward;
         }
 
         public Transform Tuna { get; }
         public Transform Lure { get; }
+        public Vector3 LureForward { get; }
     }
 }

@@ -6,9 +6,13 @@ namespace TestBoids.Gameplay
     [DisallowMultipleComponent]
     public sealed class CameraPrioritySwitcher : MonoBehaviour
     {
+        private const string DefaultTunaOnHookCameraObjectName = "TunaOnHookCamera";
+
         [SerializeField] private GameStateManager stateManager;
         [SerializeField] private CinemachineCamera introCamera;
         [SerializeField] private CinemachineCamera thirdPersonAimCamera;
+        [SerializeField] private CinemachineCamera tunaOnHookCamera;
+        [SerializeField] private string tunaOnHookCameraObjectName = DefaultTunaOnHookCameraObjectName;
 
         [Header("Priority")]
         [SerializeField] private int activePriority = 10;
@@ -19,6 +23,15 @@ namespace TestBoids.Gameplay
         private void Awake()
         {
             ResolveStateManager();
+            ResolveNamedCameras();
+        }
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(tunaOnHookCameraObjectName))
+            {
+                tunaOnHookCameraObjectName = DefaultTunaOnHookCameraObjectName;
+            }
         }
 
         private void OnEnable()
@@ -79,10 +92,12 @@ namespace TestBoids.Gameplay
 
         private void ApplyState(GameState state)
         {
+            ResolveNamedCameras();
             CinemachineCamera activeCamera = GetActiveCamera(state);
 
             SetPriority(introCamera, introCamera == activeCamera ? activePriority : inactivePriority);
             SetPriority(thirdPersonAimCamera, thirdPersonAimCamera == activeCamera ? activePriority : inactivePriority);
+            SetPriority(tunaOnHookCamera, tunaOnHookCamera == activeCamera ? activePriority : inactivePriority);
         }
 
         private CinemachineCamera GetActiveCamera(GameState state)
@@ -92,10 +107,21 @@ namespace TestBoids.Gameplay
                 case GameState.Intro:
                     return introCamera;
 
+                case GameState.OnHook:
+                    return tunaOnHookCamera ? tunaOnHookCamera : thirdPersonAimCamera;
+
                 case GameState.PhaseBaitBallTransition:
                 case GameState.PhaseBaitBall:
                 default:
                     return thirdPersonAimCamera;
+            }
+        }
+
+        private void ResolveNamedCameras()
+        {
+            if (!tunaOnHookCamera)
+            {
+                tunaOnHookCamera = FindCinemachineCameraByName(tunaOnHookCameraObjectName);
             }
         }
 
@@ -105,6 +131,27 @@ namespace TestBoids.Gameplay
             {
                 camera.Priority = priority;
             }
+        }
+
+        private static CinemachineCamera FindCinemachineCameraByName(string objectName)
+        {
+            if (string.IsNullOrWhiteSpace(objectName))
+            {
+                return null;
+            }
+
+            CinemachineCamera[] cameras = FindObjectsByType<CinemachineCamera>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            foreach (CinemachineCamera camera in cameras)
+            {
+                if (camera && camera.name == objectName)
+                {
+                    return camera;
+                }
+            }
+
+            return null;
         }
     }
 }

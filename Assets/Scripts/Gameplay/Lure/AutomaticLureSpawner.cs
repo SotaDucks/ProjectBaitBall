@@ -133,6 +133,11 @@ namespace TestBoids.Gameplay.Lure
             return lure;
         }
 
+        public void DisableAutomaticSpawning()
+        {
+            spawnAutomatically = false;
+        }
+
         private Vector3 FindSpawnPosition()
         {
             for (int attempt = 0; attempt < maximumSampleAttempts; attempt++)

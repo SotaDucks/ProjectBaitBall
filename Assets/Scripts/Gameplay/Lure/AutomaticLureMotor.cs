@@ -258,7 +258,7 @@ namespace TestBoids.Gameplay.Lure
             return passPoint;
         }
 
-        private void BeginSurfaceExit()
+        public void BeginSurfaceExit()
         {
             if (travelStage == TravelStage.Surfacing)
             {

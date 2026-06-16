@@ -1,4 +1,5 @@
 using System;
+using TestBoids.Gameplay.Lure;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
@@ -16,6 +17,10 @@ namespace TestBoids.Gameplay
 
         public static GameStateManager Instance { get; private set; }
         public GameState CurrentState { get; private set; }
+        public Transform HookedTuna { get; private set; }
+        public Transform HookedLure { get; private set; }
+        public AutomaticLureMotor HookedLureMotor { get; private set; }
+        public Vector3 HookedLureForward { get; private set; }
 
         public event Action<GameState, GameState> StateChanged;
 
@@ -79,6 +84,11 @@ namespace TestBoids.Gameplay
             }
 
             GameState previousState = CurrentState;
+            if (nextState != GameState.OnHook)
+            {
+                ClearHookedLure();
+            }
+
             CurrentState = nextState;
             StateChanged?.Invoke(previousState, nextState);
 
@@ -90,7 +100,99 @@ namespace TestBoids.Gameplay
 
         private void OnLureBitten(LureBittenEvent bittenEvent)
         {
+            if (CurrentState == GameState.OnHook)
+            {
+                return;
+            }
+
+            HookedTuna = bittenEvent.Tuna;
+            HookedLure = bittenEvent.Lure;
+            HookedLureMotor = ResolveLureMotor(bittenEvent.Lure);
+            HookedLureForward = ResolveLureForward(bittenEvent);
+
+            StopAutomaticLureSpawners();
+            BeginUnhookedLureSurfaceExit(HookedLureMotor);
             SetState(GameState.OnHook);
+        }
+
+        private static void BeginUnhookedLureSurfaceExit(AutomaticLureMotor hookedLure)
+        {
+            AutomaticLureMotor[] lures = FindObjectsByType<AutomaticLureMotor>(FindObjectsSortMode.None);
+            for (int i = 0; i < lures.Length; i++)
+            {
+                AutomaticLureMotor lure = lures[i];
+                if (!lure || lure == hookedLure)
+                {
+                    continue;
+                }
+
+                lure.BeginSurfaceExit();
+            }
+        }
+
+        private static void StopAutomaticLureSpawners()
+        {
+            AutomaticLureSpawner[] spawners = FindObjectsByType<AutomaticLureSpawner>(
+                FindObjectsInactive.Include,
+                FindObjectsSortMode.None);
+            for (int i = 0; i < spawners.Length; i++)
+            {
+                AutomaticLureSpawner spawner = spawners[i];
+                if (spawner)
+                {
+                    spawner.DisableAutomaticSpawning();
+                }
+            }
+        }
+
+        private static AutomaticLureMotor ResolveLureMotor(Transform lureTransform)
+        {
+            if (!lureTransform)
+            {
+                return null;
+            }
+
+            AutomaticLureMotor lure = lureTransform.GetComponent<AutomaticLureMotor>();
+            if (lure)
+            {
+                return lure;
+            }
+
+            lure = lureTransform.GetComponentInParent<AutomaticLureMotor>();
+            if (lure)
+            {
+                return lure;
+            }
+
+            return lureTransform.GetComponentInChildren<AutomaticLureMotor>();
+        }
+
+        private static Vector3 ResolveLureForward(LureBittenEvent bittenEvent)
+        {
+            Vector3 lureForward = Vector3.ProjectOnPlane(bittenEvent.LureForward, Vector3.up);
+            if (lureForward.sqrMagnitude > 0.000001f)
+            {
+                return lureForward.normalized;
+            }
+
+            if (bittenEvent.Lure)
+            {
+                lureForward = Vector3.ProjectOnPlane(bittenEvent.Lure.forward, Vector3.up);
+                if (lureForward.sqrMagnitude > 0.000001f)
+                {
+                    return lureForward.normalized;
+                }
+            }
+
+            return Vector3.forward;
+        }
+
+        private void ClearHookedLure()
+        {
+            HookedTuna = null;
+            HookedLure = null;
+            HookedLureMotor = null;
+            HookedLureForward = Vector3.forward;
         }
 
         private void SubscribeToEventBus()
