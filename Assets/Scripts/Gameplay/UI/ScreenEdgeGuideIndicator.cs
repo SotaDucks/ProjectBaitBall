@@ -27,6 +27,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField] private CanvasGroup guideCanvasGroup;
         [SerializeField] private TMP_Text distanceGuide;
         [SerializeField] private GameStateManager stateManager;
+        [SerializeField] private GameplayEventBus eventBus;
 
         [Header("Direction")]
         [SerializeField] private DirectionMode directionMode = DirectionMode.CameraHorizontalPlane;
@@ -39,7 +40,7 @@ namespace TestBoids.Gameplay.UI
         [SerializeField, Min(0f)] private float verticalCueStrength = 1f;
 
         [Header("Visibility")]
-        [SerializeField] private bool hideDuringIntro = true;
+        [SerializeField] private bool hideAfterTunaSchoolFocus = true;
         [SerializeField] private bool hideWhenTargetOnScreen = true;
         [SerializeField, Range(0f, 0.5f)] private float screenPadding = 0.05f;
 
@@ -57,6 +58,8 @@ namespace TestBoids.Gameplay.UI
         [SerializeField, Range(0f, 1f)] private float centerHideRadius = 0.2f;
 
         private Vector2 positionVelocity;
+        private bool subscribedToEventBus;
+        private bool tunaSchoolFocusTriggered;
 
         public Transform Source => source;
         public Transform Target => target;
@@ -75,9 +78,30 @@ namespace TestBoids.Gameplay.UI
             ResolveReferences();
         }
 
+        private void OnEnable()
+        {
+            SubscribeToEventBus();
+        }
+
+        private void Start()
+        {
+            SubscribeToEventBus();
+        }
+
+        private void OnDisable()
+        {
+            if (eventBus && subscribedToEventBus)
+            {
+                eventBus.TunaSchoolFocusTriggered -= OnTunaSchoolFocusTriggered;
+            }
+
+            subscribedToEventBus = false;
+        }
+
         private void LateUpdate()
         {
             ResolveReferences();
+            SubscribeToEventBus();
 
             if (ShouldHideForCurrentState())
             {
@@ -159,6 +183,16 @@ namespace TestBoids.Gameplay.UI
             if (!stateManager)
             {
                 stateManager = FindFirstObjectByType<GameStateManager>();
+            }
+
+            if (!eventBus)
+            {
+                eventBus = GameplayEventBus.Instance;
+            }
+
+            if (!eventBus)
+            {
+                eventBus = FindFirstObjectByType<GameplayEventBus>(FindObjectsInactive.Include);
             }
         }
 
@@ -285,9 +319,35 @@ namespace TestBoids.Gameplay.UI
 
         private bool ShouldHideForCurrentState()
         {
-            return hideDuringIntro
-                && stateManager
-                && stateManager.CurrentState == GameState.Intro;
+            if (stateManager && stateManager.CurrentState == GameState.Intro)
+            {
+                return true;
+            }
+
+            return hideAfterTunaSchoolFocus && tunaSchoolFocusTriggered;
+        }
+
+        private void SubscribeToEventBus()
+        {
+            if (subscribedToEventBus)
+            {
+                return;
+            }
+
+            ResolveReferences();
+            if (!eventBus)
+            {
+                return;
+            }
+
+            eventBus.TunaSchoolFocusTriggered += OnTunaSchoolFocusTriggered;
+            subscribedToEventBus = true;
+        }
+
+        private void OnTunaSchoolFocusTriggered(TunaSchoolFocusEvent focusEvent)
+        {
+            tunaSchoolFocusTriggered = true;
+            HideImmediate();
         }
 
         private TMP_Text FindDistanceGuide()
@@ -311,7 +371,6 @@ namespace TestBoids.Gameplay.UI
                 return;
             }
 
-            distanceGuide.enabled = showDistance;
             if (showDistance)
             {
                 distanceGuide.text = $"{Mathf.RoundToInt(distance)}M";
@@ -361,6 +420,8 @@ namespace TestBoids.Gameplay.UI
 
         private void SetAlpha(float targetAlpha)
         {
+            SetDistanceGuideVisible(targetAlpha > 0f && showDistance);
+
             if (!guideCanvasGroup)
             {
                 return;
@@ -374,9 +435,19 @@ namespace TestBoids.Gameplay.UI
 
         private void SetAlphaImmediate(float alpha)
         {
+            SetDistanceGuideVisible(alpha > 0f && showDistance);
+
             if (guideCanvasGroup)
             {
                 guideCanvasGroup.alpha = alpha;
+            }
+        }
+
+        private void SetDistanceGuideVisible(bool visible)
+        {
+            if (distanceGuide)
+            {
+                distanceGuide.enabled = visible;
             }
         }
     }

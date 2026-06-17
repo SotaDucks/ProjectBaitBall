@@ -15518,7 +15518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &126516749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15560,13 +15560,14 @@ MonoBehaviour:
   guideCanvasGroup: {fileID: 574700277}
   distanceGuide: {fileID: 994952213}
   stateManager: {fileID: 1006078978}
+  eventBus: {fileID: 390895503}
   directionMode: 0
   minimumDistanceToShow: 0.5
   backSideDeadZone: 0.15
   defaultBackSide: 1
   verticalCueThreshold: 0.35
   verticalCueStrength: 1
-  hideDuringIntro: 1
+  hideAfterTunaSchoolFocus: 1
   hideWhenTargetOnScreen: 1
   screenPadding: 0.1
   showDistance: 1
