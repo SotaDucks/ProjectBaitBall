@@ -7,16 +7,15 @@ namespace TestBoids.Gameplay.Lure
     public sealed class AutomaticLureSpawner : MonoBehaviour
     {
         [Header("References")]
+        [SerializeField] private GameplayEventBus eventBus;
         [SerializeField, Tooltip("Collection root prefab containing an AutomaticLureMotor in its hierarchy.")]
         private GameObject lurePrefab;
         [SerializeField] private Transform tuna;
         [SerializeField] private Camera referenceCamera;
         [SerializeField] private Transform spawnParent;
 
-        [Header("Automatic Spawning")]
+        [Header("Lure Entrance Spawning")]
         [SerializeField] private bool spawnAutomatically = true;
-        [SerializeField, Min(0f)] private float initialSpawnDelay = 1f;
-        [SerializeField] private Vector2 spawnIntervalRange = new(8f, 12f);
         [SerializeField, Min(1)] private int maximumActiveLures = 1;
 
         [Header("Hidden Spawn Area")]
@@ -38,7 +37,7 @@ namespace TestBoids.Gameplay.Lure
         [SerializeField, Min(0f)] private float horizontalPassRadius = 2f;
 
         private readonly List<ActiveLure> activeLures = new();
-        private float nextSpawnAt;
+        private bool subscribedToEventBus;
 
         private sealed class ActiveLure
         {
@@ -64,14 +63,26 @@ namespace TestBoids.Gameplay.Lure
 
         private void OnEnable()
         {
-            nextSpawnAt = Time.time + initialSpawnDelay;
+            SubscribeToEventBus();
+        }
+
+        private void Start()
+        {
+            SubscribeToEventBus();
+        }
+
+        private void OnDisable()
+        {
+            if (eventBus && subscribedToEventBus)
+            {
+                eventBus.LureEntrance -= OnLureEntrance;
+            }
+
+            subscribedToEventBus = false;
         }
 
         private void OnValidate()
         {
-            initialSpawnDelay = Mathf.Max(0f, initialSpawnDelay);
-            spawnIntervalRange.x = Mathf.Max(0.05f, spawnIntervalRange.x);
-            spawnIntervalRange.y = Mathf.Max(spawnIntervalRange.x, spawnIntervalRange.y);
             maximumActiveLures = Mathf.Max(1, maximumActiveLures);
             minimumSpawnDistance = Mathf.Max(0.1f, minimumSpawnDistance);
             maximumSpawnDistance = Mathf.Max(minimumSpawnDistance, maximumSpawnDistance);
@@ -86,18 +97,20 @@ namespace TestBoids.Gameplay.Lure
         private void Update()
         {
             RemoveDestroyedLures();
+        }
 
-            if (!spawnAutomatically || Time.time < nextSpawnAt)
+        private void OnLureEntrance(LureEntranceEvent entranceEvent)
+        {
+            if (!spawnAutomatically)
             {
                 return;
             }
 
+            RemoveDestroyedLures();
             if (activeLures.Count < maximumActiveLures)
             {
                 SpawnNow();
             }
-
-            ScheduleNextSpawn();
         }
 
         public AutomaticLureMotor SpawnNow()
@@ -221,17 +234,39 @@ namespace TestBoids.Gameplay.Lure
             }
         }
 
-        private void ScheduleNextSpawn()
-        {
-            nextSpawnAt = Time.time + Random.Range(spawnIntervalRange.x, spawnIntervalRange.y);
-        }
-
         private void ResolveReferences()
         {
+            if (!eventBus)
+            {
+                eventBus = GameplayEventBus.Instance;
+            }
+
+            if (!eventBus)
+            {
+                eventBus = FindFirstObjectByType<GameplayEventBus>(FindObjectsInactive.Include);
+            }
+
             if (!referenceCamera)
             {
                 referenceCamera = Camera.main;
             }
+        }
+
+        private void SubscribeToEventBus()
+        {
+            if (subscribedToEventBus)
+            {
+                return;
+            }
+
+            ResolveReferences();
+            if (!eventBus)
+            {
+                return;
+            }
+
+            eventBus.LureEntrance += OnLureEntrance;
+            subscribedToEventBus = true;
         }
     }
 }

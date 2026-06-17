@@ -574,6 +574,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -824,6 +825,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -1010,6 +1012,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -2273,6 +2276,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -2460,6 +2464,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -3092,6 +3097,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -3407,6 +3413,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -3758,6 +3765,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -4072,6 +4080,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -4811,6 +4820,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -5093,6 +5103,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -5440,6 +5451,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -5855,6 +5867,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -6553,6 +6566,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -6740,6 +6754,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -7670,6 +7685,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -9018,6 +9034,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -9745,6 +9762,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -9964,6 +9982,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -10316,6 +10335,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -10503,6 +10523,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -11074,6 +11095,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -11229,6 +11251,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -11611,6 +11634,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -11930,6 +11954,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -12703,6 +12728,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -12997,7 +13023,7 @@ MonoBehaviour:
   sprintStaminaDrainPerSecond: 20
   staminaRecoveryPerSecond: 10
   maxHunger: 100
-  initialHunger: 10
+  initialHunger: 30
   turnSpring: 92.4
   turnDamping: 9
   maxAngularVelocity: 8
@@ -13079,6 +13105,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 109750648}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -13217,6 +13244,108 @@ MonoBehaviour:
   minimumImpactSpeed: 2
   maximumImpactSpeed: 16
   repeatHitCooldown: 0.12
+--- !u!114 &109750660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e3cf8b4198a14696a4518e916ec2db15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaLureBiteSensor
+  mouth: {fileID: 2069703636339701335}
+  hookConnector: {fileID: 0}
+  eventBus: {fileID: 390895503}
+  autoResolveReferences: 1
+  biteRadius: 1
+  biteAngleDegrees: 90
+--- !u!114 &109750661
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3bdcba0ca0df41ab863da5e4487e9063, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaLureHookConnector
+  mouthMount: {fileID: 938804944}
+  tunaBody: {fileID: 109750651}
+  autoResolveReferences: 1
+  autoConfigureConnectedAnchor: 1
+  breakForce: Infinity
+  breakTorque: Infinity
+--- !u!114 &109750662
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a2c0c7d8e7b4c8cb70699255c5ed6a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaHangingController
+  stateManager: {fileID: 1006078978}
+  onHookController: {fileID: 109750663}
+  tunaMotor: {fileID: 109750650}
+  body: {fileID: 109750651}
+  hangingPosition: {fileID: 1333362145}
+  hangingPositionSearchRoot: {fileID: 0}
+  hangingPositionObjectName: TunaHangingPosition
+  moveDuration: 2
+  followHangingPositionAfterArrival: 1
+--- !u!114 &109750663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109750646}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff0fbe8b5414f18a6c5b2a7dc5f7a28, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Tuna.TunaOnHookController
+  pullTarget: {fileID: 1337131582}
+  stateManager: {fileID: 1006078978}
+  tunaMotor: {fileID: 109750650}
+  input: {fileID: 109750652}
+  sway: {fileID: 109750653}
+  pullAcceleration: 8
+  draggedMaxSpeed: 7
+  draggedSpeedLimitDamping: 4
+  draggedVelocityDamping: 0.35
+  draggedRotationSpeed: 350
+  draggedRollAngleRange: {x: 50, y: 75}
+  draggedRollCycleSpeed: 10
+  angularVelocityDamping: 8
+  draggedSteerLimitAngle: 10
+  draggedMouseDegreesPerUnit: 0.04
+  draggedSteerReturnSpeed: 30
+  playerSteeringSpeedMultiplier: 0.3
+  enableTunaHangingTrigger: 1
+  tunaHangingTriggerDistance: 4
+  escapeMoveThreshold: 0.25
+  escapeRequiredClicks: 3
+  escapeClickWindow: 0.75
+  escapeMaxAverageClickInterval: 0.25
+  clickEscapeDuration: 0.6
+  turnaroundRotationSpeed: 350
+  turnaroundMinimumDuration: 0.18
+  turnaroundCompleteAngle: 8
+  turnaroundPullScale: 0.35
+  turnaroundVelocityDamping: 1.4
+  escapeSteerLimitAngle: 28
+  escapeMouseDegreesPerUnit: 0.12
+  escapeSteerReturnSpeed: 45
+  escapeMinimumDuration: 0.3
 --- !u!1 &110830668
 GameObject:
   m_ObjectHideFlags: 0
@@ -13583,6 +13712,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -13802,6 +13932,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -14381,6 +14512,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -15674,6 +15806,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -15861,6 +15994,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -16048,6 +16182,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -16649,6 +16784,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -16922,6 +17058,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 140236093}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -17710,6 +17847,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -18057,6 +18195,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -18276,6 +18415,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -18973,6 +19113,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -19770,6 +19911,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -20021,6 +20163,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -20850,6 +20993,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -21042,6 +21186,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -21483,6 +21628,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -23319,6 +23465,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -23474,6 +23621,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -23856,6 +24004,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -24074,6 +24223,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -24967,6 +25117,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -25604,6 +25755,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -25790,6 +25942,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -26008,6 +26161,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -26200,6 +26354,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -26515,6 +26670,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -26801,6 +26957,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -27470,6 +27627,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -28341,6 +28499,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -28815,6 +28974,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -29353,6 +29513,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -29540,6 +29701,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -29986,6 +30148,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -30268,6 +30431,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -30523,6 +30687,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -31390,6 +31555,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -32612,6 +32778,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -33549,6 +33716,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -33704,6 +33872,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -33891,6 +34060,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -34455,6 +34625,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 272541242}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -34761,6 +34932,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -35042,6 +35214,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -35197,6 +35370,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -36223,6 +36397,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -37153,6 +37328,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -37663,6 +37839,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -37818,6 +37995,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -38073,6 +38251,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -39261,6 +39440,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -39454,15 +39634,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.194617
+      value: -0.00872673
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44086644
+      value: -1.6830279
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2208707
+      value: 0.18202053
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -40187,6 +40367,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -40442,6 +40623,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -40661,6 +40843,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -40911,6 +41094,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -41717,6 +41901,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -42296,6 +42481,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -43550,6 +43736,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -44094,6 +44281,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -45020,6 +45208,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -45238,6 +45427,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -45556,6 +45746,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -45903,6 +46094,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -46613,6 +46805,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -46900,6 +47093,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -47087,6 +47281,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -47656,6 +47851,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -48155,6 +48351,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -48569,6 +48766,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -48724,6 +48922,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -49726,6 +49925,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -50247,6 +50447,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -51089,6 +51290,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -51275,6 +51477,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -52142,6 +52345,137 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00007922761, y: 0.034793764, z: -0.0005926825}
     m_Extent: {x: 0.017795457, y: 0.036787048, z: 0.018147636}
   m_DirtyAABB: 0
+--- !u!1 &411473522
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 411473523}
+  - component: {fileID: 411473527}
+  - component: {fileID: 411473526}
+  - component: {fileID: 411473525}
+  - component: {fileID: 411473524}
+  m_Layer: 0
+  m_Name: RodCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &411473523
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411473522}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.38268343, y: 0, z: 0, w: 0.92387956}
+  m_LocalPosition: {x: 0, y: 0.4156, z: -0.669}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0.03}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1516510061}
+  m_LocalEulerAnglesHint: {x: -45, y: 0, z: 0}
+--- !u!114 &411473524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411473522}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6757b231cedd544c583ef8aeaf773b2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Obi::Obi.ObiCollider
+  thickness: 0
+  inverted: 0
+  material: {fileID: 0}
+  filter: -65535
+  m_SourceCollider: {fileID: 411473525}
+  m_DistanceField: {fileID: 0}
+--- !u!65 &411473525
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411473522}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &411473526
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411473522}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &411473527
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 411473522}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &411784255
 GameObject:
   m_ObjectHideFlags: 0
@@ -52525,6 +52859,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 416997825}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -53254,6 +53589,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -53605,6 +53941,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -54241,6 +54578,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -54724,6 +55062,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -54942,6 +55281,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -55097,6 +55437,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -55316,6 +55657,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -56640,6 +56982,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -57177,6 +57520,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 449990386}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -57741,6 +58085,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -58251,6 +58596,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -58438,6 +58784,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -59284,6 +59631,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -59598,6 +59946,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -59917,6 +60266,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -60136,6 +60486,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -60353,6 +60704,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -61864,6 +62216,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -62311,6 +62664,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -64569,6 +64923,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -64724,6 +65079,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -65846,6 +66202,94 @@ Transform:
   - {fileID: 241433628}
   m_Father: {fileID: 262035853}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &515777910
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.46033785
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17.11
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      propertyPath: m_Name
+      value: boat
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 411473523}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1337131582}
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1333362145}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1516510063}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1516510062}
+  m_SourcePrefab: {fileID: 100100000, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
 --- !u!1 &515787032
 GameObject:
   m_ObjectHideFlags: 0
@@ -66267,6 +66711,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -66873,6 +67318,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -67416,6 +67862,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -67794,6 +68241,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -68181,6 +68629,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -68336,6 +68785,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -69196,6 +69646,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -69451,6 +69902,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -69606,6 +70058,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -69951,6 +70404,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -70875,6 +71329,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -71582,6 +72037,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -72032,6 +72488,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -73057,6 +73514,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -73276,6 +73734,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -73505,6 +73964,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -73951,6 +74411,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -75381,6 +75842,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -75632,6 +76094,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -75915,6 +76378,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -76716,6 +77180,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -78101,6 +78566,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -78256,6 +78722,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -78927,6 +79394,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -79177,6 +79645,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -79720,6 +80189,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -80263,6 +80733,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -80514,6 +80985,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -80787,6 +81259,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 617707715}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -81539,6 +82012,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -82176,6 +82650,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -82690,6 +83165,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -83825,6 +84301,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -83980,6 +84457,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -84135,6 +84613,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -86328,6 +86807,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -86609,6 +87089,115 @@ Transform:
   - {fileID: 527177865}
   m_Father: {fileID: 103680000}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &669381871
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 669381872}
+  - component: {fileID: 669381875}
+  - component: {fileID: 669381874}
+  - component: {fileID: 669381873}
+  m_Layer: 0
+  m_Name: TunaOnHookCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &669381872
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669381871}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.9738719, z: -0, w: -0.22709824}
+  m_LocalPosition: {x: -13.315909, y: -11.06966, z: -221.33592}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1813710330}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &669381873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669381871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
+  LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &669381874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669381871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 1
+    PositionDamping: {x: 0.2, y: 0.2, z: 0.2}
+    AngularDampingMode: 0
+    RotationDamping: {x: 0.5, y: 0.5, z: 0.5}
+    QuaternionDamping: 1
+  FollowOffset: {x: -0.66, y: 0, z: 1.01}
+--- !u!114 &669381875
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 669381871}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 11
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 109750647}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!1 &669551847
 GameObject:
   m_ObjectHideFlags: 0
@@ -87392,6 +87981,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -87834,6 +88424,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -88217,6 +88808,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -89335,6 +89927,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -90398,6 +90991,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -90585,6 +91179,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -91415,6 +92010,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -91826,6 +92422,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -92398,6 +92995,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -92585,6 +93183,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -93870,6 +94469,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -94184,6 +94784,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -94563,6 +95164,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -95077,6 +95679,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -95423,6 +96026,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -95770,6 +96374,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -95925,6 +96530,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -96102,6 +96708,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 744884078}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -96540,6 +97147,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -96823,6 +97431,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -97749,6 +98358,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -98258,6 +98868,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -99028,6 +99639,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -99429,6 +100041,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 770255851}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -100318,6 +100931,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -100791,6 +101405,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 781587201}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -102013,6 +102628,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -102200,6 +102816,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -102514,6 +103131,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -103380,6 +103998,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -103599,6 +104218,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -103817,6 +104437,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -104154,6 +104775,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 803596521}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -104751,6 +105373,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -105160,6 +105783,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -105510,6 +106134,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -105825,6 +106450,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -106012,6 +106638,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -106327,6 +106954,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -107811,6 +108439,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -108030,6 +108659,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -110083,6 +110713,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 847120785}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -110937,6 +111568,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -111706,6 +112338,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -112755,6 +113388,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -113365,6 +113999,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -114006,6 +114641,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -114289,6 +114925,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -115453,6 +116090,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -115800,6 +116438,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -116868,6 +117507,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -117341,6 +117981,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -117527,6 +118168,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -117714,6 +118356,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -118319,6 +118962,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -118506,6 +119150,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -119473,6 +120118,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -119724,6 +120370,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -119879,6 +120526,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -120353,6 +121001,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -121446,6 +122095,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -122665,6 +123315,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -122884,6 +123535,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -123394,6 +124046,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -123581,6 +124234,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -125189,6 +125843,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -125376,6 +126031,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -125531,6 +126187,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -126178,6 +126835,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -127045,15 +127703,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.194617
+      value: -0.00872673
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44086644
+      value: -0.6666667
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2208707
+      value: 0.18202053
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -127536,6 +128194,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -128044,6 +128703,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -128986,6 +129646,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -129141,6 +129802,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -129359,6 +130021,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -129738,6 +130401,7 @@ MonoBehaviour:
   initialState: 0
   transitionToPhaseBaitBallWithSpace: 1
   phaseBaitBallTestKey: 32
+  eventBus: {fileID: 0}
 --- !u!4 &1006078979
 Transform:
   m_ObjectHideFlags: 0
@@ -129768,7 +130432,11 @@ MonoBehaviour:
   stateManager: {fileID: 1006078978}
   introCamera: {fileID: 1322702484}
   thirdPersonAimCamera: {fileID: 1033788101}
-  activePriority: 10
+  tunaOnHookCamera: {fileID: 669381875}
+  tunaHangingCamera: {fileID: 1996302027}
+  tunaOnHookCameraObjectName: TunaOnHookCamera
+  tunaHangingCameraObjectName: TunaHangingCamera
+  activePriority: 11
   inactivePriority: 0
 --- !u!114 &1006078981
 MonoBehaviour:
@@ -129922,6 +130590,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -130427,6 +131096,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -130873,6 +131543,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -131192,6 +131863,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -131701,6 +132373,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -132116,6 +132789,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -132566,6 +133240,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -133407,6 +134082,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -135505,6 +136181,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -136242,6 +136919,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -136789,6 +137467,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -137008,6 +137687,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -137323,6 +138003,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -139283,6 +139964,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -139502,6 +140184,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -139784,6 +140467,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -140391,6 +141075,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -140610,6 +141295,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -141479,6 +142165,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -142960,6 +143647,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -143115,6 +143803,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -143334,6 +144023,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -143583,6 +144273,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -143738,6 +144429,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -143989,6 +144681,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -144504,6 +145197,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -144659,6 +145353,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -144846,6 +145541,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -145380,6 +146076,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1130809538}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -145590,6 +146287,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -145745,6 +146443,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -146902,6 +147601,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -147517,6 +148217,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -147959,6 +148660,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -148310,6 +149012,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -148785,6 +149488,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -149714,6 +150418,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -150415,6 +151120,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -150666,6 +151372,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -150852,6 +151559,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -151629,6 +152337,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -151948,6 +152657,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -152686,6 +153396,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -153589,6 +154300,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -153904,6 +154616,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -154457,6 +155170,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -154644,6 +155358,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -155344,6 +156059,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -155553,6 +156269,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1208989516}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -156249,6 +156966,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -156987,6 +157705,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -157654,6 +158373,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -157905,6 +158625,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -158060,6 +158781,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -158542,6 +159264,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -158856,6 +159579,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -159011,6 +159735,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -159330,6 +160055,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -159580,6 +160306,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -159990,6 +160717,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -160308,6 +161036,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -160495,6 +161224,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -160650,6 +161380,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -161033,6 +161764,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -161415,6 +162147,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -161570,6 +162303,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -161884,6 +162618,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -162071,6 +162806,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -162973,6 +163709,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -163128,6 +163865,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -163283,6 +164021,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -164090,6 +164829,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -164505,6 +165245,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -165046,6 +165787,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -165429,6 +166171,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -166095,6 +166838,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -166441,6 +167185,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -166760,6 +167505,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -167834,15 +168580,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.194617
+      value: -0.00872673
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.44086644
+      value: -1.6830279
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 2.2208707
+      value: 0.18202053
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -168111,6 +168857,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -168266,6 +169013,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -168613,6 +169361,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -169376,6 +170125,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -169691,6 +170441,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -170274,6 +171025,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -171175,6 +171927,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -172067,6 +172820,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1329056334}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -172434,6 +173188,118 @@ Transform:
   - {fileID: 1293408234}
   m_Father: {fileID: 122415658}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1333362144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1333362145}
+  - component: {fileID: 1333362148}
+  - component: {fileID: 1333362147}
+  - component: {fileID: 1333362146}
+  m_Layer: 0
+  m_Name: TunaHangingPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1333362145
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333362144}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.2904, z: -0.681}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1516510061}
+  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+--- !u!65 &1333362146
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333362144}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1333362147
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333362144}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1333362148
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1333362144}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1333584527
 GameObject:
   m_ObjectHideFlags: 0
@@ -172561,6 +173427,118 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1645682552}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1337131581
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1337131582}
+  - component: {fileID: 1337131585}
+  - component: {fileID: 1337131584}
+  - component: {fileID: 1337131583}
+  m_Layer: 0
+  m_Name: FishingTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1337131582
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337131581}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.0405, z: -0.681}
+  m_LocalScale: {x: 0.08, y: 0.08, z: 0.08}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1516510061}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1337131583
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337131581}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!23 &1337131584
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337131581}
+  m_Enabled: 0
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+  m_MaskInteraction: 0
+  m_AdditionalVertexStreams: {fileID: 0}
+--- !u!33 &1337131585
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1337131581}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &1337202728
 GameObject:
   m_ObjectHideFlags: 0
@@ -172727,6 +173705,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -173880,6 +174859,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -174362,6 +175342,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -175839,6 +176820,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -176026,6 +177008,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -176478,6 +177461,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -177441,6 +178425,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -177696,6 +178681,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -178788,6 +179774,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -179135,6 +180122,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -179936,6 +180924,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -180287,6 +181276,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -180724,6 +181714,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1411596906}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -181678,6 +182669,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -182024,6 +183016,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -182528,6 +183521,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -182683,6 +183677,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -182902,6 +183897,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -183121,6 +184117,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -183439,6 +184436,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -184661,6 +185659,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -184880,6 +185879,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -186030,6 +187030,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -186799,6 +187800,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -186954,6 +187956,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -187141,6 +188144,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -188266,6 +189270,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -190001,6 +191006,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -190863,6 +191869,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -191442,6 +192449,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -192406,6 +193414,60 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.00007922761, y: 0.034793764, z: -0.0005926825}
     m_Extent: {x: 0.017795457, y: 0.036787048, z: 0.018147636}
   m_DirtyAABB: 0
+--- !u!1 &1516510060 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+  m_PrefabInstance: {fileID: 515777910}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1516510061 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: 1e407c2ddaab0b24a8801af3fff71ef0, type: 3}
+  m_PrefabInstance: {fileID: 515777910}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1516510062
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516510060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f2f34d7b4e84d9489ae5cfa416cd4a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.BoatOnHookRepositioner
+  stateManager: {fileID: 0}
+  distanceBehindLure: 50
+  preserveBoatHeight: 1
+  faceTunaAfterReposition: 1
+--- !u!114 &1516510063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1516510060}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 95144392e6eede14cafa2d339e5c1ee9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: sc.stylizedwater3.runtime::StylizedWater3.AlignToWater
+  heightInterface:
+    method: 1
+    waterObject: {fileID: 0}
+    autoFind: 1
+    waveProfile: {fileID: 11400000, guid: 07fa768fab398d34ea0cb010bc30e496, type: 2}
+    waterLevelSource: 0
+    waterLevelTransform: {fileID: 0}
+    waterLevel: -0.26
+  surfaceSize: {x: 0.38426387, y: 0.65824455}
+  followTarget: {fileID: 0}
+  heightOffset: -0.52
+  rollAmount: 0.03
+  rotation: 0
+  smoothing: 0.1
+  heightValue: 0
+  rigidbody: {fileID: 0}
 --- !u!1 &1516596691
 GameObject:
   m_ObjectHideFlags: 0
@@ -192604,6 +193666,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -192923,6 +193986,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -193206,6 +194270,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -193531,6 +194596,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -193814,6 +194880,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -194097,6 +195164,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -194348,6 +195416,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -194503,6 +195572,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -194690,6 +195760,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -194845,6 +195916,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -195132,6 +196204,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -196215,6 +197288,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -196370,6 +197444,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -196848,6 +197923,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -196967,7 +198043,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866415408107140048, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       propertyPath: 'm_BlendShapeWeights.Array.data[0]'
-      value: 0
+      value: 45.3
       objectReference: {fileID: 0}
     - target: {fileID: 4819001077394492298, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       propertyPath: m_Layer
@@ -196992,6 +198068,9 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: 0
+      addedObject: {fileID: 2069703636339701335}
     - targetCorrespondingSourceObject: {fileID: -8679921383154817045, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 938804944}
@@ -197029,6 +198108,18 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
       insertIndex: -1
       addedObject: {fileID: 109750659}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750661}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750660}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750663}
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 109750662}
   m_SourcePrefab: {fileID: 100100000, guid: d8d5da21da5cef441a89cdaaa708eba8, type: 3}
 --- !u!1 &1546432515
 GameObject:
@@ -197196,6 +198287,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -198227,6 +199319,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -198673,6 +199766,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -199156,6 +200250,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -199532,6 +200627,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -200533,6 +201629,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -200757,6 +201854,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -201331,6 +202429,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -201618,6 +202717,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -201773,6 +202873,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -202187,6 +203288,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -202303,6 +203405,88 @@ Transform:
   m_Children:
   - {fileID: 1304193057}
   m_Father: {fileID: 243289120}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1593240509
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1593240512}
+  - component: {fileID: 1593240511}
+  - component: {fileID: 1593240510}
+  m_Layer: 0
+  m_Name: LureSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1593240510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593240509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abdcfbcf9d4d3374d81f71a297ff8760, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.Lure.LureLineRendererTest
+  rodLineAnchor: {fileID: 411473523}
+  linePrefab: {fileID: 5572804935078484835, guid: 9c966e43d44926945b830be4425efa9d, type: 3}
+  lineParent: {fileID: 1593240512}
+  stateManager: {fileID: 1006078978}
+  rodLocalOffset: {x: 0, y: 0, z: 0}
+  lureLocalOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &1593240511
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593240509}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9c6553864064364a2c1232b64f17c0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.Lure.AutomaticLureSpawner
+  eventBus: {fileID: 390895503}
+  lurePrefab: {fileID: 7587136575202669150, guid: a51d7aa02fe253f4b985e61d5be7fe88, type: 3}
+  tuna: {fileID: 109750647}
+  referenceCamera: {fileID: 330585545}
+  spawnParent: {fileID: 1593240512}
+  spawnAutomatically: 1
+  maximumActiveLures: 5
+  minimumSpawnDistance: 8
+  maximumSpawnDistance: 14
+  verticalSpawnRange: 3
+  viewportMargin: 0.1
+  maximumSampleAttempts: 24
+  waterSurfaceHeight: 0
+  minimumSubmersionDepth: 0.5
+  obstacleLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleClearanceRadius: 0.5
+  horizontalPassRadius: 2
+--- !u!4 &1593240512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1593240509}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.91724, y: -27.0284, z: 15.90817}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1593291669
 GameObject:
@@ -202990,6 +204174,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -203245,6 +204430,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -203692,6 +204878,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -204341,6 +205528,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -204691,6 +205879,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -205263,6 +206452,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -205950,6 +207140,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1616742072}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -206192,6 +207383,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -206447,6 +207639,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -206634,6 +207827,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -207672,6 +208866,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -207859,6 +209054,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -208141,6 +209337,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -209088,6 +210285,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -209370,6 +210568,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -209621,6 +210820,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -210326,6 +211526,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -210613,6 +211814,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -211314,6 +212516,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -211533,6 +212736,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -211912,6 +213116,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -212230,6 +213435,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -212866,6 +214072,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -213021,6 +214228,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -213304,6 +214512,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -214588,6 +215797,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -214843,6 +216053,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -215540,6 +216751,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -215823,6 +217035,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -216651,6 +217864,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -217549,6 +218763,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -218157,6 +219372,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -218443,6 +219659,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -223349,6 +224566,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -224419,6 +225637,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -224702,6 +225921,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -225113,6 +226333,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -225553,6 +226774,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -226057,6 +227279,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -226403,6 +227626,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -226590,6 +227814,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -226909,6 +228134,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -227096,6 +228322,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -227639,6 +228866,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -228117,6 +229345,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -228429,6 +229658,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -228775,6 +230005,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -228930,6 +230161,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -229185,6 +230417,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -229500,6 +230733,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -229655,6 +230889,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -230266,6 +231501,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -230517,6 +231753,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -230899,6 +232136,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -231182,6 +232420,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -231337,6 +232576,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -231492,6 +232732,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -233162,6 +234403,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -233445,6 +234687,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -233654,6 +234897,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1792333077}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -234839,6 +236083,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -235026,6 +236271,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -235504,6 +236750,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -236009,6 +237256,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -236228,6 +237476,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -236574,6 +237823,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -236825,6 +238075,8 @@ Transform:
   - {fileID: 1632201828}
   - {fileID: 2020551939}
   - {fileID: 987107754}
+  - {fileID: 1996302024}
+  - {fileID: 669381872}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1813855487
@@ -237025,6 +238277,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -237539,6 +238792,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -238884,6 +240138,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -239039,6 +240294,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -240074,6 +241330,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -240357,6 +241614,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -240834,6 +242092,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -241441,6 +242700,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -241951,6 +243211,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -242169,6 +243430,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -242520,6 +243782,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -242967,6 +244230,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -243335,6 +244599,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1861257464}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -243964,6 +245229,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -244251,6 +245517,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -245344,6 +246611,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -245755,6 +247023,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -246813,6 +248082,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -248087,6 +249357,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -248434,6 +249705,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -248844,6 +250116,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -249746,6 +251019,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -250547,6 +251821,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -251030,6 +252305,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -251185,6 +252461,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -251595,6 +252872,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -252073,6 +253351,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -252716,6 +253995,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -252935,6 +254215,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -253090,6 +254371,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -253605,6 +254887,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -254408,6 +255691,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -254822,6 +256106,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -255653,6 +256938,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -256313,6 +257599,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 1970193725}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -256783,6 +258070,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -258389,6 +259677,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -258576,6 +259865,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -258888,6 +260178,115 @@ Transform:
   - {fileID: 1781982855}
   m_Father: {fileID: 1184043642}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1996302023
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1996302024}
+  - component: {fileID: 1996302027}
+  - component: {fileID: 1996302026}
+  - component: {fileID: 1996302025}
+  m_Layer: 0
+  m_Name: TunaHangingCamera
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1996302024
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996302023}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.82274216, z: -0, w: 0.56841475}
+  m_LocalPosition: {x: -16.51959, y: -11.06966, z: -221.40799}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1813710330}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1996302025
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996302023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
+  LookAtOffset: {x: 0, y: 0, z: 0}
+--- !u!114 &1996302026
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996302023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b617507da6d07e749b7efdb34e1173e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineFollow
+  TrackerSettings:
+    BindingMode: 4
+    PositionDamping: {x: 0.2, y: 0.2, z: 0.2}
+    AngularDampingMode: 0
+    RotationDamping: {x: 0.5, y: 0.5, z: 0.5}
+    QuaternionDamping: 1
+  FollowOffset: {x: -2.67, y: 0, z: 1.01}
+--- !u!114 &1996302027
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1996302023}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineCamera
+  Priority:
+    Enabled: 1
+    m_Value: 0
+  OutputChannel: 1
+  StandbyUpdate: 2
+  m_StreamingVersion: 20241001
+  m_LegacyPriority: 0
+  Target:
+    TrackingTarget: {fileID: 0}
+    LookAtTarget: {fileID: 0}
+    CustomLookAtTarget: 0
+  Lens:
+    FieldOfView: 60
+    OrthographicSize: 5
+    NearClipPlane: 0.3
+    FarClipPlane: 1000
+    Dutch: 0
+    ModeOverride: 0
+    PhysicalProperties:
+      GateFit: 2
+      SensorSize: {x: 21.946, y: 16.002}
+      LensShift: {x: 0, y: 0}
+      FocusDistance: 10
+      Iso: 200
+      ShutterSpeed: 0.005
+      Aperture: 16
+      BladeCount: 5
+      Curvature: {x: 2, y: 11}
+      BarrelClipping: 0.25
+      Anamorphism: 0
+  BlendHint: 0
 --- !u!1 &1996316838
 GameObject:
   m_ObjectHideFlags: 0
@@ -259085,6 +260484,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -259240,6 +260640,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -259395,6 +260796,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -259650,6 +261052,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -259837,6 +261240,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -260151,6 +261555,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -260306,6 +261711,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -260525,6 +261931,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -260908,6 +262315,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -261158,6 +262566,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -261625,6 +263034,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 2012916079}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -262154,6 +263564,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -262469,6 +263880,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -263087,6 +264499,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -263368,6 +264781,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -263718,6 +265132,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -264069,6 +265484,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -264289,6 +265705,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -265136,6 +266553,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -265610,6 +267028,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -268026,6 +269445,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -268212,6 +269632,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -268431,6 +269852,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -268840,6 +270262,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -269219,6 +270642,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -269406,6 +270830,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -270324,6 +271749,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 8
     frequency: 3
+  speedOverrideMode: 0
   dynamicBone: {fileID: 2080557088}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.18
@@ -271179,6 +272605,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -271498,6 +272925,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -272017,6 +273445,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -272459,6 +273888,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -272931,6 +274361,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -273086,6 +274517,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -273599,6 +275031,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -274333,6 +275766,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -274584,6 +276018,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -274739,6 +276174,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -275054,6 +276490,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -275462,6 +276899,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -276069,6 +277507,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -276224,6 +277663,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -277312,6 +278752,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -278178,6 +279619,7 @@ MonoBehaviour:
   highSpeed:
     amplitude: 16
     frequency: 3.6
+  speedOverrideMode: 0
   dynamicBone: {fileID: 0}
   lowSpeedDamping: 0.8
   mediumHighSpeedDamping: 0.1
@@ -278864,6 +280306,37 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   useUnscaledTime: 0
+--- !u!4 &2069703636339701335
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8797124098828236214}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0.17143041, y: -0.009447247, z: 0.0016439557, w: 0.98514956}
+  m_LocalPosition: {x: -0.015188158, y: 0.0023441762, z: 0.9947927}
+  m_LocalScale: {x: 6.5, y: 6.5000005, z: 6.5000005}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 109750647}
+  m_LocalEulerAnglesHint: {x: -48.775, y: 57.784, z: 1.162}
+--- !u!1 &8797124098828236214
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2069703636339701335}
+  m_Layer: 0
+  m_Name: LureInMouthPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -278880,6 +280353,8 @@ SceneRoots:
   - {fileID: 596421091}
   - {fileID: 6595979}
   - {fileID: 640709493}
+  - {fileID: 1593240512}
+  - {fileID: 515777910}
   - {fileID: 1546201921}
   - {fileID: 384348368}
   - {fileID: 330585546}

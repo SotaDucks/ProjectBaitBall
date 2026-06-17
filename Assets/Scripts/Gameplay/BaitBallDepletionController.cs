@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using TestBoids.Boids;
 using TestBoids.Tuna;
 using UnityEngine;
@@ -8,6 +9,8 @@ namespace TestBoids.Gameplay
     [DisallowMultipleComponent]
     public sealed class BaitBallDepletionController : MonoBehaviour
     {
+        private const float LureEntranceDelay = 5f;
+
         [Serializable]
         private struct DepletionSettings
         {
@@ -89,6 +92,7 @@ namespace TestBoids.Gameplay
         private int completedControllerRemovals;
         private float elapsedTime;
         private float depletionElapsed;
+        private Coroutine lureEntranceRoutine;
         private InstancedFishSchoolManager.FormationSettings startFormation;
         private InstancedFishSchoolManager.FormationSettings targetFormation;
 
@@ -137,6 +141,12 @@ namespace TestBoids.Gameplay
             subscribed = false;
             monitoring = false;
             depletionRunning = false;
+
+            if (lureEntranceRoutine != null)
+            {
+                StopCoroutine(lureEntranceRoutine);
+                lureEntranceRoutine = null;
+            }
         }
 
         private void Update()
@@ -282,6 +292,46 @@ namespace TestBoids.Gameplay
             {
                 focusSequenceController.RetireBarracudaSchool();
             }
+
+            ScheduleLureEntrance();
+        }
+
+        private void ScheduleLureEntrance()
+        {
+            if (lureEntranceRoutine != null)
+            {
+                StopCoroutine(lureEntranceRoutine);
+            }
+
+            lureEntranceRoutine = StartCoroutine(RaiseLureEntranceAfterDelay());
+        }
+
+        private IEnumerator RaiseLureEntranceAfterDelay()
+        {
+            if (useUnscaledTime)
+            {
+                yield return new WaitForSecondsRealtime(LureEntranceDelay);
+            }
+            else
+            {
+                yield return new WaitForSeconds(LureEntranceDelay);
+            }
+
+            lureEntranceRoutine = null;
+            RaiseLureEntrance();
+        }
+
+        private void RaiseLureEntrance()
+        {
+            ResolveReferences();
+            if (!eventBus)
+            {
+                return;
+            }
+
+            eventBus.RaiseLureEntrance(new LureEntranceEvent(
+                tunaMotor ? tunaMotor.transform : null,
+                baitBallManager ? baitBallManager.transform : null));
         }
 
         private InstancedFishSchoolManager.FormationSettings BuildLooseFormationTarget(
