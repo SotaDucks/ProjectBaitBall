@@ -17,6 +17,7 @@ namespace TestBoids.Gameplay.Lure
         [Header("Lure Entrance Spawning")]
         [SerializeField] private bool spawnAutomatically = true;
         [SerializeField, Min(1)] private int maximumActiveLures = 1;
+        [SerializeField, Min(0.1f)] private float spawnInterval = 3f;
 
         [Header("Hidden Spawn Area")]
         [SerializeField, Min(0.1f)] private float minimumSpawnDistance = 8f;
@@ -38,6 +39,8 @@ namespace TestBoids.Gameplay.Lure
 
         private readonly List<ActiveLure> activeLures = new();
         private bool subscribedToEventBus;
+        private bool entranceSpawningStarted;
+        private float nextSpawnTime;
 
         private sealed class ActiveLure
         {
@@ -84,6 +87,7 @@ namespace TestBoids.Gameplay.Lure
         private void OnValidate()
         {
             maximumActiveLures = Mathf.Max(1, maximumActiveLures);
+            spawnInterval = Mathf.Max(0.1f, spawnInterval);
             minimumSpawnDistance = Mathf.Max(0.1f, minimumSpawnDistance);
             maximumSpawnDistance = Mathf.Max(minimumSpawnDistance, maximumSpawnDistance);
             verticalSpawnRange = Mathf.Max(0f, verticalSpawnRange);
@@ -97,6 +101,7 @@ namespace TestBoids.Gameplay.Lure
         private void Update()
         {
             RemoveDestroyedLures();
+            TrySpawnAutomatically();
         }
 
         private void OnLureEntrance(LureEntranceEvent entranceEvent)
@@ -106,11 +111,9 @@ namespace TestBoids.Gameplay.Lure
                 return;
             }
 
-            RemoveDestroyedLures();
-            if (activeLures.Count < maximumActiveLures)
-            {
-                SpawnNow();
-            }
+            entranceSpawningStarted = true;
+            nextSpawnTime = Time.time;
+            TrySpawnAutomatically();
         }
 
         public AutomaticLureMotor SpawnNow()
@@ -149,6 +152,21 @@ namespace TestBoids.Gameplay.Lure
         public void DisableAutomaticSpawning()
         {
             spawnAutomatically = false;
+            entranceSpawningStarted = false;
+        }
+
+        private void TrySpawnAutomatically()
+        {
+            if (!spawnAutomatically
+                || !entranceSpawningStarted
+                || activeLures.Count >= maximumActiveLures
+                || Time.time < nextSpawnTime)
+            {
+                return;
+            }
+
+            SpawnNow();
+            nextSpawnTime = Time.time + Mathf.Max(0.1f, spawnInterval);
         }
 
         private Vector3 FindSpawnPosition()

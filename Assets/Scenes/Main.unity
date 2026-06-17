@@ -13023,7 +13023,7 @@ MonoBehaviour:
   sprintStaminaDrainPerSecond: 20
   staminaRecoveryPerSecond: 10
   maxHunger: 100
-  initialHunger: 30
+  initialHunger: 10
   turnSpring: 92.4
   turnDamping: 9
   maxAngularVelocity: 8
@@ -13319,7 +13319,7 @@ MonoBehaviour:
   input: {fileID: 109750652}
   sway: {fileID: 109750653}
   pullAcceleration: 8
-  draggedMaxSpeed: 7
+  draggedMaxSpeed: 10
   draggedSpeedLimitDamping: 4
   draggedVelocityDamping: 0.35
   draggedRotationSpeed: 350
@@ -15518,7 +15518,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &126516749
 RectTransform:
   m_ObjectHideFlags: 0
@@ -39634,15 +39634,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00872673
+      value: -0.010565874
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6830279
+      value: -1.7080668
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.18202053
+      value: 0.19500004
       objectReference: {fileID: 0}
     - target: {fileID: 4569636453055604739, guid: 07d6ca6898263394c9e08e1b92a333ad, type: 3}
       propertyPath: m_LocalRotation.w
@@ -49058,7 +49058,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TestBoids.Gameplay.TunaSchoolFocusSequenceController
   eventBus: {fileID: 390895503}
   tunaFreezeController: {fileID: 109750656}
-  tunaMotor: {fileID: 0}
+  tunaMotor: {fileID: 109750650}
   thirdPersonAimCamera: {fileID: 1033788101}
   tunaSchoolFocusCamera: {fileID: 1632201831}
   barracudaCamera: {fileID: 2020551942}
@@ -127703,7 +127703,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00872673
+      value: -0.010565874
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -127711,7 +127711,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.18202053
+      value: 0.19500004
       objectReference: {fileID: 0}
     - target: {fileID: 622543205247438978, guid: 403a9af4ecfc8fa4db7cf2680a4bb3cd, type: 3}
       propertyPath: m_LocalRotation.w
@@ -134804,7 +134804,7 @@ MonoBehaviour:
   Damping: {x: 0.1, y: 0.5, z: 0.3}
   ShoulderOffset: {x: 0.92, y: -0.48, z: 0}
   VerticalArmLength: 0.5
-  CameraSide: 0.2
+  CameraSide: 0.8
   CameraDistance: 2.09
   AvoidObstacles:
     Enabled: 0
@@ -134867,7 +134867,7 @@ Transform:
   m_GameObject: {fileID: 1033788098}
   serializedVersion: 2
   m_LocalRotation: {x: -0.21778497, y: 0.47974694, z: 0.124262236, w: 0.84081596}
-  m_LocalPosition: {x: -15.9121065, y: -12.12715, z: -222.99649}
+  m_LocalPosition: {x: -15.350388, y: -12.12715, z: -223.94691}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -168580,15 +168580,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.00872673
+      value: -0.010565874
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -1.6830279
+      value: -1.7080668
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.18202053
+      value: 0.19500004
       objectReference: {fileID: 0}
     - target: {fileID: 1601354369822315696, guid: 1547e00092a8c1847b40d67f29c0c299, type: 3}
       propertyPath: m_LocalRotation.w
@@ -203461,6 +203461,7 @@ MonoBehaviour:
   spawnParent: {fileID: 1593240512}
   spawnAutomatically: 1
   maximumActiveLures: 5
+  spawnInterval: 3
   minimumSpawnDistance: 8
   maximumSpawnDistance: 14
   verticalSpawnRange: 3
@@ -260205,8 +260206,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1996302023}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.82274216, z: -0, w: 0.56841475}
-  m_LocalPosition: {x: -16.51959, y: -11.06966, z: -221.40799}
+  m_LocalRotation: {x: -0.29022262, y: 0.6597997, z: 0.30850905, w: 0.62069106}
+  m_LocalPosition: {x: -15.56959, y: -14.519661, z: -222.198}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -260224,7 +260225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e8b78ac948f05a46a6d8339a503172b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineHardLookAt
-  LookAtOffset: {x: 0, y: 0, z: 0}
+  LookAtOffset: {x: 0.98, y: 0, z: 1.89}
 --- !u!114 &1996302026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260243,7 +260244,7 @@ MonoBehaviour:
     AngularDampingMode: 0
     RotationDamping: {x: 0.5, y: 0.5, z: 0.5}
     QuaternionDamping: 1
-  FollowOffset: {x: -2.67, y: 0, z: 1.01}
+  FollowOffset: {x: -1.72, y: -3.45, z: 0.22}
 --- !u!114 &1996302027
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260264,7 +260265,7 @@ MonoBehaviour:
   m_StreamingVersion: 20241001
   m_LegacyPriority: 0
   Target:
-    TrackingTarget: {fileID: 0}
+    TrackingTarget: {fileID: 109750647}
     LookAtTarget: {fileID: 0}
     CustomLookAtTarget: 0
   Lens:
